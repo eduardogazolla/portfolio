@@ -1,6 +1,5 @@
 import { SectionTitle } from "@/app/componentes/section-title"
 import { KnowTech } from "./known-tech"
-import { TbBrandHtml5 } from "react-icons/tb"
 import { KnownTech as IKnownTech } from "@/app/types/projects"
 
 type KnownTechsProps = {

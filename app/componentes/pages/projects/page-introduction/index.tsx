@@ -1,6 +1,6 @@
 import { Link } from "@/app/componentes/link"
 import { SectionTitle } from "@/app/componentes/section-title"
-import { HiArrowNarrowLeft, HiArrowNarrowRight } from "react-icons/hi"
+import { HiArrowNarrowLeft } from "react-icons/hi"
 
 export const PageIntroduction = () => {
     return (
