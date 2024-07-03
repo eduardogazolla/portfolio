@@ -9,7 +9,10 @@ export const Footer = () => {
         <IoMdHeart className="text-purple-500" />
         by
         <strong className="font-medium">
-          <Link href={"https://www.instagram.com/eduardogazolla/"}>
+          <Link
+            href={"https://www.instagram.com/eduardogazolla/"}
+            target="_blank"
+          >
             Eduardo Gazolla
           </Link>
         </strong>
