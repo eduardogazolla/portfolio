@@ -6,6 +6,10 @@ export type KnownTech = {
   startDate: string;
 };
 
+export type Technology = {
+  name: string
+}
+
 export type ProjectSection = {
   title: string;
   image: {
