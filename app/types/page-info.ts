@@ -30,9 +30,9 @@ export type ProjectsPageData = {
 
 export type ProjectsPageStaticData = {
   projects: {
-    slug: string;
-  }[];
-};
+    slug: string
+  }[]
+}
 
 export type HomePageData = {
   page: HomePageInfo;

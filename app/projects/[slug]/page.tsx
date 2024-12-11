@@ -3,6 +3,8 @@ import { ProjectSections } from "@/app/componentes/pages/project/project-section
 import { ProjectPageData, ProjectsPageStaticData,} from "@/app/types/page-info";
 import { fetchHygraphQuery } from "@/app/utils/fetch-hygraph-query";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
+
 
 type ProjectProps = {
   params: {
@@ -41,14 +43,18 @@ const getProjectDetails = async (slug: string): Promise<ProjectPageData> => {
   }
   `;
 
-  return fetchHygraphQuery(
+  const data = fetchHygraphQuery<ProjectPageData>(
     query,
-    60 * 60 * 24 // 1 day
-  );
-};
+    1000 * 60 * 60 * 24, // 1 day
+  )
+
+  return data
+}
 
 export default async function Project({ params: { slug } }: ProjectProps) {
   const { project } = await getProjectDetails(slug);
+
+  if (!project?.title) return notFound()
 
   return (
     <>
