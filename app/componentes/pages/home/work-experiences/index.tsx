@@ -7,6 +7,12 @@ type WorkExperienceProps = {
 };
 
 export const WorkExperience = ({ experiences }: WorkExperienceProps) => {
+  // Cria um novo array ordenado, do mais antigo para o mais recente
+  const sortedExperiences = [...experiences].sort((a, b) => {
+    const dateA = new Date(a.startDate).getTime();
+    const dateB = new Date(b.startDate).getTime();
+    return dateB - dateA;
+  });
   return (
     <section className="container py-16 flex gap-10 md:gap-4 lg:gap-16 flex-col md:flex-row">
       <div className="max-w-[420px]">
@@ -21,7 +27,7 @@ export const WorkExperience = ({ experiences }: WorkExperienceProps) => {
       </div>
 
       <div className="flex flex-col gap-4">
-        {experiences?.map((experience) => (
+      {sortedExperiences.map((experience) => (
           <ExperienceItem
             key={experience.companyName}
             experience={experience}

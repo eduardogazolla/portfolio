@@ -21,7 +21,7 @@ export type HomePageInfo = {
 };
 
 export type ProjectPageData = {
-  project: Project;
+  project: Project ;
 };
 
 export type ProjectsPageData = {

@@ -1,7 +1,7 @@
 "use client";
 
 import { Link } from "@/app/componentes/link";
-import { TechBadge } from "@/app/componentes/tech-bagde";
+import { TechBadge } from "@/app/componentes/tech-badge";
 import { fadeUpAnimation, techBadgeAnimation } from "@/app/lib/animations";
 import { Project } from "@/app/types/projects";
 import { motion } from "framer-motion";

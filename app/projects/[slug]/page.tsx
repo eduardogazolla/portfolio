@@ -1,6 +1,6 @@
 import { ProjectDetails } from "@/app/componentes/pages/project/project-details";
 import { ProjectSections } from "@/app/componentes/pages/project/project-sections";
-import { ProjectPageData, ProjectsPageStaticData,} from "@/app/types/page-info";
+import { ProjectPageData, ProjectsPageStaticData } from "@/app/types/page-info";
 import { fetchHygraphQuery } from "@/app/utils/fetch-hygraph-query";
 import { Metadata } from "next";
 
@@ -12,34 +12,34 @@ type ProjectProps = {
 
 const getProjectDetails = async (slug: string): Promise<ProjectPageData> => {
   const query = `
-  query ProjectQuery() {
-    project(where: {slug: "${slug}"}) {
-      pageThumbnail {
-        url
-      }
-      thumbnail {
-        url
-      }
-      sections {
-        title
-        image {
-          url
-        }
-      }
-      title
-      shortDescription
-      description {
-        raw
-        text
-      }
-      technologies {
-        name
-      }
-      liveProjectUrl
-      gitHubUrl
-    }
-  }
-  `;
+   query ProjectQuery() {
+     project(where: {slug: "${slug}"}) {
+       pageThumbnail {
+         url
+       }
+       thumbnail {
+         url
+       }
+       sections {
+         title
+         image {
+           url
+         }
+       }
+       title
+       shortDescription
+       description {
+         raw
+         text
+       }
+       technologies {
+         name
+       }
+       liveProjectUrl
+       gitHubUrl
+     }
+   }
+   `;
 
   return fetchHygraphQuery(
     query,
@@ -60,22 +60,22 @@ export default async function Project({ params: { slug } }: ProjectProps) {
 
 export async function generateStaticParams() {
   const query = `
-    query ProjectsSlugsQuery() {
-      projects(first: 100) {
-        slug
-      }
-    }
-  `
-  const { projects } = await fetchHygraphQuery<ProjectsPageStaticData>(query)
+     query ProjectsSlugsQuery() {
+       projects(first: 100) {
+         slug
+       }
+     }
+   `;
+  const { projects } = await fetchHygraphQuery<ProjectsPageStaticData>(query);
 
-  return projects
+  return projects;
 }
 
 export async function generateMetadata({
   params: { slug },
 }: ProjectProps): Promise<Metadata> {
-  const data = await getProjectDetails(slug)
-  const project = data.project
+  const data = await getProjectDetails(slug);
+  const project = data.project;
 
   return {
     title: project.title,
@@ -89,5 +89,5 @@ export async function generateMetadata({
         },
       ],
     },
-  }
+  };
 }

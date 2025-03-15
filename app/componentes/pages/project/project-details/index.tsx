@@ -2,7 +2,7 @@
 
 import { Button } from "@/app/componentes/button";
 import { SectionTitle } from "@/app/componentes/section-title";
-import { TechBadge } from "@/app/componentes/tech-bagde";
+import { TechBadge } from "@/app/componentes/tech-badge";
 import { TbBrandGithub } from "react-icons/tb";
 import { FiGlobe } from "react-icons/fi";
 import { Link } from "@/app/componentes/link";

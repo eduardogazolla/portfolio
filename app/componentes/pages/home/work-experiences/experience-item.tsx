@@ -1,7 +1,7 @@
 "use client";
 
 import { RichText } from "@/app/componentes/rich-text";
-import { TechBadge } from "@/app/componentes/tech-bagde";
+import { TechBadge } from "@/app/componentes/tech-badge";
 import { fadeUpAnimation, techBadgeAnimation } from "@/app/lib/animations";
 import { WorkExperience } from "@/app/types/work-experience";
 import { differenceInMonths, differenceInYears, format } from "date-fns";

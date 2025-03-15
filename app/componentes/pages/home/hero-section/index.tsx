@@ -3,7 +3,7 @@
 import { Button } from "@/app/componentes/button";
 import { CMSIcon } from "@/app/componentes/cms-icon";
 import { RichText } from "@/app/componentes/rich-text";
-import { TechBadge } from "@/app/componentes/tech-bagde";
+import { TechBadge } from "@/app/componentes/tech-badge";
 import { HomePageInfo } from "@/app/types/page-info";
 import Image from "next/image";
 import { HiArrowNarrowRight } from "react-icons/hi";
