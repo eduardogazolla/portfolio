@@ -60,16 +60,26 @@ export default async function Project({ params: { slug } }: ProjectProps) {
 
 export async function generateStaticParams() {
   const query = `
-     query ProjectsSlugsQuery() {
+     query ProjectsSlugsQuery {
        projects(first: 100) {
          slug
        }
      }
    `;
-  const { projects } = await fetchHygraphQuery<ProjectsPageStaticData>(query);
 
-  return projects;
+  const data = await fetchHygraphQuery<ProjectsPageStaticData>(query);
+
+  if (!data || !data.projects) {
+    return [];
+  }
+
+  // O que o Next espera é um array de objetos com os parâmetros:
+  return data.projects.map((project) => ({
+    slug: project.slug,
+  }));
 }
+
+
 
 export async function generateMetadata({
   params: { slug },
@@ -79,7 +89,7 @@ export async function generateMetadata({
 
   return {
     title: project.title,
-    description: project.description.text,
+    description: project.description.text, 
     openGraph: {
       images: [
         {
