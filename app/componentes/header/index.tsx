@@ -28,7 +28,7 @@ export const Header = () => {
           <Image
             width={58}
             height={49}
-            src="/images/logo.png"
+            src="/images/logo.svg"
             alt="Logo Eduardo Gazolla Dev"
           />
         </Link>
