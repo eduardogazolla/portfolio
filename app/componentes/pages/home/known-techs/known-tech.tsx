@@ -9,7 +9,7 @@ import { getRelativeTimeString } from "@/app/utils/get-relative-time"
 export const KnowTech = ({tech}: KnowTechProps) => {
     const relativeTime = getRelativeTimeString(new Date(tech.startDate), 'pt-BR').replace("há", "")
     return (
-        <div className="p-6 rounded-lg bg-gray-600/20 text-gray-500 flex flex-col gap-2 hover:text-purple-500 hover:bg-gray-600/30 transition-all">
+        <div className="p-6 rounded-lg bg-gray-600/20 text-gray-500 flex flex-col gap-2 hover:text-blue-500 hover:bg-gray-600/30 transition-all">
             <div className="flex item-center justify-between">
                 <p className="font-medium">{tech.name}</p>
                 <CMSIcon icon={tech.iconSvg} />
