@@ -1,27 +1,29 @@
-## 💜 Portfólio Eduardo Gazolla
+## 💙 Portfólio Eduardo Gazolla
  
- Este é um portfólio pessoal para mostrar os meus projetos em desevolvimentos e aqueles finalizados. Nesse projeto usamos Next.js 13, Tailwind CSS, Hygraph CMS, TypeScript, e Framer Motion para criar este portofólio em um website.
+ Este é um portfólio pessoal para mostrar os meus projetos em desenvolvimento e aqueles finalizados. Nesse projeto usamos Next.js 16, Tailwind CSS, Hygraph CMS, TypeScript, Framer Motion e Jest para criar este portfólio em um website moderno com testes automatizados.
  
  ## 🖥 Imagens do projeto
  
- <img src="https://i.imgur.com/Vz5MAZ2.png" align="center" />
+ <img src="https://i.imgur.com/AmAm7eu.png" align="center" />
  
  &nbsp;
  
  ## ⚙️ Tecnologias usadas
  
- - Next.js 13
+ - Next.js 16
  - TypeScript
- - Tailwind
+ - Tailwind CSS
  - Framer Motion
  - Hygraph CMS
+ - Jest
+ - Testing Library
  
  &nbsp;
  
  ### 🔗 Portfólio
  
- - [Eduardo Gazolla Vercel](https://eduardogazolla.vercel.app/)
+ - [Eduardo Gazolla](https://eduardogazolla.com.br/)
  
  &nbsp;
  
- <p align="center">Made with 💜 by Eduardo Gazolla</p>
+ <p align="center">Made with 💙 by Eduardo Gazolla</p>
