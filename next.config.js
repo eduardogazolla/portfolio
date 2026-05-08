@@ -1,11 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
   images: {
-    domains: ["sa-east-1.graphassets.com"],
+    remotePatterns: [{
+      protocol: "https",
+      hostname: "sa-east-1.graphassets.com",
+    }],
   },
-};
+  allowedDevOrigins: ['192.168.1.7'],
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
