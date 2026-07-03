@@ -38,3 +38,23 @@ export type HomePageData = {
   page: HomePageInfo;
   workExperiences: WorkExperience[];
 };
+
+// Localized types for aliased GraphQL queries (both locales fetched in parallel)
+
+export type LocalizedHomePageData = {
+  ptPage: HomePageInfo;
+  enPage: HomePageInfo;
+  ptWorkExperiences: WorkExperience[];
+  enWorkExperiences: WorkExperience[];
+};
+
+export type LocalizedProjectsPageData = {
+  ptProjects: Project[];
+  enProjects: Project[];
+};
+
+export type LocalizedProjectPageData = {
+  ptProject: Project;
+  enProject: Project;
+};
+

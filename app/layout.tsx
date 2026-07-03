@@ -6,6 +6,7 @@ import { ContactForm } from "./componentes/contact-form";
 import { Footer } from "./componentes/footer";
 import { BackToTop } from "./componentes/back-to-top";
 import { Toaster } from "./componentes/toaster";
+import { LanguageProvider } from "./componentes/context/language-context";
 
 export const metadata = {
   title: {
@@ -34,12 +35,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-BR" className={`${inter.variable} ${plexMono.variable}`} suppressHydrationWarning>
       <body>
-        <Toaster/>
-        <BackToTop />
-        <Header />
-        {children}
-        <ContactForm />
-        <Footer />
+        <LanguageProvider>
+          <Toaster/>
+          <BackToTop />
+          <Header />
+          {children}
+          <ContactForm />
+          <Footer />
+        </LanguageProvider>
       </body>
     </html>
   );

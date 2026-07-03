@@ -11,12 +11,14 @@ import { RichText } from "@/app/componentes/rich-text";
 import { Project } from "@/app/types/projects";
 import { motion } from "framer-motion";
 import { fadeUpAnimation, techBadgeAnimation } from "@/app/lib/animations";
+import { useLanguage } from "@/app/componentes/context/language-context";
 
 type ProjectDetailsProps = {
   project: Project;
 };
 
 export const ProjectDetails = ({ project }: ProjectDetailsProps) => {
+  const { locale, translations } = useLanguage();
   return (
     <section className="w-full sm:min-h-[750px] flex flex-col items-center justify-end relative pb-10 sm:pb-24 py-24 px-6 overflow-hidden">
       <motion.div
@@ -30,7 +32,7 @@ export const ProjectDetails = ({ project }: ProjectDetailsProps) => {
       />
 
       <SectionTitle
-        subtitle="projetos"
+        subtitle={translations.projectsPage.subtitle}
         title={project.title}
         className="text-center items-center sm:[&>h3]:text-4xl"
       />
@@ -59,7 +61,7 @@ export const ProjectDetails = ({ project }: ProjectDetailsProps) => {
           <a href={project.gitHubUrl} target="_blank">
             <Button className="min-w-[180px]">
               <TbBrandGithub size={20} />
-              Repositório
+              {locale === "en" ? "Repository" : "Repositório"}
             </Button>
           </a>
         )}
@@ -68,14 +70,14 @@ export const ProjectDetails = ({ project }: ProjectDetailsProps) => {
           <a href={project.liveProjectUrl} target="_blank">
             <Button className="min-w-[180px] ">
               <FiGlobe size={20} />
-              Projeto Online
+              {locale === "en" ? "Live Project" : "Projeto Online"}
             </Button>
           </a>
         )}
       </motion.div>
       <Link href={"/projects"}>
         <HiArrowNarrowLeft size={20} />
-        Voltar para projetos
+        {locale === "en" ? "Back to projects" : "Voltar para projetos"}
       </Link>
     </section>
   );

@@ -28,13 +28,17 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         exit={{ opacity: 0, y: 100, scale: 0.5 }}
         transition={{ duration: 0.3, delay: 0.3 }}
       >
-        <Image
-          width={420}
-          height={304}
-          src={project.thumbnail.url}
-          alt={`Thumbnail do projeto ${project.title}`}
-          className="w-full h-full object-cover rounded-lg aspect-auto"
-        />
+        {project.thumbnail?.url ? (
+          <Image
+            width={420}
+            height={304}
+            src={project.thumbnail.url}
+            alt={`Thumbnail do projeto ${project.title}`}
+            className="w-full h-full object-cover rounded-lg aspect-auto"
+          />
+        ) : (
+          <div className="w-full h-full min-h-[200px] bg-gray-800 rounded-lg" />
+        )}
       </motion.div>
       <div className="flex-1 lg:py-[18px]">
         <motion.h3

@@ -6,15 +6,19 @@ import { fadeUpAnimation, techBadgeAnimation } from "@/app/lib/animations";
 import { WorkExperience } from "@/app/types/work-experience";
 import { differenceInMonths, differenceInYears, format } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
+import enUS from "date-fns/locale/en-US";
 import { motion } from "framer-motion";
-import { difference } from "next/dist/build/utils";
 import Image from "next/image";
+import { useLanguage } from "@/app/componentes/context/language-context";
 
 type ExperienceItemProps = {
   experience: WorkExperience;
 };
 
 export const ExperienceItem = ({ experience }: ExperienceItemProps) => {
+  const { locale } = useLanguage();
+  const dateLocale = locale === "en" ? enUS : ptBR;
+
   const {
     endDate,
     companyLogo,
@@ -27,10 +31,10 @@ export const ExperienceItem = ({ experience }: ExperienceItemProps) => {
 
   const startDate = new Date(experience.startDate);
 
-  const formattedStartDate = format(startDate, "MMM, yyyy", { locale: ptBR });
+  const formattedStartDate = format(startDate, "MMM, yyyy", { locale: dateLocale });
   const formattedEndDate = endDate
-    ? format(new Date(endDate), "MMM, yyyy", { locale: ptBR })
-    : "O momento";
+    ? format(new Date(endDate), "MMM, yyyy", { locale: dateLocale })
+    : (locale === "en" ? "Present" : "O momento");
 
   const end = endDate ? new Date(endDate) : new Date();
 
@@ -38,14 +42,26 @@ export const ExperienceItem = ({ experience }: ExperienceItemProps) => {
   const years = differenceInYears(end, startDate);
   const monthsRemaining = months % 12;
 
-  const formattedDuration =
-    years > 0
-      ? `${years} ano${years > 1 ? "s" : ""}${
-          monthsRemaining > 0
-            ? ` e ${monthsRemaining} mes${monthsRemaining > 1 ? "es" : ""}`
-            : ""
-        }`
-      : `${months} mes${months > 1 ? "es" : ""}`;
+  let formattedDuration = "";
+  if (locale === "en") {
+    formattedDuration =
+      years > 0
+        ? `${years} year${years > 1 ? "s" : ""}${
+            monthsRemaining > 0
+              ? ` and ${monthsRemaining} month${monthsRemaining > 1 ? "s" : ""}`
+              : ""
+          }`
+        : `${months} month${months > 1 ? "s" : ""}`;
+  } else {
+    formattedDuration =
+      years > 0
+        ? `${years} ano${years > 1 ? "s" : ""}${
+            monthsRemaining > 0
+              ? ` e ${monthsRemaining} mes${monthsRemaining > 1 ? "es" : ""}`
+              : ""
+          }`
+        : `${months} mes${months > 1 ? "es" : ""}`;
+  }
 
   return (
     <motion.div
@@ -54,14 +70,20 @@ export const ExperienceItem = ({ experience }: ExperienceItemProps) => {
       transition={{ duration: 0.5 }}
     >
       <div className="flex items-center flex-col gap-4">
-        <div className="rounded-full border border-gray-500 p-0.5">
-          <Image
-            src={companyLogo.url}
-            width={48}
-            height={48}
-            className="rounded-full"
-            alt={`Logo da ${companyName}`}
-          />
+        <div className="rounded-full border border-gray-500 p-0.5 w-[52px] h-[52px] flex items-center justify-center bg-gray-800">
+          {companyLogo?.url ? (
+            <Image
+              src={companyLogo.url}
+              width={48}
+              height={48}
+              className="rounded-full object-cover"
+              alt={`Logo da ${companyName}`}
+            />
+          ) : (
+            <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center text-xs font-mono text-gray-400">
+              {companyName.substring(0, 2).toUpperCase()}
+            </div>
+          )}
         </div>
         <div className="h-full w-[1px] bg-gray-800"></div>
       </div>
@@ -84,7 +106,7 @@ export const ExperienceItem = ({ experience }: ExperienceItemProps) => {
           </div>
         </div>
         <p className="text-gray-400 text-sm mb-3 mt-6 font-semibold">
-          Competências
+          {locale === "en" ? "Skills" : "Competências"}
         </p>
         <div className="flex gap-x-2 gap-y-3 flex-wrap lg:max-w-[350px] mb-8">
           {technologies.map((tech, i) => (

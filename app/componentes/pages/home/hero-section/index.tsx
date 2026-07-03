@@ -9,12 +9,15 @@ import Image from "next/image";
 import { HiArrowNarrowRight } from "react-icons/hi";
 import { motion } from "framer-motion";
 import { techBadgeAnimation } from "@/app/lib/animations";
+import { useLanguage } from "@/app/componentes/context/language-context";
 
 type HomeSectionProps = {
   homeInfo: HomePageInfo;
 };
 
 export const HeroSection = ({ homeInfo }: HomeSectionProps) => {
+  const { translations } = useLanguage();
+
   const handleContact = () => {
     const constactSection = document.querySelector("#contact");
     if (constactSection) {
@@ -33,7 +36,7 @@ export const HeroSection = ({ homeInfo }: HomeSectionProps) => {
           exit={{ opacity: 0, x: -100 }}
           transition={{ duration: 0.5 }}
         >
-          <p className="font-mono text-blue-400">Olá, meu nome é</p>
+          <p className="font-mono text-blue-400">{translations.hero.greeting}</p>
           <h2 className="text-4xl font-medium mt-2">Eduardo Gazolla</h2>
 
           <div className="text-gray-400 my-6 text-sm sm:text-base">
@@ -52,7 +55,7 @@ export const HeroSection = ({ homeInfo }: HomeSectionProps) => {
           </div>
           <div className="mt-6 lg:mt-10 flex sm:items-center sm:gap-5 flex-col sm:flex-row">
             <Button className="w-max shadow-button" onClick={handleContact}>
-              Entre em contato
+              {translations.hero.contactButton}
               <HiArrowNarrowRight size={18} />
             </Button>
             <div className="text-gray-600 text2xl flex items-center h-20 gap-3">
