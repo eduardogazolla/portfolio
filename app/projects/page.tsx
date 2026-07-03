@@ -1,16 +1,27 @@
 import { PageIntroduction } from "../componentes/pages/projects/page-introduction";
-import { ProjectsList } from "../componentes/pages/projects/projects-list";
-import { ProjectsPageData } from "../types/page-info";
+import { ProjectsListClient } from "../componentes/pages/projects/projects-list-client";
+import { LocalizedProjectsPageData } from "../types/page-info";
 import { fetchHygraphQuery } from "../utils/fetch-hygraph-query";
 
 export const metadata = {
   title: 'Projetos'
 }
 
-const getPageData = async (): Promise<ProjectsPageData> => {
+const getPageData = async (): Promise<LocalizedProjectsPageData> => {
   const query = `
       query ProjectsQuery {
-        projects {
+        ptProjects: projects(locales: [pt_BR, en]) {
+          shortDescription
+          slug
+          title
+          thumbnail {
+            url
+          }
+          technologies {
+            name
+          }
+        }
+        enProjects: projects(locales: [en, pt_BR]) {
           shortDescription
           slug
           title
@@ -31,11 +42,11 @@ const getPageData = async (): Promise<ProjectsPageData> => {
 };
 
 export default async function Projects() {
-  const { projects } = await getPageData();
+  const data = await getPageData();
   return (
     <>
       <PageIntroduction />
-      <ProjectsList projects={projects} />
+      <ProjectsListClient data={data} />
     </>
   );
 }

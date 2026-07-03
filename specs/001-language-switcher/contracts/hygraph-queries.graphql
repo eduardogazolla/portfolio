@@ -1,0 +1,197 @@
+# Hygraph Localized Queries Contract
+
+## 1. Home Page Query (`PageInfoQuery`)
+```graphql
+query PageInfoQuery {
+  # Portuguese Content
+  ptPage: page(where: {slug: "home"}, locales: [pt_BR]) {
+    introduction {
+      raw
+    }
+    technologies {
+      name
+    }
+    profilePicture {
+      url
+    }
+    socials {
+      url
+      iconSvg
+    }
+    knownTechs {
+      iconSvg
+      name
+      startDate
+    }
+    highlightProjects {
+      slug
+      thumbnail {
+        url
+      }
+      title
+      shortDescription
+      technologies {
+        name
+      }
+    }
+  }
+  # English Content
+  enPage: page(where: {slug: "home"}, locales: [en]) {
+    introduction {
+      raw
+    }
+    technologies {
+      name
+    }
+    profilePicture {
+      url
+    }
+    socials {
+      url
+      iconSvg
+    }
+    knownTechs {
+      iconSvg
+      name
+      startDate
+    }
+    highlightProjects {
+      slug
+      thumbnail {
+        url
+      }
+      title
+      shortDescription
+      technologies {
+        name
+      }
+    }
+  }
+  # Portuguese Experiences
+  ptWorkExperiences: workExperiences(locales: [pt_BR]) {
+    companyLogo {
+      url
+    }
+    role
+    companyName
+    companyUrl
+    startDate
+    endDate
+    description {
+      raw
+    }
+    technologies {
+      name
+    }
+  }
+  # English Experiences
+  enWorkExperiences: workExperiences(locales: [en]) {
+    companyLogo {
+      url
+    }
+    role
+    companyName
+    companyUrl
+    startDate
+    endDate
+    description {
+      raw
+    }
+    technologies {
+      name
+    }
+  }
+}
+```
+
+---
+
+## 2. Projects List Query (`ProjectsQuery`)
+```graphql
+query ProjectsQuery {
+  # Portuguese List
+  ptProjects: projects(locales: [pt_BR]) {
+    shortDescription
+    slug
+    title
+    thumbnail {
+      url
+    }
+    technologies {
+      name
+    }
+  }
+  # English List
+  enProjects: projects(locales: [en]) {
+    shortDescription
+    slug
+    title
+    thumbnail {
+      url
+    }
+    technologies {
+      name
+    }
+  }
+}
+```
+
+---
+
+## 3. Project Detail Query (`ProjectQuery`)
+```graphql
+query ProjectQuery($slug: String!) {
+  # Portuguese Details
+  ptProject: project(where: {slug: $slug}, locales: [pt_BR]) {
+    pageThumbnail {
+      url
+    }
+    thumbnail {
+      url
+    }
+    sections {
+      title
+      image {
+        url
+      }
+    }
+    title
+    shortDescription
+    description {
+      raw
+      text
+    }
+    technologies {
+      name
+    }
+    liveProjectUrl
+    gitHubUrl
+  }
+  # English Details
+  enProject: project(where: {slug: $slug}, locales: [en]) {
+    pageThumbnail {
+      url
+    }
+    thumbnail {
+      url
+    }
+    sections {
+      title
+      image {
+        url
+      }
+    }
+    title
+    shortDescription
+    description {
+      raw
+      text
+    }
+    technologies {
+      name
+    }
+    liveProjectUrl
+    gitHubUrl
+  }
+}
+```

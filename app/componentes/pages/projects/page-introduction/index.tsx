@@ -4,13 +4,16 @@ import { Link } from "@/app/componentes/link";
 import { SectionTitle } from "@/app/componentes/section-title";
 import { motion } from "framer-motion";
 import { HiArrowNarrowLeft } from "react-icons/hi";
+import { useLanguage } from "@/app/componentes/context/language-context";
 
 export const PageIntroduction = () => {
+  const { translations } = useLanguage();
+
   return (
     <section className="w-full h-[450px] lg:h-[630px] bg-hero-image bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center px-2">
       <SectionTitle
-        subtitle="projetos"
-        title="Meus projetos"
+        subtitle={translations.projectsPage.subtitle}
+        title={translations.projectsPage.title}
         className="text-center items-center [&>h3]:text-4xl"
       />
 
@@ -22,14 +25,11 @@ export const PageIntroduction = () => {
         transition={{ duration: 0.6 }}
       >
         <p className="text-gray-400 text-center max-w-[640px] my-6 text-sm sm:text-base">
-          Aqui você poderá ver alguns dos trabalhos que desenvolvi e estou
-          desevolvendo. Fique à vontade para ver todos os meus projetos, como
-          foram criados, as tecnologias usadas neles e as funcionalidades que
-          cada um tem.
+          {translations.projectsPage.description}
         </p>
         <Link href={"/"}>
           <HiArrowNarrowLeft size={20} />
-          Voltar para Home
+          {translations.projectsPage.backToHome}
         </Link>
       </motion.div>
     </section>

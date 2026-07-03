@@ -10,6 +10,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { fadeUpAnimation } from "@/app/lib/animations";
+import { useLanguage } from "@/app/componentes/context/language-context";
 
 const contactFormSchema = z.object({
   name: z.string().min(3).max(100),
@@ -20,6 +21,8 @@ const contactFormSchema = z.object({
 type ContactFormData = z.infer<typeof contactFormSchema>;
 
 export const ContactForm = () => {
+  const { translations } = useLanguage();
+
   const {
     handleSubmit,
     register,
@@ -32,10 +35,10 @@ export const ContactForm = () => {
   const onSubmit = async (data: ContactFormData) => {
     try {
       await axios.post("/api/contact", data);
-      toast.success("Mensagem enviada com sucesso!");
+      toast.success(translations.contact.successMessage);
       reset();
     } catch {
-      toast.error("Ocorreu um erro ao enviar a mensagem. Tente novamente.");
+      toast.error(translations.contact.errorMessage);
     }
   };
 
@@ -46,8 +49,8 @@ export const ContactForm = () => {
     >
       <div className="w-full max-w-[420px] mx-auto">
         <SectionTitle
-          subtitle="contato"
-          title="Vamos trabalhar juntos? Entre em contato"
+          subtitle={translations.contact.subtitle}
+          title={translations.contact.title}
           className="items-center text-center"
         />
 
@@ -57,25 +60,25 @@ export const ContactForm = () => {
           {...fadeUpAnimation}
         >
           <input
-            placeholder="Nome"
+            placeholder={translations.contact.namePlaceholder}
             className="w-full h-14 bg-gray-800 rounded-lg placeholder:text-gray-400 text-gray-50 p-4 focus:outline-none focus:ring-2 ring-blue-600"
             {...register("name")}
           />
           <input
-            placeholder="E-mail"
+            placeholder={translations.contact.emailPlaceholder}
             type="email"
             className="w-full h-14 bg-gray-800 rounded-lg placeholder:text-gray-400 text-gray-50 p-4 focus:outline-none focus:ring-2 ring-blue-600"
             {...register("email")}
           />
           <textarea
-            placeholder="Mensagem"
+            placeholder={translations.contact.messagePlaceholder}
             className="resize-none w-full h-[138px] bg-gray-800 rounded-lg placeholder:text-gray-400 text-gray-50 p-4 focus:outline-none focus:ring-2 ring-blue-600"
             maxLength={500}
             {...register("message")}
           />
           <div className="mx-auto mt-6">
             <Button className="h-max shadow-button" disabled={isSubmitting}>
-              Enviar mensagem
+              {translations.contact.sendButton}
               <HiArrowNarrowRight size={18} />
             </Button>
           </div>

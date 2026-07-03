@@ -1,6 +1,5 @@
-import { ProjectDetails } from "@/app/componentes/pages/project/project-details";
-import { ProjectSections } from "@/app/componentes/pages/project/project-sections";
-import { ProjectPageData, ProjectsPageStaticData } from "@/app/types/page-info";
+import { ProjectDetailClient } from "@/app/componentes/pages/project/project-detail-client";
+import { LocalizedProjectPageData, ProjectsPageStaticData } from "@/app/types/page-info";
 import { fetchHygraphQuery } from "@/app/utils/fetch-hygraph-query";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -9,10 +8,35 @@ type ProjectProps = {
   params: Promise<{ slug: string }>;
 };
 
-const getProjectDetails = async (slug: string): Promise<ProjectPageData> => {
+const getProjectDetails = async (slug: string): Promise<LocalizedProjectPageData> => {
   const query = `
    query ProjectQuery {
-     project(where: {slug: "${slug}"}) {
+     ptProject: project(where: {slug: "${slug}"}, locales: [pt_BR, en]) {
+       pageThumbnail {
+         url
+       }
+       thumbnail {
+         url
+       }
+       sections {
+         title
+         image {
+           url
+         }
+       }
+       title
+       shortDescription
+       description {
+         raw
+         text
+       }
+       technologies {
+         name
+       }
+       liveProjectUrl
+       gitHubUrl
+     }
+     enProject: project(where: {slug: "${slug}"}, locales: [en, pt_BR]) {
        pageThumbnail {
          url
        }
@@ -50,16 +74,11 @@ export default async function Project({ params }: ProjectProps) {
   const { slug } = await params;
   const data = await getProjectDetails(slug);
 
-  if (!data?.project) {
+  if (!data?.ptProject && !data?.enProject) {
     notFound();
   }
 
-  return (
-    <>
-      <ProjectDetails project={data.project} />
-      <ProjectSections sections={data.project.sections} />
-    </>
-  );
+  return <ProjectDetailClient data={data} />;
 }
 
 export async function generateStaticParams() {
@@ -91,11 +110,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const data = await getProjectDetails(slug);
 
-  if (!data?.project) {
+  const project = data?.ptProject ?? data?.enProject;
+
+  if (!project) {
     notFound();
   }
-
-  const project = data.project;
 
   return {
     title: project.title,
@@ -103,7 +122,7 @@ export async function generateMetadata({
     openGraph: {
       images: [
         {
-          url: project.thumbnail.url,
+          url: project.thumbnail?.url ?? '',
           width: 1200,
           height: 630,
         },
