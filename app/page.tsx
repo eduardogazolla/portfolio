@@ -1,8 +1,5 @@
-import { HeroSection } from "./componentes/pages/home/hero-section";
-import { HighlightedProjects } from "./componentes/pages/home/highlighted-projects";
-import { KnownTechs } from "./componentes/pages/home/known-techs";
-import { WorkExperience } from "./componentes/pages/home/work-experiences";
-import { LocalizedHomePageData } from "./types/page-info";
+import { HomePageInfo, LocalizedHomePageData } from "./types/page-info";
+import { WorkExperience } from "./types/work-experience";
 import { fetchHygraphQuery } from "./utils/fetch-hygraph-query";
 import { HomeClient } from "./componentes/pages/home/home-client";
 
@@ -107,10 +104,10 @@ const getPageData = async (): Promise<LocalizedHomePageData> => {
   `;
 
   interface QueryResponse {
-    ptPages: any[];
-    enPages: any[];
-    ptWorkExperiences: any[];
-    enWorkExperiences: any[];
+    ptPages: HomePageInfo[];
+    enPages: HomePageInfo[];
+    ptWorkExperiences: WorkExperience[];
+    enWorkExperiences: WorkExperience[];
   }
 
   const result = await fetchHygraphQuery<QueryResponse>(
