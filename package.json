@@ -6,31 +6,23 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "test": "jest"
   },
   "dependencies": {
     "@graphcms/rich-text-react-renderer": "0.6.1",
     "@hookform/resolvers": "^5.9.2",
-    "@rocketseat/eslint-config": "1.2.0",
-    "@types/node": "18.15.11",
-    "autoprefixer": "10.4.14",
     "axios": "^1.16.0",
     "clsx": "1.2.1",
     "date-fns": "2.29.3",
-    "eslint": "8.37.0",
-    "eslint-config-next": "13.3.0",
     "motion": "^14.12.0",
     "next": "^16.4.6",
-    "postcss": "8.4.21",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-hook-form": "^7.92.0",
     "react-hot-toast": "2.4.0",
     "react-icons": "4.8.0",
     "tailwind-merge": "1.12.0",
-    "tailwindcss": "3.3.1",
-    "typescript": "^5.1.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
@@ -38,9 +30,16 @@
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "@types/jest": "^30.0.0",
+    "@types/node": "^18.15.11",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "autoprefixer": "^10.4.14",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.4.6",
     "jest": "^30.4.0",
-    "jest-environment-jsdom": "^30.4.0"
+    "jest-environment-jsdom": "^30.4.0",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.9.3"
   }
 }
