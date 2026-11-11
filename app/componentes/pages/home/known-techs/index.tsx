@@ -3,7 +3,7 @@
 import { SectionTitle } from "@/app/componentes/section-title";
 import { KnowTech } from "./known-tech";
 import { KnownTech as IKnownTech } from "@/app/types/projects";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useLanguage } from "@/app/componentes/context/language-context";
 
 type KnownTechsProps = {

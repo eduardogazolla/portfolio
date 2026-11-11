@@ -2,7 +2,7 @@
 
 import { fadeUpAnimation } from "@/app/lib/animations";
 import { ProjectSection } from "@/app/types/projects";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import Image from "next/image";
 
 type ProjectSectionsProps = {

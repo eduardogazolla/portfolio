@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { NavItem } from "./nav-item";
 import { LanguageSelector } from "./language-selector";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useLanguage } from "@/app/componentes/context/language-context";
 
 export const Header = () => {

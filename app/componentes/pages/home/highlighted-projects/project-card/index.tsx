@@ -4,7 +4,7 @@ import { Link } from "@/app/componentes/link";
 import { TechBadge } from "@/app/componentes/tech-badge";
 import { fadeUpAnimation, techBadgeAnimation } from "@/app/lib/animations";
 import { Project } from "@/app/types/projects";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import Image from "next/image";
 import { HiArrowNarrowRight } from "react-icons/hi";
 

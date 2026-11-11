@@ -1,7 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/app/componentes/context/language-context";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 export const LanguageSelector = () => {
   const { locale, toggleLocale } = useLanguage();
