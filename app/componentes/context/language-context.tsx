@@ -25,11 +25,27 @@ const LanguageContext = createContext<LanguageContextProps | undefined>(
   undefined
 );
 
-function getInitialLocale(): Locale {
+// Locale kept in memory when localStorage is unavailable (blocked or full), so
+// the choice still applies for the current page session.
+let memoryLocale: Locale | null = null;
+
+function readStoredLocale(): Locale | null {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored === "en" || stored === "pt-BR") return stored;
+  } catch {
+    // Storage unavailable: fall through to the in-memory or browser rule.
+  }
+  return null;
+}
+
+// Live snapshot reader for the store.
+function readLocale(): Locale {
   if (typeof window === "undefined") return "pt-BR";
 
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored === "en" || stored === "pt-BR") return stored;
+  const stored = readStoredLocale();
+  if (stored) return stored;
+  if (memoryLocale) return memoryLocale;
 
   const browserLang = navigator.language;
   if (browserLang.startsWith("pt")) return "pt-BR";
@@ -52,13 +68,17 @@ const getServerSnapshot = (): Locale => "pt-BR";
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const locale = useSyncExternalStore(
     subscribe,
-    getInitialLocale,
+    readLocale,
     getServerSnapshot
   );
 
   const toggleLocale = useCallback(() => {
-    const next: Locale = getInitialLocale() === "pt-BR" ? "en" : "pt-BR";
-    localStorage.setItem(STORAGE_KEY, next);
+    const next: Locale = readLocale() === "pt-BR" ? "en" : "pt-BR";
+    try {
+      localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      memoryLocale = next;
+    }
     listeners.forEach((listener) => listener());
   }, []);
 
