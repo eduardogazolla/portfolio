@@ -4,7 +4,6 @@ import {
   createContext,
   useContext,
   useSyncExternalStore,
-  useEffect,
   useCallback,
   ReactNode,
 } from "react";
@@ -56,10 +55,6 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     getInitialLocale,
     getServerSnapshot
   );
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, locale);
-  }, [locale]);
 
   const toggleLocale = useCallback(() => {
     const next: Locale = getInitialLocale() === "pt-BR" ? "en" : "pt-BR";
