@@ -1,4 +1,4 @@
-import { Inter, IBM_Plex_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Geist, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { ReactNode } from "react";
 import { Header } from "./componentes/header";
@@ -20,20 +20,31 @@ export const metadata = {
   ],
 };
 
-const inter = Inter({
-  variable: "--font-inter",
+const bricolage = Bricolage_Grotesque({
+  weight: "variable",
+  axes: ["opsz"],
+  variable: "--font-display",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const geist = Geist({
+  weight: ["400", "500"],
+  variable: "--font-sans",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 const plexMono = IBM_Plex_Mono({
-  variable: "--font-plex-mono",
+  weight: "400",
+  variable: "--font-mono",
   subsets: ["latin"],
-  weight: ["400", "500"],
+  display: "swap",
 });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${plexMono.variable}`} suppressHydrationWarning>
+    <html lang="pt-BR" className={`${bricolage.variable} ${geist.variable} ${plexMono.variable}`} suppressHydrationWarning>
       <body>
         <LanguageProvider>
           <Toaster/>
