@@ -278,7 +278,7 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
   - região `aria-live="polite"`;
   - confirmação conforme o Figma `27:314`;
   - layout da seção Contato da Home conforme `6:21` (título "Vamos conversar?" e texto da FR-013).
-- [ ] T073 [US2] Remover `react-hot-toast` do `package.json`, `app/componentes/toaster/` e o `<Toaster/>` de `app/layout.tsx`; tirar o `<ContactForm />` do layout global e deixá-lo só na Home (`#contact`); verificar a Parte 5 (gates, Playwright MCP com os 4 estados contra `27:314` em 1440 e 390) e abrir o PR (código pronto; verificação visual e PR pendentes)
+- [x] T073 [US2] Remover `react-hot-toast` do `package.json`, `app/componentes/toaster/` e o `<Toaster/>` de `app/layout.tsx`; tirar o `<ContactForm />` do layout global e deixá-lo só na Home (`#contact`); verificar a Parte 5 (gates, Playwright MCP com os 4 estados contra `27:314` em 1440 e 390) e abrir o PR
 
 **Checkpoint**: todas as user stories funcionando.
 
