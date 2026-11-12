@@ -150,10 +150,10 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 
 **Independent Test**: em 390 px, abrir e fechar o menu e navegar só com teclado (quickstart V10).
 
-- [ ] T043 [P] [US6] Teste do Header em `tests/header.test.tsx` (atualizar o existente): nome com link para `/`; nav desktop com Home, Projetos e Contato e `aria-current` no atual; LanguageSwitch; abaixo de 768 px, botão "Menu" com `aria-expanded` e `aria-controls`
-- [ ] T044 [P] [US6] Teste do MobileMenu em `tests/components/mobile-menu.test.tsx`: abre com "Menu", mostra Home, Projetos, Experiência e Contato, sociais e "Vamos conversar"; prende o foco; Esc, "Fechar" e clique em link fecham; ao fechar, o foco volta para "Menu"; o `body` não rola enquanto o menu está aberto
-- [ ] T045 [US6] Refazer `app/componentes/header/index.tsx` conforme o Figma `6:21` / `8:29`: fundo `bg`, sem animar `top`; Contato aponta para `/#contact`
-- [ ] T046 [US6] Criar `app/componentes/header/mobile-menu.tsx` conforme o Figma `8:228`:
+- [x] T043 [P] [US6] Teste do Header em `tests/header.test.tsx` (atualizar o existente): nome com link para `/`; nav desktop com Home, Projetos e Contato e `aria-current` no atual; LanguageSwitch; abaixo de 768 px, botão "Menu" com `aria-expanded` e `aria-controls`
+- [x] T044 [P] [US6] Teste do MobileMenu em `tests/components/mobile-menu.test.tsx`: abre com "Menu", mostra Home, Projetos, Experiência e Contato, sociais e "Vamos conversar"; prende o foco; Esc, "Fechar" e clique em link fecham; ao fechar, o foco volta para "Menu"; o `body` não rola enquanto o menu está aberto
+- [x] T045 [US6] Refazer `app/componentes/header/index.tsx` conforme o Figma `6:21` / `8:29`: fundo `bg`, sem animar `top`; Contato aponta para `/#contact`
+- [x] T046 [US6] Criar `app/componentes/header/mobile-menu.tsx` conforme o Figma `8:228`:
   - links em `display` grandes, com ponto no atual;
   - abre em círculo a partir do botão (`clip-path: circle()` via transform/opacity);
   - links sobem com 40 ms entre eles; fecha em 180 ms;

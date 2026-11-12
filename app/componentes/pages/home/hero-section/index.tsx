@@ -40,7 +40,7 @@ export const HeroSection = ({ homeInfo, currentExperience }: HeroSectionProps) =
   return (
     <section
       ref={sectionRef}
-      className="w-full px-5 pb-16 pt-[118px] lg:px-10 lg:pb-[118px] lg:pt-[154px]"
+      className="w-full px-5 pb-16 pt-8 md:pt-14 lg:px-10 lg:pb-[118px]"
     >
       <HeroIntro rootRef={sectionRef} />
       <div className="mx-auto grid w-full max-w-content lg:grid-cols-[minmax(0,1fr)_400px]">

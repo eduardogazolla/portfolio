@@ -91,7 +91,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <LanguageProvider>
           <SkipLink />
           <Toaster/>
-          <Header />
+          <Header socials={socials} />
           {/* tabIndex -1 lets the skip link and BackToTop move focus here; main is not
               interactive, so no focus ring is shown when focused programmatically. */}
           <main id="main" tabIndex={-1} className="focus:outline-none">
