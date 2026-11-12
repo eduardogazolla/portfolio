@@ -28,15 +28,17 @@ const bricolage = Bricolage_Grotesque({
   display: "swap",
 });
 
+// 600/700 (Geist) and 500 (Plex) are only for the current screens' font-semibold/bold/medium;
+// drop them once Parts 3–4 replace those screens (design uses Geist 400/500, Plex 400).
 const geist = Geist({
-  weight: ["400", "500"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-sans",
   subsets: ["latin"],
   display: "swap",
 });
 
 const plexMono = IBM_Plex_Mono({
-  weight: "400",
+  weight: ["400", "500"],
   variable: "--font-mono",
   subsets: ["latin"],
   display: "swap",

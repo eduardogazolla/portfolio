@@ -52,8 +52,12 @@
   @apply mx-auto w-full max-w-content px-6;
 }
 
-html {
-  scrollbar-color: var(--color-line) var(--color-bg);
+/* Chrome 121+ ignores ::-webkit-scrollbar rules once scrollbar-color is set,
+   so the standard property only applies where the WebKit selector is unsupported (Firefox). */
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-color: var(--color-line) var(--color-bg);
+  }
 }
 
 *::-webkit-scrollbar {
