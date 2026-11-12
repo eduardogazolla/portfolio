@@ -19,9 +19,9 @@ const TEXT_START = 0.6;
 const TEXT_END = 0.9;
 
 // The pinned layout needs room: desktop width and at least 640px of height. Below that the card is
-// static. Expressed in CSS (class strings are literal so Tailwind sees them, and mirror
-// `ACTIVE_QUERY`) so the server HTML already has the final
-// layout and JS only drives the transforms. `motion-safe` keeps reduced motion static.
+// static. The layout is expressed in CSS (class strings are literal so Tailwind sees them, and they
+// mirror `ACTIVE_QUERY`) so the server HTML already has the final layout and JS only drives the
+// transforms. `motion-safe` keeps reduced motion static.
 const ACTIVE_QUERY = "(min-width: 768px) and (min-height: 640px)";
 
 export const ScrollStage = ({ media, text }: ScrollStageProps) => {
@@ -38,10 +38,7 @@ export const ScrollStage = ({ media, text }: ScrollStageProps) => {
 
   // Re-render only when the text crosses the threshold, not per frame.
   const [textVisible, setTextVisible] = useState(false);
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    const visible = v >= TEXT_START;
-    setTextVisible((prev) => (prev === visible ? prev : visible));
-  });
+  useMotionValueEvent(scrollYProgress, "change", (v) => setTextVisible(v >= TEXT_START));
 
   return (
     // 100svh pinned + 100svh of scroll = 200svh.
