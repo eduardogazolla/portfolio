@@ -29,7 +29,7 @@ type ButtonProps = ButtonAsButton | ButtonAsLink;
 const base =
   "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-label-m " +
   "transition-transform duration-fast ease-out " +
-  "active:scale-[0.97] motion-reduce:active:scale-100 disabled:cursor-not-allowed disabled:opacity-60";
+  "active:scale-[0.97] motion-reduce:active:scale-100 disabled:cursor-not-allowed disabled:opacity-60 aria-busy:cursor-progress aria-busy:opacity-100";
 
 const variants: Record<Variant, string> = {
   primary: "bg-accent text-on-accent [@media(hover:hover)_and_(pointer:fine)]:hover:bg-text",

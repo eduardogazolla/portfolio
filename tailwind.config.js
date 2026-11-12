@@ -31,7 +31,7 @@ module.exports = {
         "body-l": ["20px", { lineHeight: "1.5" }],
         "body-m": ["16px", { lineHeight: "1.6" }],
         "label-m": ["14px", { lineHeight: "1.4", fontWeight: "500" }],
-        "mono-s": ["13px", { lineHeight: "1.4" }],
+        "mono-s": ["13px", { lineHeight: "1.4", letterSpacing: "0", fontWeight: "400" }],
       },
       borderRadius: {
         sm: "6px",

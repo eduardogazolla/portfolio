@@ -96,7 +96,7 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 - [x] T028 [P] Teste e implementação do BackToTop em `tests/components/back-to-top.test.tsx` e `app/componentes/back-to-top/index.tsx`: aparece depois de 1,5 × a altura da viewport; entra com opacity e `y` 8→0 (sem animar `top`/`right`); ao ativar, rola para o topo (instantâneo com reduzir movimento) e move o foco para `#main`; botão com nome acessível "Voltar ao topo" / "Back to top"
 - [x] T029 [P] Teste e implementação do SkipLink em `tests/components/skip-link.test.tsx` e `app/componentes/skip-link/index.tsx`: primeiro elemento focável, visível só no foco, aponta para `#main`; inserir em `app/layout.tsx` com `<main id="main" tabIndex={-1}>`
 - [x] T030 Adicionar a `app/utils/translations.ts` (PT e EN, no mesmo formato de dicionário) todas as strings novas da interface: papel do hero, subtítulos de seção, voz do contato (FR-007, FR-013, US2), menu, 404, "desde", "atual", rótulos de acessibilidade; manter o tipo `TranslationDictionary` exaustivo
-- [ ] T031 Verificar a Parte 2: gates verdes; uma página de verificação local (não versionada) ou Storybook-like via teste mostrando cada componente; Playwright MCP comparando com o board Componentes `4:3`; abrir o PR
+- [x] T031 Verificar a Parte 2: gates verdes; uma página de verificação local (não versionada) ou Storybook-like via teste mostrando cada componente; Playwright MCP comparando com o board Componentes `4:3`; abrir o PR
 
 **Checkpoint**: fundação pronta; as telas podem começar.
 
