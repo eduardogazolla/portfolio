@@ -113,6 +113,48 @@ describe('MobileMenu', () => {
     expect(trigger).toHaveFocus();
   });
 
+  it('moves focus to the target section when a hash link is clicked on the same page', async () => {
+    const section = document.createElement('section');
+    section.id = 'experience';
+    document.body.appendChild(section);
+    try {
+      renderMenu();
+      const { user } = await openMenu();
+      const dialog = await screen.findByRole('dialog');
+      await user.click(dialog.querySelector('nav a[href="/#experience"]') as HTMLElement);
+      await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+      expect(section).toHaveFocus();
+      expect(section).toHaveAttribute('tabindex', '-1');
+    } finally {
+      section.remove();
+    }
+  });
+
+  it('keeps focus on the Menu button for hash links from another page and for page links', async () => {
+    const section = document.createElement('section');
+    section.id = 'contact';
+    document.body.appendChild(section);
+    try {
+      mockPathname.mockReturnValue('/projects');
+      renderMenu();
+      const { user, trigger } = await openMenu();
+      let dialog = await screen.findByRole('dialog');
+      await user.click(dialog.querySelector('nav a[href="/#contact"]') as HTMLElement);
+      await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+      expect(trigger).toHaveFocus();
+      expect(section).not.toHaveFocus();
+
+      mockPathname.mockReturnValue('/');
+      await user.click(trigger);
+      dialog = await screen.findByRole('dialog');
+      await user.click(dialog.querySelector('nav a[href="/projects"]') as HTMLElement);
+      await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+      expect(trigger).toHaveFocus();
+    } finally {
+      section.remove();
+    }
+  });
+
   it('closes when a link is clicked', async () => {
     renderMenu();
     const { user } = await openMenu();

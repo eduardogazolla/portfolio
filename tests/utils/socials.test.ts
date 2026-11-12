@@ -1,4 +1,4 @@
-import { getSocialLabel } from '@/app/utils/socials';
+import { getSocialLabel, isGitHubSocial } from '@/app/utils/socials';
 
 describe('getSocialLabel', () => {
   it('uses the trimmed name', () => {
@@ -56,5 +56,27 @@ describe('getSocialLabel', () => {
 
   it('returns the raw url when it cannot be parsed', () => {
     expect(getSocialLabel({ url: 'not a url' })).toBe('not a url');
+  });
+});
+
+describe('isGitHubSocial', () => {
+  it.each([
+    'https://github.com/user',
+    'https://www.github.com/user',
+    'github.com/user',
+    'HTTPS://GitHub.com/user',
+  ])('accepts %s', (url) => {
+    expect(isGitHubSocial({ url })).toBe(true);
+  });
+
+  it.each([
+    'https://evil.com/github.com',
+    'https://github.com.evil.com/x',
+    'https://notgithub.com/x',
+    'https://api.github.com/x',
+    'https://linkedin.com/in/x?ref=github.com',
+    '',
+  ])('rejects %s', (url) => {
+    expect(isGitHubSocial({ url })).toBe(false);
   });
 });

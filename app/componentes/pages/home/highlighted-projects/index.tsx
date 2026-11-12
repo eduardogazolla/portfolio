@@ -1,11 +1,12 @@
 "use client";
 
+import { PageSection } from "@/app/componentes/page-section";
 import { SectionTitle } from "@/app/componentes/section-title";
 import { Link } from "@/app/componentes/link";
 import { useLanguage } from "@/app/componentes/context/language-context";
 import type { Project } from "@/app/types/projects";
 import type { Social } from "@/app/types/page-info";
-import { getSocialLabel } from "@/app/utils/socials";
+import { getSocialLabel, isGitHubSocial } from "@/app/utils/socials";
 import { ProjectCard } from "./project-card";
 
 type HighlightedProjectsProps = {
@@ -13,18 +14,16 @@ type HighlightedProjectsProps = {
   socials: Social[];
 };
 
-const isGitHub = (social: Social) => /(^|[/.@])github\.com(?=[/:?#]|$)/i.test(social.url);
-
 export const HighlightedProjects = ({ projects, socials }: HighlightedProjectsProps) => {
   const { translations } = useLanguage();
   const { projectsSection } = translations;
 
   if (!projects?.length) return null;
 
-  const github = socials?.find(isGitHub);
+  const github = socials?.find(isGitHubSocial);
 
   return (
-    <section id="projects" className="container pt-28 md:pt-10 md:pb-40">
+    <PageSection id="projects" className="pt-28 md:pt-10 md:pb-40">
       <div className="flex flex-col md:flex-row md:items-end md:justify-between md:gap-12">
         <SectionTitle title={translations.projectsPage.title} />
         <Link href="/projects" arrow className="hidden text-label-m md:inline-flex md:pb-[3px]">
@@ -55,6 +54,6 @@ export const HighlightedProjects = ({ projects, socials }: HighlightedProjectsPr
           )}
         </div>
       </div>
-    </section>
+    </PageSection>
   );
 };

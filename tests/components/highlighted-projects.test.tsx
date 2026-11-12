@@ -1,5 +1,5 @@
 /// <reference types="@testing-library/jest-dom" />
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { HighlightedProjects } from '../../app/componentes/pages/home/highlighted-projects';
 import { LanguageProvider } from '../../app/componentes/context/language-context';
 import type { Project } from '../../app/types/projects';
@@ -93,9 +93,13 @@ describe('HighlightedProjects', () => {
     expect(screen.getByText(/More projects coming/i)).toBeInTheDocument();
   });
 
-  it('has no hardcoded Portuguese image alt prefix', () => {
-    renderSection([makeProject()]);
-    const img = screen.getByRole('img', { name: 'Hour Sync' });
-    expect(within(img.parentElement!).queryByAltText(/Thumbnail do projeto/)).toBeNull();
+  it('ignores a social that only mentions github.com in its path', () => {
+    renderSection([makeProject()], [{ name: 'Fake', url: 'https://evil.com/github.com' }]);
+    expect(screen.queryByRole('link', { name: /Fake/ })).not.toBeInTheDocument();
+  });
+
+  it('hides the empty thumbnail placeholder from assistive tech', () => {
+    const { container } = renderSection([makeProject({ thumbnail: null })]);
+    expect(container.querySelector('article > div')).toHaveAttribute('aria-hidden', 'true');
   });
 });

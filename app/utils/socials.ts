@@ -10,18 +10,26 @@ const knownHosts: Record<string, string> = {
   'wa.me': 'WhatsApp',
 };
 
-const parseHost = (url: string): string => {
+const parseHostname = (url: string): string => {
   const hasScheme = /^[a-z][a-z0-9+.-]*:/i.test(url);
   const candidates = hasScheme ? [url] : [url, `https://${url}`];
   for (const candidate of candidates) {
     try {
       const host = new URL(candidate).hostname;
-      if (host) return host.replace(/^(www|api)\./, '');
+      if (host) return host;
     } catch {
       // try the next candidate
     }
   }
   return '';
+};
+
+const parseHost = (url: string): string => parseHostname(url).replace(/^(www|api)\./, '');
+
+/** True only when the URL's host is github.com (or www.github.com), not when it merely mentions it. */
+export const isGitHubSocial = ({ url }: SocialLike): boolean => {
+  const host = parseHostname(url);
+  return host === 'github.com' || host === 'www.github.com';
 };
 
 /** Link label: the CMS name, else a known-host label, else the bare domain. */

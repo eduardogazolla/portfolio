@@ -50,7 +50,7 @@ type MenuDialogProps = {
   label: string;
   origin: Origin;
   socials: Social[];
-  onClose: () => void;
+  onClose: (focusSectionId?: string) => void;
 };
 
 const MenuDialog = ({ id, label, origin, socials, onClose }: MenuDialogProps) => {
@@ -102,6 +102,12 @@ const MenuDialog = ({ id, label, origin, socials, onClose }: MenuDialogProps) =>
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [onClose, isPresent]);
 
+  // A hash link on the page we are already on scrolls in place, so focus should follow it.
+  const closeForLink = (href: string) => () => {
+    const hash = href.startsWith("/#") ? href.slice(2) : "";
+    onClose(hash && pathname === "/" ? hash : undefined);
+  };
+
   const links = [
     { label: translations.header.home, href: "/" },
     { label: translations.header.projects, href: "/projects" },
@@ -140,7 +146,7 @@ const MenuDialog = ({ id, label, origin, socials, onClose }: MenuDialogProps) =>
       {...dialogMotion}
     >
       <div className="flex items-center justify-between">
-        <NextLink href="/" onClick={onClose} className="min-w-0 truncate text-label-m text-text">
+        <NextLink href="/" onClick={() => onClose()} className="min-w-0 truncate text-label-m text-text">
           Eduardo Gazolla
         </NextLink>
         <div className="flex shrink-0 items-center gap-2">
@@ -149,7 +155,7 @@ const MenuDialog = ({ id, label, origin, socials, onClose }: MenuDialogProps) =>
             data-menu-close
             variant="secondary"
             className="min-h-11 border-text px-5 py-3 min-[360px]:px-7 min-[360px]:py-4"
-            onClick={onClose}
+            onClick={() => onClose()}
           >
             {translations.menu.close}
           </Button>
@@ -176,7 +182,7 @@ const MenuDialog = ({ id, label, origin, socials, onClose }: MenuDialogProps) =>
               >
                 <NextLink
                   href={item.href}
-                  onClick={onClose}
+                  onClick={closeForLink(item.href)}
                   aria-current={isCurrent ? "page" : undefined}
                   className={cn(
                     "inline-flex items-center gap-[14px] font-display font-extrabold leading-[0.92] tracking-[-0.03em]",
@@ -216,7 +222,7 @@ const MenuDialog = ({ id, label, origin, socials, onClose }: MenuDialogProps) =>
         <Button
           href="/#contact"
           data-menu-cta
-          onClick={onClose}
+          onClick={closeForLink("/#contact")}
           className="w-full px-7 py-4"
         >
           {translations.contactVoice.primaryButton}
@@ -234,10 +240,10 @@ export const MobileMenu = ({ socials }: MobileMenuProps) => {
   const triggerId = useId();
 
   // Where focus goes once the menu is closed (and the page is no longer inert).
-  const returnFocusTo = useRef<"trigger" | "main">("trigger");
+  const returnFocusTo = useRef<"trigger" | "main" | { sectionId: string }>("trigger");
 
-  const close = useCallback(() => {
-    returnFocusTo.current = "trigger";
+  const close = useCallback((focusSectionId?: string) => {
+    returnFocusTo.current = focusSectionId ? { sectionId: focusSectionId } : "trigger";
     setOpen(false);
   }, []);
 
@@ -270,11 +276,17 @@ export const MobileMenu = ({ socials }: MobileMenuProps) => {
   const wasOpen = useRef(false);
   useEffect(() => {
     if (wasOpen.current && !open) {
-      const target =
-        returnFocusTo.current === "main"
-          ? document.getElementById("main")
-          : document.getElementById(triggerId);
-      target?.focus();
+      const to = returnFocusTo.current;
+      const section = typeof to === "object" ? document.getElementById(to.sectionId) : null;
+      if (section) {
+        // Sections are not focusable by default; the browser scrolls to the hash itself.
+        if (!section.hasAttribute("tabindex")) section.setAttribute("tabindex", "-1");
+        section.focus();
+      } else {
+        const target =
+          to === "main" ? document.getElementById("main") : document.getElementById(triggerId);
+        target?.focus();
+      }
     }
     wasOpen.current = open;
   }, [open, triggerId]);
