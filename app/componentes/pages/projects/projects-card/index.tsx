@@ -6,11 +6,13 @@ import type { Project } from "@/app/types/projects";
 type ProjectCardProps = {
   project: Project;
   viewProjectLabel: string;
+  /** Above-the-fold card: load its image eagerly with high fetch priority. */
+  priority?: boolean;
 };
 
 // Featured block (fewer than 4 projects). Unlike the Home card, the whole card is the
 // link on mobile (arrow beside the title, pressed scale 0.98) and "Ver projeto" shows from md.
-export const ProjectCard = ({ project, viewProjectLabel }: ProjectCardProps) => (
+export const ProjectCard = ({ project, viewProjectLabel, priority = false }: ProjectCardProps) => (
   <article className="relative flex flex-col gap-4 border-t border-line pt-6 transition-transform duration-fast ease-out active:scale-[0.98] motion-reduce:active:scale-100 md:gap-8 md:border-t-0 md:pt-0 md:active:scale-100">
     <div
       data-testid="project-thumbnail"
@@ -22,6 +24,8 @@ export const ProjectCard = ({ project, viewProjectLabel }: ProjectCardProps) => 
           src={project.thumbnail.url}
           alt={project.title}
           fill
+          loading={priority ? "eager" : undefined}
+          fetchPriority={priority ? "high" : undefined}
           sizes="(min-width: 1440px) 1200px, (min-width: 1024px) calc(100vw - 80px), calc(100vw - 40px)"
           className="object-cover"
         />
@@ -52,6 +56,7 @@ export const ProjectCard = ({ project, viewProjectLabel }: ProjectCardProps) => 
         <Link
           href={`/projects/${project.slug}`}
           arrow
+          aria-label={`${viewProjectLabel}: ${project.title}`}
           className="text-label-m after:absolute after:inset-0 max-md:gap-0 max-md:[&>[data-arrow]]:hidden"
         >
           <span className="max-md:sr-only">{viewProjectLabel}</span>

@@ -1,5 +1,6 @@
 "use client";
 
+import type { Ref } from "react";
 import { cn } from "@/app/lib/utils";
 import { useLanguage } from "@/app/componentes/context/language-context";
 
@@ -9,9 +10,11 @@ type TechFilterProps = {
   techs: string[];
   value: string;
   onChange: (value: string) => void;
+  /** Ref to the "all" button, so callers can move focus back to it. */
+  allRef?: Ref<HTMLButtonElement>;
 };
 
-export const TechFilter = ({ techs, value, onChange }: TechFilterProps) => {
+export const TechFilter = ({ techs, value, onChange, allRef }: TechFilterProps) => {
   const { translations } = useLanguage();
   const options = [
     { value: ALL_FILTER, label: translations.projectsSection.filterAll },
@@ -25,6 +28,7 @@ export const TechFilter = ({ techs, value, onChange }: TechFilterProps) => {
         return (
           <button
             key={option.value}
+            ref={option.value === ALL_FILTER ? allRef : undefined}
             type="button"
             aria-pressed={active}
             onClick={() => onChange(option.value)}

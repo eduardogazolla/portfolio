@@ -18,7 +18,7 @@ export const PageIntroduction = ({ count, children }: PageIntroductionProps) => 
   return (
     <PageSection className="pb-10 pt-10 md:pb-16 md:pt-20" innerClassName="flex flex-col gap-5 md:gap-8">
       <div className="flex items-end justify-between gap-6">
-        <h1 className="group relative w-fit max-w-full font-display text-display-xl tracking-[-0.04em] text-text [font-size:clamp(64px,24vw,96px)] md:[font-size:176px]">
+        <h1 className="group relative w-fit max-w-full font-display text-[96px] font-extrabold leading-[0.88] tracking-[-0.04em] text-text md:text-display-xl md:tracking-[-0.04em]">
           {translations.projectsPage.title}
           <InspectOutline variant="hover" measure selector="h1" />
         </h1>

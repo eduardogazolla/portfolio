@@ -8,24 +8,30 @@ import type { Project } from "@/app/types/projects";
 
 type ProjectRowProps = {
   project: Project;
-  onHover: (project: Project | null) => void;
+  onHover: (slug: string | null) => void;
+  /** Another visible row has a context label: reserve its column so titles align. */
+  reserveContext?: boolean;
 };
 
 const fine = "[@media(hover:hover)_and_(pointer:fine)]";
 
 // Row on md+ (title, summary, techs, arrow); a card with image on mobile, where there is no hover.
-export const ProjectRow = ({ project, onHover }: ProjectRowProps) => (
+export const ProjectRow = ({ project, onHover, reserveContext = false }: ProjectRowProps) => (
   <li
-    onPointerEnter={(event) => event.pointerType === "mouse" && onHover(project)}
+    onPointerEnter={(event) => event.pointerType === "mouse" && onHover(project.slug)}
     onPointerLeave={() => onHover(null)}
-    className={`group relative flex flex-col gap-3.5 border-t border-line pt-6 transition-[background-color,transform] duration-fast ease-out active:scale-[0.98] motion-reduce:active:scale-100 md:flex-row md:items-center md:gap-8 md:border-b md:border-t-0 md:px-6 md:py-9 md:active:scale-100 ${fine}:hover:bg-surface`}
+    className={`group relative flex flex-col gap-3.5 border-t border-line pt-6 transition-[background-color,transform] duration-fast ease-out active:scale-[0.98] motion-reduce:active:scale-100 md:flex-row md:items-center md:gap-8 md:border-b md:border-t-0 md:px-6 md:py-9 md:active:scale-100 ${fine}:hover:bg-surface has-[:focus-visible]:bg-surface`}
   >
     {project.thumbnail?.url && (
       <div className="relative aspect-[7/4] w-full overflow-hidden rounded-md bg-surface md:hidden">
-        <Image src={project.thumbnail.url} alt={project.title} fill sizes="(min-width: 768px) 0px, calc(100vw - 40px)" className="object-cover" />
+        <Image src={project.thumbnail.url} alt={project.title} fill sizes="calc(100vw - 40px)" className="object-cover" />
       </div>
     )}
-    {project.context && <p className="text-label-m text-text-muted md:w-[72px] md:shrink-0">{project.context}</p>}
+    {project.context ? (
+      <p className="text-label-m text-text-muted md:w-[72px] md:shrink-0">{project.context}</p>
+    ) : (
+      reserveContext && <span aria-hidden="true" data-testid="context-spacer" className="hidden md:block md:w-[72px] md:shrink-0" />
+    )}
     <div className="flex min-w-0 flex-1 flex-col gap-3.5 md:gap-2">
       <div className="flex items-center justify-between gap-4">
         <h2>

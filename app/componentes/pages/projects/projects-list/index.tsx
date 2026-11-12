@@ -18,13 +18,23 @@ type ProjectsListProps = {
 
 export const ProjectsList = ({ projects, filter, onClearFilter }: ProjectsListProps) => {
   const { translations } = useLanguage();
-  const [hovered, setHovered] = useState<Project | null>(null);
+  const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
+  const [seenProjects, setSeenProjects] = useState(projects);
+
+  // Never keep a preview alive across a filter or locale change.
+  if (seenProjects !== projects) {
+    setSeenProjects(projects);
+    setHoveredSlug(null);
+  }
+
+  const hovered = projects.find((project) => project.slug === hoveredSlug);
+  const reserveContext = projects.some((project) => project.context);
 
   return (
     <PageSection className="pb-16 md:pb-[120px]">
       {projects.length === 0 ? (
         <div className="flex flex-col items-start gap-4 border-t border-line pt-8">
-          <p className="text-body-m text-text-muted">
+          <p role="status" className="text-body-m text-text-muted">
             {translations.projectsSection.noProjectsWith(filter === ALL_FILTER ? "" : filter)}
           </p>
           <Button variant="secondary" onClick={onClearFilter}>
@@ -34,7 +44,7 @@ export const ProjectsList = ({ projects, filter, onClearFilter }: ProjectsListPr
       ) : (
         <ul className="flex flex-col gap-8 md:gap-0 md:border-t md:border-line">
           {projects.map((project) => (
-            <ProjectRow key={project.slug} project={project} onHover={setHovered} />
+            <ProjectRow key={project.slug} project={project} onHover={setHoveredSlug} reserveContext={reserveContext} />
           ))}
         </ul>
       )}

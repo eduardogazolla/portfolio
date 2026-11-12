@@ -1,5 +1,6 @@
 /// <reference types="@testing-library/jest-dom" />
 import { fireEvent, render, screen, within } from '@testing-library/react';
+import { ProjectsList } from '../../app/componentes/pages/projects/projects-list';
 import { ProjectsListClient } from '../../app/componentes/pages/projects/projects-list-client';
 import { LanguageProvider } from '../../app/componentes/context/language-context';
 import type { Project } from '../../app/types/projects';
@@ -92,25 +93,6 @@ describe('ProjectsListClient with four projects', () => {
     expect(screen.getByRole('link', { name: /Projeto Dois/ })).toHaveAttribute('href', '/projects/two');
   });
 
-  it('shows "Nenhum projeto com <tech>" when the active filter no longer matches, and clears it', () => {
-    // Java exists in PT only (EN calls it Go); switching to EN leaves the active filter empty.
-    const en = four.map((p) => ({ ...p, technologies: p.technologies.map((t) => (t.name === 'Java' ? { name: 'Go' } : t)) }));
-    localStorage.clear();
-    localStorage.setItem('portfolio-gazolla:locale', 'pt-BR');
-    render(
-      <LanguageProvider>
-        <LocaleSwitch />
-        <ProjectsListClient data={{ ptProjects: four, enProjects: en, socials }} />
-      </LanguageProvider>
-    );
-    fireEvent.click(screen.getByRole('button', { name: 'Java' }));
-    fireEvent.click(screen.getByRole('button', { name: 'to-en' }));
-    expect(screen.getByText('No project with Java')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Clear filter' }));
-    expect(screen.getByText('4 projects')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'All' })).toHaveAttribute('aria-pressed', 'true');
-  });
-
   it('uses the English copy', () => {
     renderPage(four, four, 'en');
     expect(screen.getByText('4 projects')).toBeInTheDocument();
@@ -128,5 +110,75 @@ describe('ProjectsListClient with four projects', () => {
     // missing EN falls back to PT
     expect(screen.getByRole('heading', { name: 'Projeto Dois' })).toBeInTheDocument();
     expect(within(screen.getAllByRole('heading', { level: 2 })[0].closest('li') as HTMLElement).getByRole('link')).toHaveAttribute('href', '/projects/hour-sync');
+  });
+});
+
+describe('ProjectsListClient a11y and layout fixes', () => {
+  it('gives each featured link a unique accessible name and loads the first image eagerly', () => {
+    renderPage([makeProject()]);
+    const link = screen.getByRole('link', { name: 'Ver projeto: Hour Sync' });
+    expect(link).toHaveAttribute('href', '/projects/hour-sync');
+    expect(screen.getByAltText('Hour Sync')).toHaveAttribute('fetchpriority', 'high');
+    expect(screen.getByAltText('Hour Sync')).toHaveAttribute('loading', 'eager');
+  });
+
+  it('reserves the context column on rows without context when another row has one', () => {
+    renderPage(four);
+    expect(screen.getAllByTestId('context-spacer')).toHaveLength(3);
+  });
+
+  it('does not reserve the column when no row has context', () => {
+    const noCtx = four.map((p) => ({ ...p, context: null }));
+    renderPage(noCtx);
+    expect(screen.queryByTestId('context-spacer')).not.toBeInTheDocument();
+  });
+
+  it('resets the filter silently when the locale removes the active tech', () => {
+    const en = four.map((p) => ({ ...p, technologies: p.technologies.map((t) => (t.name === 'Java' ? { name: 'Go' } : t)) }));
+    localStorage.clear();
+    localStorage.setItem('portfolio-gazolla:locale', 'pt-BR');
+    render(
+      <LanguageProvider>
+        <LocaleSwitch />
+        <ProjectsListClient data={{ ptProjects: four, enProjects: en, socials }} />
+      </LanguageProvider>
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Java' }));
+    fireEvent.click(screen.getByRole('button', { name: 'to-en' }));
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    expect(screen.getByText('4 projects')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'All' })).toHaveAttribute('aria-pressed', 'true');
+  });
+});
+
+describe('ProjectsList empty state and hover', () => {
+  const clear = jest.fn();
+  const renderList = (projects: Project[], filter = 'Rust') =>
+    render(
+      <LanguageProvider>
+        <ProjectsList projects={projects} filter={filter} onClearFilter={clear} />
+      </LanguageProvider>
+    );
+
+  it('announces the empty state with role=status', () => {
+    renderList([]);
+    expect(screen.getByRole('status')).toHaveTextContent(/Rust/);
+  });
+
+  it('calls onClearFilter from the empty state', () => {
+    renderList([]);
+    fireEvent.click(screen.getByRole('button', { name: 'Clear filter' }));
+    expect(clear).toHaveBeenCalled();
+  });
+
+  it('does not keep a cursor preview for a row that left the list', () => {
+    const { rerender } = renderList(four, 'all');
+    fireEvent.pointerEnter(screen.getAllByRole('listitem')[0], { pointerType: 'mouse' });
+    rerender(
+      <LanguageProvider>
+        <ProjectsList projects={four.slice(1)} filter="React" onClearFilter={clear} />
+      </LanguageProvider>
+    );
+    expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(3);
   });
 });
