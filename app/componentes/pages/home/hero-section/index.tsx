@@ -7,7 +7,7 @@ import { TechBadge } from "@/app/componentes/tech-badge";
 import { HomePageInfo } from "@/app/types/page-info";
 import Image from "next/image";
 import { HiArrowNarrowRight } from "react-icons/hi";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { techBadgeAnimation } from "@/app/lib/animations";
 import { useLanguage } from "@/app/componentes/context/language-context";
 

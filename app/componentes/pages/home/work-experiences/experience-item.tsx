@@ -7,7 +7,7 @@ import { WorkExperience } from "@/app/types/work-experience";
 import { differenceInMonths, differenceInYears, format } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
 import enUS from "date-fns/locale/en-US";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import Image from "next/image";
 import { useLanguage } from "@/app/componentes/context/language-context";
 

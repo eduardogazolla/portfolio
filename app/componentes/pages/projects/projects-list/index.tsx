@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ProjectCard } from "../projects-card";
 import { Project } from "@/app/types/projects";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { fadeUpAnimation } from "@/app/lib/animations";
 
 type ProjectsListProps = {

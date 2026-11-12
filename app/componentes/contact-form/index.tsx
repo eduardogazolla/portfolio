@@ -8,7 +8,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { fadeUpAnimation } from "@/app/lib/animations";
 import { useLanguage } from "@/app/componentes/context/language-context";
 

@@ -67,9 +67,3 @@ logs/
 # Build artifacts
 build/
 dist/
-
-# Package manager lock files (uncomment if you want to ignore)
-/package-lock.json
-/yarn.lock
-/pnpm-lock.yaml
-

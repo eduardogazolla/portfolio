@@ -9,7 +9,7 @@ import { Link } from "@/app/componentes/link";
 import { HiArrowNarrowLeft } from "react-icons/hi";
 import { RichText } from "@/app/componentes/rich-text";
 import { Project } from "@/app/types/projects";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { fadeUpAnimation, techBadgeAnimation } from "@/app/lib/animations";
 import { useLanguage } from "@/app/componentes/context/language-context";
 
