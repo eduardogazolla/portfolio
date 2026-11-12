@@ -119,3 +119,42 @@ describe("createContactSchema", () => {
     expect(msg("mariaempresa.com")).toMatch(/@/);
   });
 });
+
+describe("createContactSchema abuse hardening", () => {
+  it("defaults the honeypot field `website` to an empty string", () => {
+    const result = createContactSchema("pt").safeParse(valid);
+    expect(result.success && result.data.website).toBe("");
+  });
+
+  it("accepts a filled honeypot (the route decides what to do) but caps it", () => {
+    const schema = createContactSchema("pt");
+    expect(schema.safeParse({ ...valid, website: "http://spam" }).success).toBe(true);
+    expect(schema.safeParse({ ...valid, website: "x".repeat(201) }).success).toBe(false);
+  });
+
+  it("strips ASCII control characters from name and email", () => {
+    const result = createContactSchema("pt").safeParse({
+      ...valid,
+      name: "Ma\u0000ria\u001b Silva\n",
+      email: "ma\u0007ria@empresa.com",
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.name).toBe("Maria Silva");
+      expect(result.data.email).toBe("maria@empresa.com");
+    }
+  });
+
+  it("strips control characters from the message but keeps newlines and tabs", () => {
+    const result = createContactSchema("pt").safeParse({
+      ...valid,
+      message: "Oi\u0000\u0008,\n\tEduardo\r\u007f!",
+    });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.message).toBe("Oi,\n\tEduardo!");
+  });
+
+  it("a message made only of control characters counts as empty", () => {
+    expect(createContactSchema("pt").safeParse({ ...valid, message: "\u0000\u0001" }).success).toBe(false);
+  });
+});
