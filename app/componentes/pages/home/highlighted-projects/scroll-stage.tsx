@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
-import { motion, useMotionTemplate, useScroll, useTransform } from "motion/react";
+import { useRef, useState, type ReactNode } from "react";
+import { motion, useMotionTemplate, useMotionValueEvent, useScroll, useTransform } from "motion/react";
 import { useMediaQuery } from "@/app/lib/use-media-query";
 import { usePrefersReducedMotion } from "@/app/lib/use-prefers-reduced-motion";
 
@@ -10,14 +10,24 @@ type ScrollStageProps = {
   text: ReactNode;
 };
 
-// Motion board 12:21, "Projeto em destaque (Home)": the card is pinned for 1.5 screens ; the image
-// grows 0.86 -> 1 while its radius goes 14 -> 0 (clip-path, so only compositor-friendly properties
-// animate); then title and text fade in. Linked to scroll progress, no timing curve.
+// Motion board 12:21, "Projeto em destaque (Home)": the card is pinned for 1 screen of scroll; the
+// image grows 0.86 -> 1 while its radius goes 14 -> 0 (clip-path: it repaints each frame, but it is
+// the only way to round a scaling frame without distorting the corners; the scale itself is
+// transform-only); then title and text fade in. Linked to scroll progress, no timing curve.
 const IMAGE_END = 0.6; // share of the pinned scroll spent on the image
 const TEXT_START = 0.6;
 const TEXT_END = 0.9;
 
-const ActiveStage = ({ media, text }: ScrollStageProps) => {
+// The pinned layout needs room: desktop width and at least 640px of height. Below that the card is
+// static. Expressed in CSS (class strings are literal so Tailwind sees them, and mirror
+// `ACTIVE_QUERY`) so the server HTML already has the final
+// layout and JS only drives the transforms. `motion-safe` keeps reduced motion static.
+const ACTIVE_QUERY = "(min-width: 768px) and (min-height: 640px)";
+
+export const ScrollStage = ({ media, text }: ScrollStageProps) => {
+  const wide = useMediaQuery(ACTIVE_QUERY);
+  const reduced = usePrefersReducedMotion();
+  const active = wide && !reduced;
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
   const scale = useTransform(scrollYProgress, [0, IMAGE_END], [0.86, 1], { clamp: true });
@@ -26,34 +36,30 @@ const ActiveStage = ({ media, text }: ScrollStageProps) => {
   const opacity = useTransform(scrollYProgress, [TEXT_START, TEXT_END], [0, 1], { clamp: true });
   const y = useTransform(scrollYProgress, [TEXT_START, TEXT_END], [12, 0], { clamp: true });
 
-  // 100svh pinned + 1.5 viewports of scroll = 250svh.
+  // Re-render only when the text crosses the threshold, not per frame.
+  const [textVisible, setTextVisible] = useState(false);
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    const visible = v >= TEXT_START;
+    setTextVisible((prev) => (prev === visible ? prev : visible));
+  });
+
   return (
-    <div ref={ref} className="h-[250svh]">
-      <div className="sticky top-0 flex h-[100svh] flex-col justify-center gap-8 py-20">
-        <motion.div style={{ scale, clipPath }} className="max-h-[55svh] overflow-hidden [&>*]:rounded-none">
+    // 100svh pinned + 100svh of scroll = 200svh.
+    <div ref={ref} className="[@media(min-width:768px)_and_(min-height:640px)]:motion-safe:h-[200svh]">
+      <div
+        className="flex flex-col gap-6 md:gap-8 [@media(min-width:768px)_and_(min-height:640px)]:motion-safe:sticky [@media(min-width:768px)_and_(min-height:640px)]:motion-safe:top-0 [@media(min-width:768px)_and_(min-height:640px)]:motion-safe:h-[100svh] [@media(min-width:768px)_and_(min-height:640px)]:motion-safe:justify-center [@media(min-width:768px)_and_(min-height:640px)]:motion-safe:py-16"
+      >
+        {/* Width follows the 1200/620 aspect from a height budget, so the whole image scales. */}
+        <motion.div
+          style={active ? { scale, clipPath } : undefined}
+          className="[@media(min-width:768px)_and_(min-height:640px)]:motion-safe:mx-auto [@media(min-width:768px)_and_(min-height:640px)]:motion-safe:w-[min(100%,calc(min(60svh,100svh_-_360px)_*_1200_/_620))] [@media(min-width:768px)_and_(min-height:640px)]:motion-safe:[&>*]:rounded-none"
+        >
           {media}
         </motion.div>
-        <motion.div style={{ opacity, y }}>{text}</motion.div>
+        <motion.div style={active ? { opacity, y } : undefined} inert={active && !textVisible}>
+          {text}
+        </motion.div>
       </div>
     </div>
   );
-};
-
-/**
- * Pins the card on desktop. Static (media above text) on small screens, with reduced motion, and in
- * the server HTML: both hooks report `false` until hydration, so no content depends on JS.
- */
-export const ScrollStage = ({ media, text }: ScrollStageProps) => {
-  const wide = useMediaQuery("(min-width: 768px)");
-  const reduced = usePrefersReducedMotion();
-
-  if (!wide || reduced) {
-    return (
-      <div className="flex flex-col gap-6 md:gap-8">
-        {media}
-        {text}
-      </div>
-    );
-  }
-  return <ActiveStage media={media} text={text} />;
 };
