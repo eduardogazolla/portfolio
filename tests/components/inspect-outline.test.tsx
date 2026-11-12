@@ -67,6 +67,15 @@ describe('InspectOutline', () => {
     expect(root.className).toMatch(/group-hover:opacity-100/);
   });
 
+  it('hover variant scales 1.02 -> 1 (board 12:21), leaves after 120 ms, and skips the scale when reduced', () => {
+    const { container } = renderOutline(<InspectOutline variant="hover" label="h2" />);
+    const root = container.querySelector('[data-testid="parent"]')!.firstElementChild!;
+    expect(root.className).toMatch(/scale-\[1\.02\]/);
+    expect(root.className).toMatch(/group-hover:scale-100/);
+    expect(root.className).toMatch(/delay-\[120ms\]/);
+    expect(root.className).toMatch(/motion-reduce:scale-100/);
+  });
+
   describe('measure', () => {
     let callback: () => void = () => {};
     const observe = jest.fn();

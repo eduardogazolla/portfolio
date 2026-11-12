@@ -70,3 +70,7 @@ dist/
 
 # Agent instructions
 AGENTS.md
+
+# Playwright
+/test-results/
+/playwright-report/

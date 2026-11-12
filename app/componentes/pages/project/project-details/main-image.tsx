@@ -26,7 +26,7 @@ export const MainImage = ({ src, alt }: MainImageProps) => {
         className="absolute inset-x-0 -inset-y-6"
         style={{ scale, y }}
       >
-        <Image src={src} alt={alt} fill sizes="100vw" preload className="object-cover" />
+        <Image src={src} alt={alt} fill sizes="100vw" quality={70} loading="eager" fetchPriority="high" className="object-cover" />
       </motion.div>
     </div>
   );

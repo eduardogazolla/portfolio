@@ -109,7 +109,7 @@ export const ContactForm = ({ socials = [] }: { socials?: Social[] }) => {
     <PageSection
       id="contact"
       className="pt-28 md:pt-10 md:pb-40"
-      innerClassName="flex flex-col gap-7 md:flex-row md:justify-between md:gap-12"
+      innerClassName="flex flex-col gap-7 xl:flex-row xl:justify-between xl:gap-12"
     >
       <SectionTitle
         title={t.title}
@@ -117,7 +117,7 @@ export const ContactForm = ({ socials = [] }: { socials?: Social[] }) => {
         className="gap-7 md:gap-6"
         subtitleClassName="md:max-w-[440px] md:text-body-l"
       />
-      <div className="w-full md:max-w-[480px] md:shrink-0">
+      <div className="w-full md:max-w-[640px] xl:max-w-[480px] xl:shrink-0">
         <div aria-live="polite" className="sr-only">
           {/* The confirmation is announced by its focused heading. */}
           {submitting ? t.submittingAnnouncement : ""}

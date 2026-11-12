@@ -98,7 +98,9 @@ export const HeroSection = ({ homeInfo, currentExperience }: HeroSectionProps) =
                 src={profilePictureUrl}
                 alt={translations.hero.photoAlt}
                 fill
-                priority
+                loading="eager"
+                fetchPriority="high"
+                quality={70}
                 sizes="(min-width: 1024px) 400px, calc(100vw - 40px)"
                 className="object-cover"
               />

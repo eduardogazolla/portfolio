@@ -9,9 +9,12 @@ import { AppMotionConfig } from "./componentes/motion-config";
 import { LanguageProvider } from "./componentes/context/language-context";
 import { fetchHygraphQuery } from "./utils/fetch-hygraph-query";
 import type { Social } from "./types/page-info";
+import { InlineScript } from "./componentes/inline-script";
 import { INTRO_BOOT_SCRIPT } from "./componentes/pages/home/hero-section/intro-flag";
 
 export const metadata = {
+  description:
+    "Portfólio de Eduardo Gazolla, desenvolvedor front-end e analista de testes: projetos, tecnologias e experiência.",
   title: {
     default: "Eduardo Gazolla - Portfólio",
     template: "%s | Eduardo Gazolla - Portfólio",
@@ -84,7 +87,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       <head>
         {/* Constant boot script (no interpolated data): marks <html data-intro="play"> before
             paint on a session's first visit so the hero can start hidden without a flash. */}
-        <script dangerouslySetInnerHTML={{ __html: INTRO_BOOT_SCRIPT }} />
+        <InlineScript html={INTRO_BOOT_SCRIPT} />
       </head>
       <body>
         <AppMotionConfig>

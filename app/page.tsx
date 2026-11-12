@@ -3,6 +3,11 @@ import { WorkExperience } from "./types/work-experience";
 import { fetchHygraphQuery } from "./utils/fetch-hygraph-query";
 import { HomeClient } from "./componentes/pages/home/home-client";
 
+export const metadata = {
+  description:
+    "Eduardo Gazolla, desenvolvedor front-end e analista de testes. Conheça meus projetos, tecnologias e experiência.",
+};
+
 // Keep in sync with the `HomePage` operation in
 // specs/002-redesign/contracts/hygraph-queries.graphql.
 const query = `

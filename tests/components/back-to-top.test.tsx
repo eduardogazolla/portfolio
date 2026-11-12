@@ -3,10 +3,7 @@ import { LanguageProvider } from '../../app/componentes/context/language-context
 import { BackToTop } from '../../app/componentes/back-to-top';
 
 const mockReduced = jest.fn(() => false);
-jest.mock('motion/react', () => {
-  const actual = jest.requireActual('motion/react');
-  return { ...actual, useReducedMotion: () => mockReduced() };
-});
+jest.mock('@/app/lib/use-prefers-reduced-motion', () => ({ usePrefersReducedMotion: () => mockReduced() }));
 
 const setScroll = (y: number) => {
   Object.defineProperty(window, 'scrollY', { value: y, configurable: true });

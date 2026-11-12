@@ -23,7 +23,7 @@ npm run test:e2e  # Playwright (a partir da Parte 6)
 
 | # | Cenário | Como | Esperado |
 |---|---------|------|----------|
-| V1 | Primeira dobra (US1) | `npm run dev`, abrir `/` em 1440×900 e 390×844 | nome, papel, apresentação, "Agora: …", sociais e "Vamos conversar" visíveis sem rolar |
+| V1 | Primeira dobra (US1) | `npm run dev`, abrir `/` em 1440×900 e 390×844 | nome, papel, apresentação, "Agora: …", sociais e "Vamos conversar" visíveis sem rolar em 1440×900; em 390×844 só nome, papel, apresentação e CTA: "Agora:" e sociais ficam abaixo da dobra por design (Figma `8:29`) |
 | V2 | Entrada uma vez por sessão (US1) | recarregar `/` na mesma aba | topo aparece pronto, sem animar |
 | V3 | Reduzir movimento (US1, SC-007) | DevTools → Rendering → `prefers-reduced-motion: reduce` | nada se desloca nem escala; só fades |
 | V4 | Form inválido (US2) | enviar vazio; depois e-mail `eduardo@gmail` | erros abaixo dos campos, foco no 1º, texto do erro ensina a corrigir |

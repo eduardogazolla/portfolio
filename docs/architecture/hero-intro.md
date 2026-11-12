@@ -23,9 +23,10 @@ be after first paint, so the hidden initial state would flash. A plain inline `<
 `<head>` runs while the parser reaches it, before paint, so it stays (Next 16.4.6). The
 `suppressHydrationWarning` on `<html>` stays too, because the script sets `data-intro`.
 
-Known dev-only noise: React logs "Encountered a script tag while rendering React component" when
-the root layout is rendered on the client (seen on the 404 page). The script has already run in the
-server HTML, so behavior is unaffected.
+The script is rendered through `InlineScript` (`app/componentes/inline-script`), Next's documented
+pattern for inline head scripts: `type="text/javascript"` on the server (it runs from the HTML) and
+`type="text/plain"` when React renders the layout on the client, which silences React's dev warning
+"Encountered a script tag while rendering React component" (seen on the 404 page).
 
 ## CSP
 
