@@ -4,8 +4,9 @@ import type { ReactNode } from "react";
 import { useLanguage } from "@/app/componentes/context/language-context";
 import { Link } from "@/app/componentes/link";
 import { PageSection } from "@/app/componentes/page-section";
+import { PageTitle } from "@/app/componentes/page-title";
 import { RichText } from "@/app/componentes/rich-text";
-import { SectionTitle } from "@/app/componentes/section-title";
+
 import { TechBadge } from "@/app/componentes/tech-badge";
 import { cn } from "@/app/lib/utils";
 import { Project } from "@/app/types/projects";
@@ -44,7 +45,7 @@ export const ProjectDetails = ({ project }: ProjectDetailsProps) => {
         <Link href="/projects" arrow className="text-label-m">
           {backToProjects}
         </Link>
-        <SectionTitle as="h1" title={project.title} />
+        <PageTitle title={project.title} />
         <div className="grid gap-6 md:grid-cols-[3fr_3fr_4fr] md:gap-0">
           <MetaColumn label={whatItIs}>
             <p className={valueClass}>{project.shortDescription}</p>
