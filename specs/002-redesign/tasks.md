@@ -64,8 +64,8 @@ que atendem.
 ### Parte 1 `feat/redesign-tokens`
 
 - [x] T011 Ler no Figma o valor exato da cor de erro no componente Input / State=Error (nó `5:101`, fileKey `nuxSe49ViC40aYOcI0nImY`) e confirmar contraste ≥ 4,5:1 sobre `#050505`; registrar em `specs/002-redesign/data-model.md` §1 (token `danger`)
-- [ ] T012 Declarar os tokens como CSS vars em `:root` de `app/globals.css`: `--color-bg #050505`, `--color-surface #111113`, `--color-line #232327`, `--color-text #F2F2EF`, `--color-text-muted #8B8B92`, `--accent-cobalto #5B6BFF`, `--accent-laranja #FF5A1F`, `--accent-lima #C8FF2E`, `--color-accent var(--accent-cobalto)`, `--color-on-accent #050505`, `--color-danger` (T011); motion `--duration-fast 140ms`, `--duration-base 220ms`, `--duration-slow 700ms`, `--ease-out cubic-bezier(0.22, 1, 0.36, 1)`, `--ease-in-out cubic-bezier(0.65, 0, 0.35, 1)`; `body` com `bg`/`text`; seleção de texto e scrollbar no tema novo
-- [ ] T013 Mapear os tokens em `tailwind.config.js`:
+- [x] T012 Declarar os tokens como CSS vars em `:root` de `app/globals.css`: `--color-bg #050505`, `--color-surface #111113`, `--color-line #232327`, `--color-text #F2F2EF`, `--color-text-muted #8B8B92`, `--accent-cobalto #5B6BFF`, `--accent-laranja #FF5A1F`, `--accent-lima #C8FF2E`, `--color-accent var(--accent-cobalto)`, `--color-on-accent #050505`, `--color-danger` (T011); motion `--duration-fast 140ms`, `--duration-base 220ms`, `--duration-slow 700ms`, `--ease-out cubic-bezier(0.22, 1, 0.36, 1)`, `--ease-in-out cubic-bezier(0.65, 0, 0.35, 1)`; `body` com `bg`/`text`; seleção de texto e scrollbar no tema novo
+- [x] T013 Mapear os tokens em `tailwind.config.js`:
   - cores (`bg`, `surface`, `line`, `text`, `text-muted`, `accent`, `on-accent`, `danger` via `var()`);
   - `fontFamily` (`display`, `sans`, `mono`);
   - `fontSize` `display-xl` (176/0.88/-4px), `display-l` (112/0.92/-3px), `h1` (64/1/-2px), `h2` (40/1.1/-1px), `h3` (24/1.25/-0.5px), `body-l` (20/1.5), `body-m` (16/1.6), `label-m` (14/1.4, 500), `mono-s` (13/1.4);
@@ -74,9 +74,9 @@ que atendem.
   - `spacing.40 = 160px`;
   - `maxWidth.content = 1200px`;
   - remover `hero-image` e `shadow-button`.
-- [ ] T014 Trocar as fontes em `app/layout.tsx`: remover `Inter`; adicionar `Bricolage_Grotesque` (pesos 600/700/800, `axes: ['opsz']` se exigido pelo tipo, `variable: '--font-display'`), `Geist` (400/500, `--font-sans`) e manter `IBM_Plex_Mono` (400, `--font-mono`), todas com `display: 'swap'`
-- [ ] T015 [P] Criar `app/lib/motion.ts` exportando `duration = { fast: 0.14, base: 0.22, slow: 0.7 }`, `ease = { out: [0.22, 1, 0.36, 1], inOut: [0.65, 0, 0.35, 1] }`, `spring = { ui: { type: 'spring', stiffness: 500, damping: 35 }, cursor: { type: 'spring', stiffness: 300, damping: 30 } }`, e substituir `app/lib/animations.ts` (que anima a partir de `scale: 0`) por variantes com opacity + `y` 8→0 usando esses tokens
-- [ ] T016 Adicionar o focus ring global em `app/globals.css`: `:focus-visible` com `outline: 1px solid var(--color-accent)` e `outline-offset: 4px` (o inspect outline sem etiqueta; os cantos ficam com o componente da T019); `:focus:not(:focus-visible)` sem anel; proibir `outline: none` sem substituto
+- [x] T014 Trocar as fontes em `app/layout.tsx`: remover `Inter`; adicionar `Bricolage_Grotesque` (pesos 600/700/800, `axes: ['opsz']` se exigido pelo tipo, `variable: '--font-display'`), `Geist` (400/500, `--font-sans`) e manter `IBM_Plex_Mono` (400, `--font-mono`), todas com `display: 'swap'`
+- [x] T015 [P] Criar `app/lib/motion.ts` exportando `duration = { fast: 0.14, base: 0.22, slow: 0.7 }`, `ease = { out: [0.22, 1, 0.36, 1], inOut: [0.65, 0, 0.35, 1] }`, `spring = { ui: { type: 'spring', stiffness: 500, damping: 35 }, cursor: { type: 'spring', stiffness: 300, damping: 30 } }`, e substituir `app/lib/animations.ts` (que anima a partir de `scale: 0`) por variantes com opacity + `y` 8→0 usando esses tokens
+- [x] T016 Adicionar o focus ring global em `app/globals.css`: `:focus-visible` com `outline: 1px solid var(--color-accent)` e `outline-offset: 4px` (o inspect outline sem etiqueta; os cantos ficam com o componente da T019); `:focus:not(:focus-visible)` sem anel; proibir `outline: none` sem substituto
 - [ ] T017 Verificar a Parte 1: gates verdes; as páginas atuais renderizam com as fontes e cores novas sem quebrar layout (Playwright MCP em 1440 e 390); abrir o PR
 
 ### Parte 2 `feat/redesign-components`
