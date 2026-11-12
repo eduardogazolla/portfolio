@@ -29,7 +29,7 @@ export const ProjectCard = ({ project, viewProjectLabel }: ProjectCardProps) => 
           {project.context && (
             <p className="font-mono text-mono-s text-text-muted">{project.context}</p>
           )}
-          <h3 className="font-display text-h2 md:text-h1 text-text">{project.title}</h3>
+          <h3 className="font-display text-h2 text-text md:text-h1 md:tracking-[-0.02em]">{project.title}</h3>
         </div>
         <p className="text-body-m text-text-muted md:text-body-l">{project.shortDescription}</p>
       </div>
