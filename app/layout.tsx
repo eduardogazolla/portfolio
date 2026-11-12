@@ -65,7 +65,7 @@ const getSiteSocials = async (): Promise<Social[]> => {
   try {
     const result = await fetchHygraphQuery<{ pages?: { socials: Social[] }[] }>(
       siteSocialsQuery,
-      60 * 60 * 24 // 24 horas, same as the pages
+      { revalidate: 60 * 60 * 24 }, // 24 horas, same as the pages
     );
     const socials = result?.pages?.[0]?.socials;
     if (!socials) console.error("SiteSocials query returned no data");
