@@ -1,5 +1,5 @@
 /// <reference types="@testing-library/jest-dom" />
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MobileMenu } from '../../app/componentes/header/mobile-menu';
 import { LanguageProvider } from '../../app/componentes/context/language-context';
@@ -135,5 +135,68 @@ describe('MobileMenu', () => {
     expect(document.body.style.overflow).toBe('hidden');
     unmount();
     expect(document.body.style.overflow).toBe('auto');
+  });
+
+  it('does not pull focus back into the dialog while it is exiting', async () => {
+    renderMenu();
+    const { user, trigger } = await openMenu();
+    await screen.findByRole('dialog');
+    await user.keyboard('{Escape}');
+    expect(trigger).toHaveFocus();
+    await user.tab();
+    expect(screen.queryByRole('dialog')?.contains(document.activeElement) ?? false).toBe(false);
+  });
+
+  it('makes the page content inert while open and restores it on close', async () => {
+    const main = document.createElement('main');
+    main.id = 'main';
+    document.body.appendChild(main);
+    try {
+      renderMenu();
+      const { user } = await openMenu();
+      const dialog = await screen.findByRole('dialog');
+      expect(main).toHaveAttribute('inert');
+      expect(dialog).not.toHaveAttribute('inert');
+      expect(dialog.closest('[inert]')).toBeNull();
+      await user.keyboard('{Escape}');
+      await waitFor(() => expect(main).not.toHaveAttribute('inert'));
+    } finally {
+      main.remove();
+    }
+  });
+
+  it('closes and moves focus to #main when the viewport grows past the mobile layout', async () => {
+    const main = document.createElement('main');
+    main.id = 'main';
+    main.tabIndex = -1;
+    document.body.appendChild(main);
+    let listener: ((e: { matches: boolean }) => void) | undefined;
+    const original = window.matchMedia;
+    window.matchMedia = jest.fn().mockImplementation(() => ({
+      matches: false,
+      addEventListener: (_: string, cb: (e: { matches: boolean }) => void) => {
+        listener = cb;
+      },
+      removeEventListener: jest.fn(),
+    })) as unknown as typeof window.matchMedia;
+    try {
+      renderMenu();
+      await openMenu();
+      await screen.findByRole('dialog');
+      act(() => listener?.({ matches: true }));
+      await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+      expect(main).toHaveFocus();
+    } finally {
+      window.matchMedia = original;
+      main.remove();
+    }
+  });
+
+  it('closes when the contact button is clicked', async () => {
+    renderMenu();
+    const { user } = await openMenu();
+    const dialog = await screen.findByRole('dialog');
+    await user.click(dialog.querySelector('[data-menu-cta]') as HTMLElement);
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
   });
 });
