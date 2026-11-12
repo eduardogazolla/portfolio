@@ -81,7 +81,7 @@ export const InspectOutline = ({
       className={cn(
         "pointer-events-none absolute inset-0 block",
         variant === "hover" &&
-          "opacity-0 scale-[1.02] delay-[120ms] transition-[opacity,transform] duration-fast ease-out motion-reduce:scale-100 motion-reduce:transition-opacity",
+          "opacity-0 scale-[1.02] delay-[120ms] transition-[opacity,transform] duration-fast ease-out motion-reduce:scale-100 motion-reduce:transition-opacity " +
           "[@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:delay-0",
         className
       )}
