@@ -11,7 +11,7 @@ import { Link } from "@/app/componentes/link";
 import { useLanguage } from "@/app/componentes/context/language-context";
 import { LanguageSelector } from "./language-selector";
 import { ease } from "@/app/lib/motion";
-import { isCurrentPath } from "@/app/lib/nav";
+import { getNavCurrent } from "@/app/lib/nav";
 import { cn } from "@/app/lib/utils";
 import type { Social } from "@/app/types/page-info";
 import { getSocialLabel } from "@/app/utils/socials";
@@ -166,7 +166,8 @@ const MenuDialog = ({ id, label, origin, socials, onClose }: MenuDialogProps) =>
       <nav aria-label={translations.a11y.mainNavigation} className="py-10">
         <ul className="flex flex-col gap-1">
           {links.map((item, index) => {
-            const isCurrent = isCurrentPath(pathname, item.href);
+            const current = getNavCurrent(pathname, item.href);
+            const isCurrent = current !== undefined;
             return (
               <motion.li
                 key={item.href}
@@ -184,7 +185,7 @@ const MenuDialog = ({ id, label, origin, socials, onClose }: MenuDialogProps) =>
                 <NextLink
                   href={item.href}
                   onClick={closeForLink(item.href)}
-                  aria-current={isCurrent ? "page" : undefined}
+                  aria-current={current}
                   className={cn(
                     "inline-flex items-center gap-[14px] font-display font-extrabold leading-[0.92] tracking-[-0.03em]",
                     "[font-size:clamp(44px,16.4vw,64px)]",

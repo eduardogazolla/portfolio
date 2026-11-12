@@ -47,7 +47,9 @@ describe('NavItem on nested routes', () => {
   it('stays current on child paths of its href', () => {
     mockPathname.mockReturnValue('/projects/hour-sync');
     render(<NavItem label="Projects" href="/projects" />);
-    expect(screen.getByRole('link', { name: 'Projects' })).toHaveAttribute('aria-current', 'page');
+    const link = screen.getByRole('link', { name: 'Projects' });
+    expect(link).toHaveAttribute('aria-current', 'true');
+    expect(link.querySelector('span[aria-hidden="true"]')).toBeInTheDocument();
   });
 
   it('does not mark Home or hash links current on a child path', () => {

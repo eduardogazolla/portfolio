@@ -80,9 +80,10 @@ describe('MobileMenu', () => {
     renderMenu();
     await openMenu();
     const dialog = await screen.findByRole('dialog');
-    const current = dialog.querySelectorAll('nav [aria-current="page"]');
+    const current = dialog.querySelectorAll('nav [aria-current="true"]');
     expect(current).toHaveLength(1);
     expect(current[0]).toHaveAttribute('href', '/projects');
+    expect(dialog.querySelectorAll('nav [data-current-dot]')).toHaveLength(1);
   });
 
   it('moves focus into the dialog and traps Tab / Shift+Tab', async () => {
