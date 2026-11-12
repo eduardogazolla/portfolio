@@ -10,7 +10,7 @@ import { HiArrowNarrowLeft } from "react-icons/hi";
 import { RichText } from "@/app/componentes/rich-text";
 import { Project } from "@/app/types/projects";
 import { motion } from "motion/react";
-import { fadeUpAnimation, techBadgeAnimation } from "@/app/lib/animations";
+import { fadeUpAnimation } from "@/app/lib/animations";
 import { useLanguage } from "@/app/componentes/context/language-context";
 
 type ProjectDetailsProps = {
@@ -32,9 +32,10 @@ export const ProjectDetails = ({ project }: ProjectDetailsProps) => {
       />
 
       <SectionTitle
+        as="h1"
         subtitle={translations.projectsPage.subtitle}
         title={project.title}
-        className="text-center items-center sm:[&>h3]:text-4xl"
+        className="text-center items-center"
       />
 
       <motion.div
@@ -44,12 +45,10 @@ export const ProjectDetails = ({ project }: ProjectDetailsProps) => {
         <RichText content={project.description.raw} />
       </motion.div>
       <div className="w-full max-w-[330px] flex flex-wrap gap-2 items-center justify-center">
-        {project.technologies.map((tech, i) => (
+        {project.technologies.map((tech) => (
           <TechBadge
             key={tech.name}
             name={tech.name}
-            {...techBadgeAnimation}
-            transition={{ duration: 0.3, delay: i * 0.1 }}
           />
         ))}
       </div>
@@ -58,21 +57,17 @@ export const ProjectDetails = ({ project }: ProjectDetailsProps) => {
         {...fadeUpAnimation}
       >
         {project?.gitHubUrl && (
-          <a href={project.gitHubUrl} target="_blank">
-            <Button className="min-w-[180px]">
-              <TbBrandGithub size={20} />
-              {locale === "en" ? "Repository" : "Repositório"}
-            </Button>
-          </a>
+          <Button href={project.gitHubUrl} target="_blank" className="min-w-[180px]">
+            <TbBrandGithub size={20} />
+            {locale === "en" ? "Repository" : "Repositório"}
+          </Button>
         )}
 
         {project?.liveProjectUrl && (
-          <a href={project.liveProjectUrl} target="_blank">
-            <Button className="min-w-[180px] ">
-              <FiGlobe size={20} />
-              {locale === "en" ? "Live Project" : "Projeto Online"}
-            </Button>
-          </a>
+          <Button href={project.liveProjectUrl} target="_blank" className="min-w-[180px]">
+            <FiGlobe size={20} />
+            {locale === "en" ? "Live Project" : "Projeto Online"}
+          </Button>
         )}
       </motion.div>
       <Link href={"/projects"}>

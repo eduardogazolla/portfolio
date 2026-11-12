@@ -6,6 +6,7 @@ import { ContactForm } from "./componentes/contact-form";
 import { Footer } from "./componentes/footer";
 import { BackToTop } from "./componentes/back-to-top";
 import { Toaster } from "./componentes/toaster";
+import { SkipLink } from "./componentes/skip-link";
 import { LanguageProvider } from "./componentes/context/language-context";
 
 export const metadata = {
@@ -49,12 +50,17 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="pt-BR" className={`${bricolage.variable} ${geist.variable} ${plexMono.variable}`} suppressHydrationWarning>
       <body>
         <LanguageProvider>
+          <SkipLink />
           <Toaster/>
-          <BackToTop />
           <Header />
-          {children}
+          {/* tabIndex -1 lets the skip link and BackToTop move focus here; main is not
+              interactive, so no focus ring is shown when focused programmatically. */}
+          <main id="main" tabIndex={-1} className="focus:outline-none">
+            {children}
+          </main>
           <ContactForm />
           <Footer />
+          <BackToTop />
         </LanguageProvider>
       </body>
     </html>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/app/componentes/button";
+import { Link } from "@/app/componentes/link";
 import { CMSIcon } from "@/app/componentes/cms-icon";
 import { RichText } from "@/app/componentes/rich-text";
 import { TechBadge } from "@/app/componentes/tech-badge";
@@ -8,7 +9,6 @@ import { HomePageInfo } from "@/app/types/page-info";
 import Image from "next/image";
 import { HiArrowNarrowRight } from "react-icons/hi";
 import { motion } from "motion/react";
-import { techBadgeAnimation } from "@/app/lib/animations";
 import { useLanguage } from "@/app/componentes/context/language-context";
 
 type HomeSectionProps = {
@@ -37,19 +37,17 @@ export const HeroSection = ({ homeInfo }: HomeSectionProps) => {
           transition={{ duration: 0.5 }}
         >
           <p className="font-mono text-blue-400">{translations.hero.greeting}</p>
-          <h2 className="text-4xl font-medium mt-2">Eduardo Gazolla</h2>
+          <h1 className="text-4xl font-medium mt-2">Eduardo Gazolla</h1>
 
           <div className="text-gray-400 my-6 text-sm sm:text-base">
             <RichText content={homeInfo.introduction.raw} />
           </div>
 
           <div className="flex flex-wrap gap-x-2 gap-y-3 lg:max-w-[340px]">
-            {homeInfo.technologies.map((tech, i) => (
+            {homeInfo.technologies.map((tech) => (
               <TechBadge
                 name={tech.name}
                 key={`intro-tech-${tech.name}`}
-                {...techBadgeAnimation}
-                transition={{ duration: 0.2, delay: i * 0.1 }}
               />
             ))}
           </div>
@@ -60,14 +58,14 @@ export const HeroSection = ({ homeInfo }: HomeSectionProps) => {
             </Button>
             <div className="text-gray-600 text2xl flex items-center h-20 gap-3">
               {homeInfo.socials.map((contact, index) => (
-                <a
+                <Link
                   href={contact.url}
                   key={`contact-${index}`}
-                  target="_blank"
+                  arrow={false}
                   className="hover:text-gray-100 transition-colors"
                 >
                   <CMSIcon icon={contact.iconSvg} />
-                </a>
+                </Link>
               ))}
             </div>
           </div>

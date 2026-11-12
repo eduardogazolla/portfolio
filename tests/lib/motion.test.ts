@@ -1,5 +1,5 @@
 import { duration, ease, spring } from "@/app/lib/motion";
-import { fadeUpAnimation, techBadgeAnimation } from "@/app/lib/animations";
+import { fadeUpAnimation } from "@/app/lib/animations";
 
 describe("motion tokens", () => {
   it("exposes durations in seconds", () => {
@@ -19,7 +19,6 @@ describe("motion tokens", () => {
 
 describe.each([
   ["fadeUpAnimation", fadeUpAnimation],
-  ["techBadgeAnimation", techBadgeAnimation],
 ])("%s", (_name, preset) => {
   it("never animates scale", () => {
     expect(JSON.stringify(preset)).not.toContain("scale");

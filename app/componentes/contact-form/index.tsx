@@ -77,7 +77,7 @@ export const ContactForm = () => {
             {...register("message")}
           />
           <div className="mx-auto mt-6">
-            <Button className="h-max" disabled={isSubmitting}>
+            <Button type="submit" className="h-max" disabled={isSubmitting}>
               {translations.contact.sendButton}
               <HiArrowNarrowRight size={18} />
             </Button>

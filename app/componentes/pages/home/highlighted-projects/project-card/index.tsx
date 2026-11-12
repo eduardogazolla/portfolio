@@ -2,11 +2,10 @@
 
 import { Link } from "@/app/componentes/link";
 import { TechBadge } from "@/app/componentes/tech-badge";
-import { fadeUpAnimation, techBadgeAnimation } from "@/app/lib/animations";
+import { fadeUpAnimation } from "@/app/lib/animations";
 import { Project } from "@/app/types/projects";
 import { motion } from "motion/react";
 import Image from "next/image";
-import { HiArrowNarrowRight } from "react-icons/hi";
 
 type ProjectCardProps = {
   project: Project;
@@ -64,19 +63,16 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         </motion.p>
 
         <div className="flex gap-x-2 gap-y-3 flex-wrap mb-8 lg:max-w-[350px]">
-          {project.technologies.map((tech, i) => (
+          {project.technologies.map((tech) => (
             <TechBadge
               key={`${project.title}-tech-${tech.name}`}
               name={tech.name}
-              {...techBadgeAnimation}
-              transition={{ duration: 0.2, delay: 0.5 + i * 0.1 }}
             />
           ))}
         </div>
 
-        <Link href={`/projects/${project.slug}`}>
+        <Link href={`/projects/${project.slug}`} arrow>
           Ver projeto
-          <HiArrowNarrowRight />
         </Link>
       </div>
     </motion.div>

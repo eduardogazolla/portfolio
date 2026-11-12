@@ -27,9 +27,8 @@ describe('Header', () => {
     const projectsLink = screen.getByRole('link', { name: /Projects|Projetos/i });
     expect(projectsLink).toBeInTheDocument();
   });
-
-  it('renders language selector button', () => {
+  it('renders the language switch group', () => {
     renderWithLanguage(<Header />);
-    expect(screen.getByRole('button')).toBeInTheDocument();
+    expect(screen.getByRole('group', { name: /Idioma|Language/ })).toBeInTheDocument();
   });
 });

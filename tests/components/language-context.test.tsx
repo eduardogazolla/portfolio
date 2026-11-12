@@ -7,12 +7,18 @@ import {
 const STORAGE_KEY = 'portfolio-gazolla:locale';
 
 const LocaleConsumer = () => {
-  const { locale, toggleLocale } = useLanguage();
+  const { locale, toggleLocale, setLocale } = useLanguage();
   return (
     <div>
       <span data-testid="locale">{locale}</span>
       <button type="button" onClick={toggleLocale}>
         toggle
+      </button>
+      <button type="button" onClick={() => setLocale('en')}>
+        set-en
+      </button>
+      <button type="button" onClick={() => setLocale('pt-BR')}>
+        set-pt
       </button>
     </div>
   );
@@ -48,6 +54,45 @@ describe('LanguageProvider', () => {
 
     expect(screen.getByTestId('locale')).toHaveTextContent('pt-BR');
     expect(localStorage.getItem(STORAGE_KEY)).toBe('pt-BR');
+  });
+
+  it('sets document.documentElement.lang from the stored locale on first render', () => {
+    localStorage.setItem(STORAGE_KEY, 'en');
+    renderConsumer();
+    expect(document.documentElement.lang).toBe('en');
+  });
+
+  it('keeps document.documentElement.lang in sync on every change', () => {
+    localStorage.setItem(STORAGE_KEY, 'pt-BR');
+    renderConsumer();
+    expect(document.documentElement.lang).toBe('pt-BR');
+
+    fireEvent.click(screen.getByRole('button', { name: 'toggle' }));
+    expect(document.documentElement.lang).toBe('en');
+
+    fireEvent.click(screen.getByRole('button', { name: 'set-pt' }));
+    expect(document.documentElement.lang).toBe('pt-BR');
+  });
+
+  it('setLocale persists the chosen locale', () => {
+    localStorage.setItem(STORAGE_KEY, 'pt-BR');
+    renderConsumer();
+
+    fireEvent.click(screen.getByRole('button', { name: 'set-en' }));
+
+    expect(screen.getByTestId('locale')).toHaveTextContent('en');
+    expect(localStorage.getItem(STORAGE_KEY)).toBe('en');
+  });
+
+  it('setLocale with the current value is a no-op', () => {
+    localStorage.setItem(STORAGE_KEY, 'en');
+    renderConsumer();
+    const setItem = jest.spyOn(Storage.prototype, 'setItem');
+
+    fireEvent.click(screen.getByRole('button', { name: 'set-en' }));
+
+    expect(setItem).not.toHaveBeenCalled();
+    expect(screen.getByTestId('locale')).toHaveTextContent('en');
   });
 
   // Keep this case last: when storage throws, the locale is held in module
