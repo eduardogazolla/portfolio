@@ -20,8 +20,8 @@ describe('MoreProjectsNote', () => {
   });
 
   it('omits the link without a GitHub social and renders extra children', () => {
-    renderNote({ socials: [], children: <a href="/projects">todos</a> });
+    renderNote({ socials: [], children: <button type="button">todos</button> });
     expect(screen.queryByRole('link', { name: /GitHub/ })).not.toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'todos' })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "todos" })).toBeInTheDocument();
   });
 });
