@@ -52,7 +52,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <LanguageProvider>
           <SkipLink />
           <Toaster/>
-          <BackToTop />
           <Header />
           {/* tabIndex -1 lets the skip link and BackToTop move focus here; main is not
               interactive, so no focus ring is shown when focused programmatically. */}
@@ -61,6 +60,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           </main>
           <ContactForm />
           <Footer />
+          <BackToTop />
         </LanguageProvider>
       </body>
     </html>
