@@ -91,7 +91,7 @@ const PreviousExperience = ({ experience }: { experience: WorkExperience }) => {
   const { locale, translations } = useLanguage();
   const [open, setOpen] = useState(false);
   const panelId = useId();
-  const { startDate, endDate, role, companyName, technologies, description } =
+  const { startDate, endDate, role, companyName, description } =
     experience;
 
   const period = formatPeriod(
@@ -172,9 +172,6 @@ const PreviousExperience = ({ experience }: { experience: WorkExperience }) => {
           <div className="min-h-0 overflow-hidden">
             <div className="flex flex-col items-start gap-4 pb-6 md:pl-[288px]">
               <Description description={description} />
-              {technologies.length > 0 && (
-                <Badges technologies={technologies} />
-              )}
             </div>
           </div>
         </div>
