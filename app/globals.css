@@ -2,15 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Figma sets Bricolage Grotesque to opsz 14 at every size; without this the browser's
-   automatic optical sizing would tighten large display text. Needs the opsz axis from
-   next/font (app/layout.tsx). */
-@layer utilities {
-  .font-display {
-    font-variation-settings: "opsz" 14;
-  }
-}
-
 @layer base {
   :root {
     --color-bg: #050505;
