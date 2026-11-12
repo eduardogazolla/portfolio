@@ -137,3 +137,4 @@ export const createContactSchema = (locale: ContactLocale) => {
 };
 
 export type ContactFormData = z.infer<ReturnType<typeof createContactSchema>>;
+export type ContactFormInput = z.input<ReturnType<typeof createContactSchema>>;

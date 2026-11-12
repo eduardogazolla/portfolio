@@ -86,6 +86,7 @@ export type TranslationDictionary = {
     bandDescription: string;
     bandButton: string;
     nameLabel: string;
+    honeypotLabel: string;
     namePlaceholder: string;
     emailLabel: string;
     emailPlaceholder: string;
@@ -213,6 +214,7 @@ const pt: TranslationDictionary = {
     bandDescription: 'Vaga ou projeto, a mensagem chega direto para mim.',
     bandButton: 'Escrever mensagem',
     nameLabel: 'Nome',
+    honeypotLabel: 'Deixe este campo em branco',
     namePlaceholder: 'Seu nome',
     emailLabel: 'E-mail',
     emailPlaceholder: 'voce@empresa.com',
@@ -342,6 +344,7 @@ const en: TranslationDictionary = {
     bandDescription: 'A job or a project, the message goes straight to me.',
     bandButton: 'Write a message',
     nameLabel: 'Name',
+    honeypotLabel: 'Leave this field empty',
     namePlaceholder: 'Your name',
     emailLabel: 'Email',
     emailPlaceholder: 'you@company.com',

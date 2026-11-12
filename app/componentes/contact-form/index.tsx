@@ -9,20 +9,20 @@ import { Textarea } from "../form/textarea";
 import { PageSection } from "../page-section";
 import { SectionTitle } from "../section-title";
 import { useLanguage } from "@/app/componentes/context/language-context";
-import { CONTACT_LIMITS, createContactSchema, type ContactFormData } from "@/app/lib/contact-schema";
+import { CONTACT_LIMITS, createContactSchema, type ContactFormData, type ContactFormInput } from "@/app/lib/contact-schema";
 
 // `invalid` is derived from the form errors while the status is `idle`.
 type Status = "idle" | "submitting" | "sent" | "failed";
 
-const EMPTY: ContactFormData = { name: "", email: "", message: "" };
+const EMPTY: ContactFormInput = { name: "", email: "", message: "", website: "" };
 
 // The API answers 200 { ok: true } on success; anything else counts as a failure.
-const sendMessage = async (data: ContactFormData): Promise<boolean> => {
+const sendMessage = async ({ name, email, message }: ContactFormData): Promise<boolean> => {
   try {
     const response = await fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ name, email, message }),
     });
     if (!response.ok) return false;
     const body = await response.json();
@@ -47,7 +47,7 @@ export const ContactForm = () => {
     reset,
     control,
     formState: { errors },
-  } = useForm<ContactFormData>({
+  } = useForm<ContactFormInput, unknown, ContactFormData>({
     mode: "onTouched",
     resolver: zodResolver(schema),
     defaultValues: EMPTY,
@@ -61,6 +61,12 @@ export const ContactForm = () => {
 
   const onSubmit = async (data: ContactFormData) => {
     if (sending.current) return;
+    // Honeypot filled: a bot. Look successful, send nothing.
+    if (data.website.trim() !== "") {
+      reset(EMPTY);
+      setStatus("sent");
+      return;
+    }
     sending.current = true;
     setStatus("submitting");
     const ok = await sendMessage(data);
@@ -112,7 +118,7 @@ export const ContactForm = () => {
             </Button>
           </div>
         ) : (
-          <form noValidate className="flex w-full flex-col gap-7 md:gap-9" onSubmit={handleSubmit(onSubmit)}>
+          <form noValidate className="relative flex w-full flex-col gap-7 md:gap-9" onSubmit={handleSubmit(onSubmit)}>
             <Input
               label={t.nameLabel}
               placeholder={t.namePlaceholder}
@@ -140,6 +146,13 @@ export const ContactForm = () => {
               error={errors.message?.message}
               {...register("message")}
             />
+            {/* Honeypot: off-screen (not display:none, so bots still fill it), out of the tab order and the accessibility tree. */}
+            <div aria-hidden="true" className="pointer-events-none absolute -left-[9999px] top-auto h-px w-px overflow-hidden">
+              <label>
+                {t.honeypotLabel}
+                <input type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
+              </label>
+            </div>
             {status === "failed" && (
               <div
                 ref={failureRef}
