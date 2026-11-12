@@ -34,6 +34,7 @@ describe("createContactSchema", () => {
         name: "Maria Silva",
         email: "maria@empresa.com",
         message: "Oi!",
+        website: "",
       });
     }
   });
