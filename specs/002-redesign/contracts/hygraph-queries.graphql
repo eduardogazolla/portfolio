@@ -54,6 +54,8 @@ query SiteSocials {
 query ProjectsPage {
   ptProjects: projects(locales: [pt_BR, en]) { ...ProjectCard }
   enProjects: projects(locales: [en, pt_BR]) { ...ProjectCard }
+  # Socials para o link do GitHub em "Mais projetos chegando…"
+  pages(where: { slug: "home" }, locales: [pt_BR]) { socials { ...SocialFields } }
 }
 
 # `ProjectSection.title` é localizado (vem no locale ativo, com fallback para PT).

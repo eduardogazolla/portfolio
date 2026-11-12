@@ -27,7 +27,7 @@ export const ProjectCard = ({ project, viewProjectLabel }: ProjectCardProps) => 
       <div className="flex flex-col gap-6 md:max-w-[600px] md:gap-4">
         <div className="flex flex-col gap-2">
           {project.context && (
-            <p className="font-mono text-mono-s text-text-muted">{project.context}</p>
+            <p className="text-label-m text-text-muted">{project.context}</p>
           )}
           <h3 className="font-display text-h2 text-text md:text-h1 md:tracking-[-0.02em]">{project.title}</h3>
         </div>

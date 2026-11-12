@@ -23,7 +23,14 @@ module.exports = {
         mono: ["var(--font-mono)", "monospace"],
       },
       fontSize: {
-        "display-xl": ["176px", { lineHeight: "0.88", letterSpacing: "-4px", fontWeight: "800" }],
+        // Display/XL: Figma's style says -4px but every instance (page title, hero) overrides it
+        // to -0.04em (-7.04px at 176px), which is what the design shows.
+        "display-xl": ["176px", { lineHeight: "0.88", letterSpacing: "-0.04em", fontWeight: "800" }],
+        "display-title-s": ["96px", { lineHeight: "0.88", letterSpacing: "-0.04em", fontWeight: "800" }],
+        "display-status-s": ["160px", { lineHeight: "0.88", letterSpacing: "-0.04em", fontWeight: "800" }],
+        "display-status": ["360px", { lineHeight: "0.88", letterSpacing: "-0.04em", fontWeight: "800" }],
+        "display-cta-s": ["56px", { lineHeight: "0.92", letterSpacing: "-0.03em", fontWeight: "800" }],
+        "display-cta": ["88px", { lineHeight: "0.92", letterSpacing: "-0.03em", fontWeight: "800" }],
         "display-l": ["112px", { lineHeight: "0.92", letterSpacing: "-3px", fontWeight: "800" }],
         h1: ["64px", { lineHeight: "1", letterSpacing: "-2px", fontWeight: "700" }],
         h2: ["40px", { lineHeight: "1.1", letterSpacing: "-1px", fontWeight: "600" }],

@@ -36,6 +36,14 @@ export type TranslationDictionary = {
     viewProjects: string;
     code: string;
   };
+  errorPage: {
+    title: string;
+    description: string;
+    retry: string;
+    backToHome: string;
+    code: string;
+    label: string;
+  };
   a11y: {
     opensInNewTab: string;
     backToTop: string;
@@ -74,6 +82,9 @@ export type TranslationDictionary = {
     moreComing: string;
     filterAll: string;
     projectsCount: (count: number) => string;
+    filterLabel: string;
+    noProjectsWith: (tech: string) => string;
+    clearFilter: string;
     viewProject: string;
     viewCode: string;
     viewLive: string;
@@ -117,6 +128,8 @@ export type TranslationDictionary = {
     links: string;
     onlyOneNotice: string;
     backToAll: string;
+    about: string;
+    technologies: string;
   };
 };
 
@@ -156,6 +169,15 @@ const pt: TranslationDictionary = {
     backToHome: 'Voltar para a Home',
     viewProjects: 'Ver projetos',
     code: '404',
+  },
+  errorPage: {
+    title: 'Algo deu errado.',
+    description:
+      'Não foi possível carregar este conteúdo agora. Tente de novo ou volte para a Home.',
+    retry: 'Tentar de novo',
+    backToHome: 'Voltar para a Home',
+    code: '500',
+    label: 'erro inesperado',
   },
   a11y: {
     opensInNewTab: '(abre em nova aba)',
@@ -197,6 +219,9 @@ const pt: TranslationDictionary = {
       'Mais projetos chegando. Enquanto isso, o que estou construindo fica no GitHub.',
     filterAll: 'Todos',
     projectsCount: (count) => `${count} ${count === 1 ? 'projeto' : 'projetos'}`,
+    filterLabel: 'Filtrar por tecnologia',
+    noProjectsWith: (tech) => `Nenhum projeto com ${tech}`,
+    clearFilter: 'Limpar filtro',
     viewProject: 'Ver projeto',
     viewCode: 'Repositório',
     viewLive: 'Ver online',
@@ -242,6 +267,8 @@ const pt: TranslationDictionary = {
     links: 'Links',
     onlyOneNotice: 'Por enquanto, este é o único projeto publicado.',
     backToAll: 'Voltar para todos os projetos',
+    about: 'Sobre o projeto',
+    technologies: 'Tecnologias',
   },
 };
 
@@ -281,6 +308,15 @@ const en: TranslationDictionary = {
     backToHome: 'Back to Home',
     viewProjects: 'View projects',
     code: '404',
+  },
+  errorPage: {
+    title: 'Something went wrong.',
+    description:
+      'This content could not be loaded right now. Try again or go back to Home.',
+    retry: 'Try again',
+    backToHome: 'Back to Home',
+    code: '500',
+    label: 'unexpected error',
   },
   a11y: {
     opensInNewTab: '(opens in a new tab)',
@@ -322,6 +358,9 @@ const en: TranslationDictionary = {
       'More projects coming. Meanwhile, what I am building lives on GitHub.',
     filterAll: 'All',
     projectsCount: (count) => `${count} ${count === 1 ? 'project' : 'projects'}`,
+    filterLabel: 'Filter by technology',
+    noProjectsWith: (tech) => `No project with ${tech}`,
+    clearFilter: 'Clear filter',
     viewProject: 'View project',
     viewCode: 'Repository',
     viewLive: 'View live',
@@ -367,6 +406,8 @@ const en: TranslationDictionary = {
     links: 'Links',
     onlyOneNotice: 'For now, this is the only published project.',
     backToAll: 'Back to all projects',
+    about: 'About the project',
+    technologies: 'Technologies',
   },
 };
 

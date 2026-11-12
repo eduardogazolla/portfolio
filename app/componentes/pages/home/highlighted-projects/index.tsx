@@ -3,10 +3,10 @@
 import { PageSection } from "@/app/componentes/page-section";
 import { SectionTitle } from "@/app/componentes/section-title";
 import { Link } from "@/app/componentes/link";
+import { MoreProjectsNote } from "@/app/componentes/more-projects-note";
 import { useLanguage } from "@/app/componentes/context/language-context";
 import type { Project } from "@/app/types/projects";
 import type { Social } from "@/app/types/page-info";
-import { getSocialLabel, isGitHubSocial } from "@/app/utils/socials";
 import { ProjectCard } from "./project-card";
 
 type HighlightedProjectsProps = {
@@ -19,8 +19,6 @@ export const HighlightedProjects = ({ projects, socials }: HighlightedProjectsPr
   const { projectsSection } = translations;
 
   if (!projects?.length) return null;
-
-  const github = socials?.find(isGitHubSocial);
 
   return (
     <PageSection id="projects" className="pt-28 md:pt-10 md:pb-40">
@@ -41,19 +39,11 @@ export const HighlightedProjects = ({ projects, socials }: HighlightedProjectsPr
         ))}
       </div>
 
-      <div className="mt-6 flex flex-col gap-3 border-t border-line pt-6 md:mt-14 md:flex-row md:items-center md:gap-4 md:pt-7">
-        <p className="text-body-m text-text-muted">{projectsSection.moreComing}</p>
-        <div className="flex flex-col gap-3 md:flex-row md:gap-4">
-          <Link href="/projects" arrow className="text-label-m md:hidden">
-            {projectsSection.viewAllProjects}
-          </Link>
-          {github && (
-            <Link href={github.url} className="text-label-m">
-              {getSocialLabel(github)}
-            </Link>
-          )}
-        </div>
-      </div>
+      <MoreProjectsNote socials={socials} className="mt-6 border-t border-line pt-6 md:mt-14 md:pt-7">
+        <Link href="/projects" arrow className="text-label-m md:hidden">
+          {projectsSection.viewAllProjects}
+        </Link>
+      </MoreProjectsNote>
     </PageSection>
   );
 };

@@ -1,39 +1,43 @@
-'use client';
+"use client";
 
-import { fadeUpAnimation } from "@/app/lib/animations";
-import { ProjectSection } from "@/app/types/projects";
-import { motion } from "motion/react";
 import Image from "next/image";
+import { motion } from "motion/react";
+import { PageSection } from "@/app/componentes/page-section";
+import { duration, ease } from "@/app/lib/motion";
+import { ProjectSection } from "@/app/types/projects";
 
 type ProjectSectionsProps = {
   sections: ProjectSection[];
 };
 
+// Figma 9:291 (desktop) / 11:456 (mobile). The app-wide MotionConfig (reducedMotion="user") drops the transform under reduced motion.
 export const ProjectSections = ({ sections }: ProjectSectionsProps) => {
+  if (sections.length === 0) return null;
+
   return (
-    <section className="container my-12 md:my-32 flex flex-col gap-8 md:gap-32">
-      {sections.map((section) => (
-        <motion.div
-          key={section.title}
-          className="flex flex-col items-center gap-6 md:gap-12"
-          {...fadeUpAnimation}
-          transition={{ duration: 0.5 }}
-        >
-          <h2 className="text-2xl md:text-3xl font-medium text-gray-300">
-            {section.title}
-          </h2>
+    <PageSection className="pb-14 md:pb-[120px]" innerClassName="flex flex-col gap-12 md:gap-24">
+      {sections.map((section, i) => (
+        <div key={`${i}-${section.title}`} className="flex flex-col gap-4 md:gap-6">
+          <h2 className="font-display text-h3 text-text md:text-h2">{section.title}</h2>
           {section.image?.url && (
-            <Image
-              src={section.image.url}
-              width={1080}
-              height={672}
-              className="w-full aspect-auto rounded-lg object-cover"
-              alt={`Imagem da sessão ${section.title}`}
-              unoptimized
-            />
+            <motion.div
+              className="relative aspect-[350/220] overflow-hidden rounded-[12px] bg-surface md:aspect-[1200/640] md:rounded-md"
+              initial={{ scale: 0.96 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true, margin: "0px 0px -10% 0px" }}
+              transition={{ duration: duration.slow, ease: ease.out }}
+            >
+              <Image
+                src={section.image.url}
+                alt={section.title}
+                fill
+                sizes="(min-width: 1280px) 1200px, (min-width: 1024px) calc(100vw - 80px), calc(100vw - 40px)"
+                className="object-cover"
+              />
+            </motion.div>
           )}
-        </motion.div>
+        </div>
       ))}
-    </section>
+    </PageSection>
   );
 };

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { getNavCurrent } from "@/app/lib/nav";
 import { cn } from "@/app/lib/utils";
 
 type NavItemProps = {
@@ -10,12 +11,13 @@ type NavItemProps = {
 };
 
 export const NavItem = ({ label, href }: NavItemProps) => {
-  const isActive = usePathname() === href;
+  const current = getNavCurrent(usePathname(), href);
+  const isActive = current !== undefined;
 
   return (
     <Link
       href={href}
-      aria-current={isActive ? "page" : undefined}
+      aria-current={current}
       className={cn(
         "inline-flex items-center gap-2 text-label-m text-text-muted transition-colors duration-fast ease-out motion-reduce:transition-none",
         "[@media(hover:hover)_and_(pointer:fine)]:hover:text-text",

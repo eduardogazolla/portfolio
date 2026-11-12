@@ -17,10 +17,10 @@ export type Project = {
   title: string;
   context?: string | null;
   shortDescription: string;
-  description: {
+  description?: {
     raw: RichTextContent;
     text: string;
-  };
+  } | null;
   gitHubUrl?: string;
   liveProjectUrl?: string;
   technologies: Pick<KnownTech, "name">[];

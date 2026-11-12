@@ -1,29 +1,54 @@
 "use client";
 
-import Link from "next/link";
-import { ProjectCard } from "../projects-card";
-import { Project } from "@/app/types/projects";
-import { motion } from "motion/react";
-import { fadeUpAnimation } from "@/app/lib/animations";
+import { useState } from "react";
+import { PageSection } from "@/app/componentes/page-section";
+import { useLanguage } from "@/app/componentes/context/language-context";
+import { Button } from "@/app/componentes/button";
+import type { Project } from "@/app/types/projects";
+import { ALL_FILTER } from "./tech-filter";
+import { ProjectRow } from "./project-row";
+import { CursorPreview } from "./cursor-preview";
 
 type ProjectsListProps = {
+  /** Projects already filtered by the active technology. */
   projects: Project[];
+  filter: string;
+  onClearFilter: () => void;
 };
 
-export const ProjectsList = ({ projects }: ProjectsListProps) => {
+export const ProjectsList = ({ projects, filter, onClearFilter }: ProjectsListProps) => {
+  const { translations } = useLanguage();
+  const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
+  const [seenProjects, setSeenProjects] = useState(projects);
+
+  // Never keep a preview alive across a filter or locale change.
+  if (seenProjects !== projects) {
+    setSeenProjects(projects);
+    setHoveredSlug(null);
+  }
+
+  const hovered = projects.find((project) => project.slug === hoveredSlug);
+  const reserveContext = projects.some((project) => project.context);
+
   return (
-    <section className="container py-32 grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(350px,1fr))] gap-x-4 gap-y-6">
-      {projects.map((project, i) => (
-        <motion.div
-          key={project.title}
-          {...fadeUpAnimation}
-          transition={{ duration: 0.5, delay: i * 0.1 }}
-        >
-          <Link href={`/projects/${project.slug}`}>
-            <ProjectCard project={project} />
-          </Link>
-        </motion.div>
-      ))}
-    </section>
+    <PageSection className="pb-16 md:pb-[120px]">
+      {projects.length === 0 ? (
+        <div className="flex flex-col items-start gap-4 border-t border-line pt-8">
+          <p role="status" className="text-body-m text-text-muted">
+            {translations.projectsSection.noProjectsWith(filter === ALL_FILTER ? "" : filter)}
+          </p>
+          <Button variant="secondary" onClick={onClearFilter}>
+            {translations.projectsSection.clearFilter}
+          </Button>
+        </div>
+      ) : (
+        <ul className="flex flex-col gap-8 md:gap-0 md:border-t md:border-line">
+          {projects.map((project) => (
+            <ProjectRow key={project.slug} project={project} onHover={setHoveredSlug} reserveContext={reserveContext} />
+          ))}
+        </ul>
+      )}
+      <CursorPreview src={hovered?.thumbnail?.url ?? null} />
+    </PageSection>
   );
 };

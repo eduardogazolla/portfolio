@@ -74,10 +74,11 @@ interface QueryResponse {
 }
 
 const getPageData = async (): Promise<LocalizedHomePageData> => {
-  const result = await fetchHygraphQuery<QueryResponse>(
-    query,
-    60 * 60 * 24 // 24 horas
-  );
+  // A failed request throws to the Next error boundary rather than rendering an
+  // empty Home (which would be cached for 24 h). Missing documents still degrade to null/[].
+  const result = await fetchHygraphQuery<QueryResponse>(query, {
+    revalidate: 60 * 60 * 24, // 24 horas
+  });
 
   return {
     ptPage: result?.ptPages?.[0] ?? null,

@@ -55,7 +55,7 @@ export const HeroSection = ({ homeInfo, currentExperience }: HeroSectionProps) =
 
           <h1
             data-hero="name"
-            className="relative -ml-1 mt-4 font-display text-display-xl tracking-[-0.04em] text-text [font-size:clamp(64px,26vw,104px)] md:[font-size:clamp(64px,22vw,168px)] lg:-ml-3 lg:mt-7 lg:[font-size:clamp(64px,calc((100vw-480px)/3.5),232px)]"
+            className="relative -ml-1 mt-4 font-display text-display-xl text-text [font-size:clamp(64px,26vw,104px)] md:[font-size:clamp(64px,22vw,168px)] lg:-ml-3 lg:mt-7 lg:[font-size:clamp(64px,calc((100vw-480px)/3.5),232px)]"
           >
             <span className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
               <span data-hero="name-line" className="block">
