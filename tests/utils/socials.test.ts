@@ -1,4 +1,4 @@
-import { getSocialLabel, isGitHubSocial } from '@/app/utils/socials';
+import { getSocialLabel, isGitHubSocial, isLinkedInSocial } from '@/app/utils/socials';
 
 describe('getSocialLabel', () => {
   it('uses the trimmed name', () => {
@@ -78,5 +78,25 @@ describe('isGitHubSocial', () => {
     '',
   ])('rejects %s', (url) => {
     expect(isGitHubSocial({ url })).toBe(false);
+  });
+});
+
+describe('isLinkedInSocial', () => {
+  it.each([
+    'https://linkedin.com/in/user',
+    'https://www.linkedin.com/in/user',
+    'https://br.linkedin.com/in/user',
+    'linkedin.com/in/user',
+  ])('accepts %s', (url) => {
+    expect(isLinkedInSocial({ url })).toBe(true);
+  });
+
+  it.each([
+    'https://github.com/linkedin.com',
+    'https://notlinkedin.com/in/user',
+    'https://example.com/?next=linkedin.com',
+    'mailto:me@example.com',
+  ])('rejects %s', (url) => {
+    expect(isLinkedInSocial({ url })).toBe(false);
   });
 });

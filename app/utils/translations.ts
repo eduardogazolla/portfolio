@@ -11,17 +11,6 @@ export type TranslationDictionary = {
     nowAt: string;
     viewProjects: string;
   };
-  // legacy: the group contact is removed in Part 5 (form rewrite)
-  contact: {
-    subtitle: string;
-    title: string;
-    namePlaceholder: string;
-    emailPlaceholder: string;
-    messagePlaceholder: string;
-    sendButton: string;
-    successMessage: string;
-    errorMessage: string;
-  };
   projectsPage: {
     subtitle: string;
     title: string;
@@ -97,6 +86,7 @@ export type TranslationDictionary = {
     bandDescription: string;
     bandButton: string;
     nameLabel: string;
+    honeypotLabel: string;
     namePlaceholder: string;
     emailLabel: string;
     emailPlaceholder: string;
@@ -110,16 +100,8 @@ export type TranslationDictionary = {
     sendAnother: string;
     failed: string;
     failedDescription: string;
+    failedLinkLabel: string;
     retry: string;
-    errors: {
-      nameRequired: string;
-      nameMin: string;
-      nameMax: string;
-      emailRequired: string;
-      emailInvalid: string;
-      messageRequired: string;
-      messageMax: string;
-    };
   };
   projectDetail: {
     backToProjects: string;
@@ -143,16 +125,6 @@ const pt: TranslationDictionary = {
     nowPrefix: 'Agora:',
     nowAt: 'na',
     viewProjects: 'Ver projetos',
-  },
-  contact: {
-    subtitle: 'contato',
-    title: 'Vamos trabalhar juntos? Entre em contato',
-    namePlaceholder: 'Nome',
-    emailPlaceholder: 'E-mail',
-    messagePlaceholder: 'Mensagem',
-    sendButton: 'Enviar mensagem',
-    successMessage: 'Mensagem enviada com sucesso!',
-    errorMessage: 'Ocorreu um erro ao enviar a mensagem. Tente novamente.',
   },
   projectsPage: {
     subtitle: 'projetos',
@@ -234,6 +206,7 @@ const pt: TranslationDictionary = {
     bandDescription: 'Vaga ou projeto, a mensagem chega direto para mim.',
     bandButton: 'Escrever mensagem',
     nameLabel: 'Nome',
+    honeypotLabel: 'Deixe este campo em branco',
     namePlaceholder: 'Seu nome',
     emailLabel: 'E-mail',
     emailPlaceholder: 'voce@empresa.com',
@@ -248,17 +221,9 @@ const pt: TranslationDictionary = {
     sendAnother: 'Enviar outra mensagem',
     failed: 'Não consegui enviar agora.',
     failedDescription:
-      'Seus dados continuam aqui. Tente de novo ou me chame no LinkedIn.',
+      'Seus dados continuam aqui. Tente de novo ou me chame no',
+    failedLinkLabel: 'LinkedIn',
     retry: 'Tentar de novo',
-    errors: {
-      nameRequired: 'Informe seu nome.',
-      nameMin: 'O nome precisa ter pelo menos 3 caracteres.',
-      nameMax: 'O nome pode ter no máximo 100 caracteres.',
-      emailRequired: 'Informe seu e-mail.',
-      emailInvalid: 'Falta o domínio. Use algo como nome@gmail.com.',
-      messageRequired: 'Escreva sua mensagem antes de enviar.',
-      messageMax: 'A mensagem pode ter no máximo 500 caracteres.',
-    },
   },
   projectDetail: {
     backToProjects: 'Todos os projetos',
@@ -282,16 +247,6 @@ const en: TranslationDictionary = {
     nowPrefix: 'Now:',
     nowAt: 'at',
     viewProjects: 'View projects',
-  },
-  contact: {
-    subtitle: 'contact',
-    title: 'Let\'s work together? Get in touch',
-    namePlaceholder: 'Name',
-    emailPlaceholder: 'Email',
-    messagePlaceholder: 'Message',
-    sendButton: 'Send message',
-    successMessage: 'Message sent successfully!',
-    errorMessage: 'An error occurred while sending the message. Please try again.',
   },
   projectsPage: {
     subtitle: 'projects',
@@ -373,6 +328,7 @@ const en: TranslationDictionary = {
     bandDescription: 'A job or a project, the message goes straight to me.',
     bandButton: 'Write a message',
     nameLabel: 'Name',
+    honeypotLabel: 'Leave this field empty',
     namePlaceholder: 'Your name',
     emailLabel: 'Email',
     emailPlaceholder: 'you@company.com',
@@ -387,17 +343,9 @@ const en: TranslationDictionary = {
     sendAnother: 'Send another message',
     failed: 'I could not send it right now.',
     failedDescription:
-      'Your details are still here. Try again or reach me on LinkedIn.',
+      'Your details are still here. Try again or reach me on',
+    failedLinkLabel: 'LinkedIn',
     retry: 'Try again',
-    errors: {
-      nameRequired: 'Enter your name.',
-      nameMin: 'The name must have at least 3 characters.',
-      nameMax: 'The name can have at most 100 characters.',
-      emailRequired: 'Enter your email.',
-      emailInvalid: 'The domain is missing. Use something like name@gmail.com.',
-      messageRequired: 'Write your message before sending.',
-      messageMax: 'The message can have at most 500 characters.',
-    },
   },
   projectDetail: {
     backToProjects: 'All projects',

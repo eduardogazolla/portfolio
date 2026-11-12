@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { LanguageProvider } from '../../app/componentes/context/language-context';
 import { Button } from '../../app/componentes/button';
 
@@ -28,10 +29,11 @@ describe('Button', () => {
     expect(screen.getByRole('button')).toHaveAttribute('type', 'submit');
   });
 
-  it('loading disables, sets aria-busy and shows an aria-hidden spinner with text', () => {
+  it('loading sets aria-disabled (not disabled, so focus stays), aria-busy and shows an aria-hidden spinner with text', () => {
     render(<Button loading>Enviando…</Button>);
     const btn = screen.getByRole('button', { name: 'Enviando…' });
-    expect(btn).toBeDisabled();
+    expect(btn).toHaveAttribute('aria-disabled', 'true');
+    expect(btn).not.toBeDisabled();
     expect(btn).toHaveAttribute('aria-busy', 'true');
     const spinner = btn.querySelector('[data-spinner]');
     expect(spinner).toHaveAttribute('aria-hidden', 'true');
@@ -109,7 +111,27 @@ describe('Button', () => {
       </Button>
     );
     const btn = screen.getByRole('button');
-    expect(btn).toBeDisabled();
+    expect(btn).toHaveAttribute('aria-disabled', 'true');
     expect(btn).toHaveAttribute('aria-busy', 'true');
+  });
+
+  it('loading keeps focus and ignores clicks', async () => {
+    const onClick = jest.fn();
+    const { rerender } = render(<Button onClick={onClick}>Enviar</Button>);
+    const btn = screen.getByRole('button');
+    btn.focus();
+    rerender(<Button onClick={onClick} loading>Enviando…</Button>);
+    expect(btn).toHaveFocus();
+    await userEvent.click(btn);
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it('loading primary keeps the accent background and no hover swap', () => {
+    render(<Button loading>Enviando…</Button>);
+    const cls = screen.getByRole('button').className;
+    expect(cls).toMatch(/(^|\s)bg-accent(\s|$)/);
+    expect(cls).toMatch(/text-on-accent/);
+    expect(cls).toMatch(/aria-busy:opacity-100/);
+    expect(cls).toMatch(/not\(\[aria-busy=true\]\)[^ ]*hover:bg-text/);
   });
 });

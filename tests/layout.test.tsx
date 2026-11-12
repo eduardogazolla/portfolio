@@ -12,7 +12,6 @@ jest.mock('../app/componentes/header', () => ({ Header: () => <header data-testi
 jest.mock('../app/componentes/footer', () => ({
   Footer: ({ socials }: { socials: unknown[] }) => <footer data-testid="footer" data-socials={socials.length} />,
 }));
-jest.mock('../app/componentes/toaster', () => ({ Toaster: () => null }));
 jest.mock('../app/componentes/back-to-top', () => ({
   BackToTop: () => <button data-testid="back-to-top" type="button">top</button>,
 }));

@@ -4,7 +4,6 @@ import { ReactNode } from "react";
 import { Header } from "./componentes/header";
 import { Footer } from "./componentes/footer";
 import { BackToTop } from "./componentes/back-to-top";
-import { Toaster } from "./componentes/toaster";
 import { SkipLink } from "./componentes/skip-link";
 import { AppMotionConfig } from "./componentes/motion-config";
 import { LanguageProvider } from "./componentes/context/language-context";
@@ -91,7 +90,6 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <AppMotionConfig>
         <LanguageProvider>
           <SkipLink />
-          <Toaster/>
           <Header socials={socials} />
           {/* tabIndex -1 lets the skip link and BackToTop move focus here; main is not
               interactive, so no focus ring is shown when focused programmatically. */}

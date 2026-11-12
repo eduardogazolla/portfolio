@@ -1,6 +1,6 @@
 import type { Ref, TextareaHTMLAttributes } from "react";
 import { cn } from "@/app/lib/utils";
-import { FieldLabel, FieldMessage, Underline, fieldClasses, useField } from "./field";
+import { FieldLabel, FieldMessages, Underline, fieldClasses, useField } from "./field";
 
 type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "id"> & {
   label: string;
@@ -28,9 +28,7 @@ export const Textarea = ({ label, helper, error, id, className, ref, rows = 3, .
         />
         <Underline error={!!error} />
       </div>
-      <FieldMessage id={field.messageId} error={!!error}>
-        {field.message}
-      </FieldMessage>
+      <FieldMessages errorId={field.errorId} helperId={field.helperId} error={error} helper={helper} />
     </div>
   );
 };

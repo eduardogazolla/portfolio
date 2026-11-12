@@ -254,14 +254,14 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 
 ### Tests (primeiro)
 
-- [ ] T067 [P] [US2] Teste do schema em `tests/lib/contact-schema.test.ts`: `name` aparado com "3–100 caracteres", `email` válido com "até 254 caracteres", `message` aparada com "1–500 caracteres"; cada erro tem mensagem PT e EN que ensina a corrigir (ex.: "Falta o domínio. Use algo como nome@gmail.com.")
-- [ ] T068 [P] [US2] Teste da rota em `tests/api/contact-route.test.ts` (ambiente `node`, com `axios` mockado), cobrindo cada resposta do contrato `specs/002-redesign/contracts/contact-api.md`:
+- [x] T067 [P] [US2] Teste do schema em `tests/lib/contact-schema.test.ts`: `name` aparado com "3–100 caracteres", `email` válido com "até 254 caracteres", `message` aparada com "1–500 caracteres"; cada erro tem mensagem PT e EN que ensina a corrigir (ex.: "Falta o domínio. Use algo como nome@gmail.com.")
+- [x] T068 [P] [US2] Teste da rota em `tests/api/contact-route.test.ts` (ambiente `node`, com `axios` mockado), cobrindo cada resposta do contrato `specs/002-redesign/contracts/contact-api.md`:
   - válido → `200 { ok: true }`;
   - corpo inválido ou JSON quebrado → `400 { ok: false, error: "invalid_input" }`;
   - webhook falha ou passa de 10 s → `502 delivery_failed`;
   - sem `WEBHOOK_URL` → `500 unexpected`;
   - nenhuma resposta vaza detalhes.
-- [ ] T069 [P] [US2] Teste do ContactForm em `tests/components/contact-form.test.tsx`, cobrindo os estados com `fetch`/`axios` mockado:
+- [x] T069 [P] [US2] Teste do ContactForm em `tests/components/contact-form.test.tsx`, cobrindo os estados com `fetch`/`axios` mockado:
   - **invalid**: erros abaixo dos campos, foco no 1º campo com erro, erro some ao corrigir e sair do campo;
   - **submitting**: campos e botão desabilitados, "Enviando…";
   - **sent**: "Mensagem enviada." com foco no título, e "Enviar outra mensagem" volta vazio;
@@ -270,15 +270,15 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 
 ### Implementation
 
-- [ ] T070 [US2] Criar `app/lib/contact-schema.ts` com o zod compartilhado (faz a T067 passar), recebendo as mensagens por locale
-- [ ] T071 [US2] Reescrever `app/api/contact/route.ts` conforme o contrato (faz a T068 passar): `safeParse`; `axios.post` com `timeout: 10000`; respostas `{ ok, error }`; `console.error` só no servidor
-- [ ] T072 [US2] Reescrever `app/componentes/contact-form/index.tsx` com os estados `idle | invalid | submitting | sent | failed` (faz a T069 passar):
+- [x] T070 [US2] Criar `app/lib/contact-schema.ts` com o zod compartilhado (faz a T067 passar), recebendo as mensagens por locale
+- [x] T071 [US2] Reescrever `app/api/contact/route.ts` conforme o contrato (faz a T068 passar): `safeParse`; `axios.post` com `timeout: 10000`; respostas `{ ok, error }`; `console.error` só no servidor
+- [x] T072 [US2] Reescrever `app/componentes/contact-form/index.tsx` com os estados `idle | invalid | submitting | sent | failed` (faz a T069 passar):
   - react-hook-form com `mode: "onTouched"` e `zodResolver`;
   - Input e Textarea da T025, com `maxLength={500}` e o limite informado;
   - região `aria-live="polite"`;
   - confirmação conforme o Figma `27:314`;
   - layout da seção Contato da Home conforme `6:21` (título "Vamos conversar?" e texto da FR-013).
-- [ ] T073 [US2] Remover `react-hot-toast` do `package.json`, `app/componentes/toaster/` e o `<Toaster/>` de `app/layout.tsx`; tirar o `<ContactForm />` do layout global e deixá-lo só na Home (`#contact`); verificar a Parte 5 (gates, Playwright MCP com os 4 estados contra `27:314` em 1440 e 390) e abrir o PR
+- [x] T073 [US2] Remover `react-hot-toast` do `package.json`, `app/componentes/toaster/` e o `<Toaster/>` de `app/layout.tsx`; tirar o `<ContactForm />` do layout global e deixá-lo só na Home (`#contact`); verificar a Parte 5 (gates, Playwright MCP com os 4 estados contra `27:314` em 1440 e 390) e abrir o PR
 
 **Checkpoint**: todas as user stories funcionando.
 

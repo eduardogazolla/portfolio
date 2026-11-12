@@ -7,14 +7,16 @@ type FieldMeta = { id?: string; helper?: string; error?: string; describedBy?: s
 export const useField = ({ id, helper, error, describedBy }: FieldMeta) => {
   const generated = useId();
   const fieldId = id ?? generated;
-  const messageId = `${fieldId}-message`;
-  const message = error ?? helper;
+  const helperId = `${fieldId}-helper`;
+  const errorId = `${fieldId}-error`;
   return {
     fieldId,
-    messageId,
-    message,
-    // Keep the caller's own aria-describedby alongside the helper/error id.
-    describedBy: [describedBy, message ? messageId : undefined].filter(Boolean).join(" ") || undefined,
+    helperId,
+    errorId,
+    // Keep the caller's own aria-describedby alongside the error and helper ids (both stay visible).
+    describedBy:
+      [describedBy, error ? errorId : undefined, helper ? helperId : undefined].filter(Boolean).join(" ") ||
+      undefined,
     invalid: error ? true : undefined,
   };
 };
@@ -62,17 +64,29 @@ export const Underline = ({ error }: { error: boolean }) => (
   </>
 );
 
-export const FieldMessage = ({
-  id,
+/** Error (left) and helper such as a counter (right). Both stay visible so neither hides the other. */
+export const FieldMessages = ({
+  errorId,
+  helperId,
   error,
-  children,
+  helper,
 }: {
-  id: string;
-  error: boolean;
-  children?: string;
+  errorId: string;
+  helperId: string;
+  error?: string;
+  helper?: string;
 }) =>
-  children ? (
-    <p id={id} className={cn("text-body-m", error ? "text-danger" : "text-text-muted")}>
-      {children}
-    </p>
+  error || helper ? (
+    <div className="flex items-start justify-between gap-4 text-body-m">
+      {error ? (
+        <p id={errorId} className="text-danger">
+          {error}
+        </p>
+      ) : null}
+      {helper ? (
+        <p id={helperId} className="ml-auto text-text-muted">
+          {helper}
+        </p>
+      ) : null}
+    </div>
   ) : null;
