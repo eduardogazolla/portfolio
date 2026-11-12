@@ -71,6 +71,7 @@ Tipos em `app/types/`. Os campos marcados como *novo na query* já existem no sc
 
 | Campo | Tipo | Uso no redesign |
 |-------|------|-----------------|
+| `role` | String (localizado) | linha de cargo do hero (*novo na query*; vem do CMS, não das traduções) |
 | `introduction.raw` | RichText | apresentação do hero |
 | `profilePicture.url` | Asset | foto do hero |
 | `socials[]` | Social | hero, menu mobile, rodapé |
@@ -106,7 +107,7 @@ Tipos em `app/types/`. Os campos marcados como *novo na query* já existem no sc
 | `technologies[]` | KnownTech (`name`) | badges e filtros |
 | `thumbnail.url` | Asset | imagem na Home, na lista e no OG |
 | `pageThumbnail.url` | Asset | imagem principal do detalhe |
-| `sections[]` | `{ title, image.url }` | blocos do detalhe |
+| `sections[]` | `{ title, image.url }` | blocos do detalhe (`ProjectSection.title` é localizado) |
 | `gitHubUrl` | String? | link "Repositório" |
 | `liveProjectUrl` | String? | link "Ver online" |
 

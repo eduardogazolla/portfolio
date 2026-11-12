@@ -110,17 +110,17 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 
 ### Tests (escrever primeiro e ver falhar)
 
-- [ ] T032 [P] [US1] Teste de `getCurrentExperience` em `tests/utils/experience.test.ts`: retorna a experiência sem `endDate` de `startDate` mais recente; com duas atuais, a mais recente; sem nenhuma, `null`
-- [ ] T033 [P] [US1] Teste de `getSocialLabel` em `tests/utils/socials.test.ts`: usa `name` aparado; sem `name`, mapeia `github.com` → "GitHub", `linkedin.com` → "LinkedIn", `api.whatsapp.com` e `wa.me` → "WhatsApp"; host desconhecido → domínio sem `www.`/`api.`
-- [ ] T034 [P] [US1] Teste de `pickLocale` em `tests/utils/locale.test.ts`: com EN ativo, campos EN vazios ou `null` caem para o valor PT, campo a campo
+- [x] T032 [P] [US1] Teste de `getCurrentExperience` em `tests/utils/experience.test.ts`: retorna a experiência sem `endDate` de `startDate` mais recente; com duas atuais, a mais recente; sem nenhuma, `null`
+- [x] T033 [P] [US1] Teste de `getSocialLabel` em `tests/utils/socials.test.ts`: usa `name` aparado; sem `name`, mapeia `github.com` → "GitHub", `linkedin.com` → "LinkedIn", `api.whatsapp.com` e `wa.me` → "WhatsApp"; host desconhecido → domínio sem `www.`/`api.`
+- [x] T034 [P] [US1] Teste de `pickLocale` em `tests/utils/locale.test.ts`: com EN ativo, campos EN vazios ou `null` caem para o valor PT, campo a campo
 - [ ] T035 [P] [US1] Teste do Hero em `tests/components/hero.test.tsx`: renderiza papel, nome em `h1`, apresentação, "Agora: <cargo> na <empresa>" só quando há experiência atual, sociais com rótulos, "Vamos conversar" e "Ver projetos"; com `sessionStorage` marcado, não anima
 
 ### Implementation
 
-- [ ] T036 [P] [US1] Implementar `getCurrentExperience` em `app/utils/experience.ts` (faz a T032 passar)
-- [ ] T037 [P] [US1] Implementar `getSocialLabel` em `app/utils/socials.ts` (faz a T033 passar)
-- [ ] T038 [P] [US1] Implementar `pickLocale` em `app/utils/locale.ts` (faz a T034 passar) e usá-lo em `app/componentes/pages/home/home-client.tsx` no lugar do fallback atual
-- [ ] T039 [US1] Ajustar a query da Home em `app/page.tsx` ao contrato `HomePage` de `specs/002-redesign/contracts/hygraph-queries.graphql`: incluir `Social.name`, `Project.context` e `workExperiences(orderBy: startDate_DESC)`; remover `technologies`, `iconSvg` e `companyLogo`; atualizar `app/types/page-info.ts`, `app/types/projects.ts` (`context?: string`) e `app/types/work-experience.ts`
+- [x] T036 [P] [US1] Implementar `getCurrentExperience` em `app/utils/experience.ts` (faz a T032 passar)
+- [x] T037 [P] [US1] Implementar `getSocialLabel` em `app/utils/socials.ts` (faz a T033 passar)
+- [x] T038 [P] [US1] Implementar `pickLocale` em `app/utils/locale.ts` (faz a T034 passar) e usá-lo em `app/componentes/pages/home/home-client.tsx` no lugar do fallback atual
+- [x] T039 [US1] Ajustar a query da Home em `app/page.tsx` ao contrato `HomePage` de `specs/002-redesign/contracts/hygraph-queries.graphql`: incluir `Social.name`, `Project.context` e `workExperiences(orderBy: startDate_DESC)`; remover `technologies`, `iconSvg` e `companyLogo`; atualizar `app/types/page-info.ts`, `app/types/projects.ts` (`context?: string`) e `app/types/work-experience.ts`
 - [ ] T040 [US1] Refazer o Hero em `app/componentes/pages/home/hero-section/index.tsx` conforme o Figma `6:21` / mobile `8:29`:
   - papel (`label-m`, `text-muted`);
   - nome em duas linhas `display-xl` (`clamp` até 64 px no mobile);
@@ -172,7 +172,7 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 
 ### Tests (primeiro)
 
-- [ ] T047 [P] [US3] Teste de `formatDuration` e `formatPeriod` em `tests/utils/experience.test.ts`:
+- [x] T047 [P] [US3] Teste de `formatDuration` e `formatPeriod` em `tests/utils/experience.test.ts`:
   - PT: "1 ano e 9 meses", "2 anos e 1 mês", "1 ano", mínimo "1 mês";
   - EN: "1 year and 9 months";
   - meses arredondados para baixo, `end` ausente = hoje (com relógio fixo);
@@ -182,7 +182,7 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 
 ### Implementation
 
-- [ ] T050 [US3] Implementar `formatDuration` e `formatPeriod` em `app/utils/experience.ts` com `date-fns` (já é dependência), usando os locales `ptBR` e `enUS` (faz a T047 passar); remover `app/utils/get-relative-time.tsx` se ficar sem uso
+- [x] T050 [US3] Implementar `formatDuration` e `formatPeriod` em `app/utils/experience.ts` com `date-fns` (já é dependência), usando os locales `ptBR` e `enUS` (faz a T047 passar); remover `app/utils/get-relative-time.tsx` se ficar sem uso
 - [ ] T051 [US3] Refazer a Stack em `app/componentes/pages/home/known-techs/index.tsx` e `known-tech.tsx` conforme o Figma: SectionTitle "Stack" com o subtítulo "Tecnologias que uso no dia a dia."; duas colunas com divisores `line` no desktop e uma no mobile; lista estática, sem animação
 - [ ] T052 [US3] Refazer a Experiência em `app/componentes/pages/home/work-experiences/index.tsx` e `experience-item.tsx` conforme o Figma:
   - SectionTitle com o subtítulo "Do suporte de TI à qualidade de software: …";
