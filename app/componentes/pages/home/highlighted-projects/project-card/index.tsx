@@ -6,7 +6,6 @@ import { fadeUpAnimation } from "@/app/lib/animations";
 import { Project } from "@/app/types/projects";
 import { motion } from "motion/react";
 import Image from "next/image";
-import { HiArrowNarrowRight } from "react-icons/hi";
 
 type ProjectCardProps = {
   project: Project;
@@ -72,9 +71,8 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           ))}
         </div>
 
-        <Link href={`/projects/${project.slug}`}>
+        <Link href={`/projects/${project.slug}`} arrow>
           Ver projeto
-          <HiArrowNarrowRight />
         </Link>
       </div>
     </motion.div>
