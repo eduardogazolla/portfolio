@@ -60,9 +60,12 @@ export const HeroSection = ({ homeInfo, currentExperience }: HeroSectionProps) =
                 {FIRST_NAME}
               </span>
             </span>{" "}
-            <span className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
-              <span data-hero="name-line" className="block">
-                {LAST_NAME}
+            {/* Outline target: flow-root keeps the mask's -mb inside, so it hugs the glyph box. */}
+            <span data-hero="name-last" className="relative flow-root w-fit">
+              <span className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
+                <span data-hero="name-line" className="block">
+                  {LAST_NAME}
+                </span>
               </span>
             </span>
           </h1>

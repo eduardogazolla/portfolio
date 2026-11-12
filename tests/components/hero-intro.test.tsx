@@ -30,7 +30,12 @@ const renderHero = () =>
     </LanguageProvider>
   );
 
-const flush = () => act(async () => { await new Promise((r) => setTimeout(r, 120)); });
+// Several short act() scopes so React commits state updates made from rAF callbacks.
+const flush = async () => {
+  for (let i = 0; i < 12; i++) {
+    await act(async () => { await new Promise((r) => setTimeout(r, 60)); });
+  }
+};
 
 describe('Hero intro', () => {
   beforeEach(() => {
@@ -54,8 +59,27 @@ describe('Hero intro', () => {
     expect(sessionStorage.getItem(INTRO_STORAGE_KEY)).toBe('1');
     await flush();
     expect(mockAnimate).toHaveBeenCalled();
-    expect(container.querySelector('h1 [data-part="box"]')).toBeInTheDocument();
+    expect(container.querySelector('h1 [data-hero="name-last"] [data-part="box"]')).toBeInTheDocument();
     expect(document.documentElement.dataset.intro).toBe('play');
+  });
+
+  it('removes the attribute after the timeline ends and clears the boot timer', () => {
+    jest.useFakeTimers();
+    try {
+      const boot = window.setTimeout(() => {}, 4000);
+      window.__portfolioIntroTimer = boot;
+      const clear = jest.spyOn(window, 'clearTimeout');
+      document.documentElement.dataset.intro = 'play';
+      renderHero();
+      expect(clear).toHaveBeenCalledWith(boot);
+      act(() => { jest.advanceTimersByTime(2000); });
+      expect(document.documentElement.dataset.intro).toBe('play');
+      act(() => { jest.advanceTimersByTime(1100); });
+      expect(document.documentElement).not.toHaveAttribute('data-intro');
+      clear.mockRestore();
+    } finally {
+      jest.useRealTimers();
+    }
   });
 
   it('clears the attribute on unmount so content is never left hidden', async () => {

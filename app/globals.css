@@ -77,18 +77,39 @@
   background-color: var(--color-text-muted);
 }
 
-/* Hero intro initial states (see hero-intro.tsx). Applied only while the boot script
-   has set <html data-intro="play">, so content is visible without JS and on repeat visits. */
+/* Hero intro (see hero-intro.tsx). Applies only while the boot script has set
+   <html data-intro="play">, so content is visible without JS and on repeat visits. The
+   timeline starts at first paint (Motion board 12:21); fill-mode both holds the hidden
+   start state during each delay. When the attribute is removed the elements fall back to
+   their normal state, which equals each animation's end frame, so nothing jumps. */
+@keyframes hero-rise {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes hero-reveal {
+  from { clip-path: inset(100% 0 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes hero-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 html[data-intro="play"] [data-hero="name-line"] {
-  transform: translateY(100%);
+  animation: hero-rise 700ms var(--ease-out) both;
+}
+
+html[data-intro="play"] [data-hero="name-last"] [data-hero="name-line"] {
+  animation-delay: 90ms;
 }
 
 html[data-intro="play"] [data-hero="photo"] {
-  clip-path: inset(100% 0 0 0);
+  animation: hero-reveal 750ms var(--ease-out) 250ms both;
 }
 
 html[data-intro="play"] [data-hero="bio"],
 html[data-intro="play"] [data-hero="actions"] {
-  opacity: 0;
-  transform: translateY(12px);
+  animation: hero-fade-up 400ms var(--ease-out) 600ms both;
 }

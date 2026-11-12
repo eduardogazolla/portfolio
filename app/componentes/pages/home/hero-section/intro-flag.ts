@@ -1,3 +1,10 @@
+declare global {
+  interface Window {
+    /** Id of the boot script's last-resort timer; HeroIntro clears it when it takes over. */
+    __portfolioIntroTimer?: number;
+  }
+}
+
 export const INTRO_STORAGE_KEY = "portfolio-gazolla:intro";
 
 /**
@@ -8,7 +15,7 @@ export const INTRO_STORAGE_KEY = "portfolio-gazolla:intro";
  * The 4 s timer is a last-resort fallback so content can never stay hidden.
  * Static string: no user or request data is interpolated.
  */
-export const INTRO_BOOT_SCRIPT = `(function(){try{var d=document.documentElement;if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;if(window.sessionStorage.getItem("${INTRO_STORAGE_KEY}")!==null)return;d.dataset.intro="play";window.setTimeout(function(){delete d.dataset.intro},4000)}catch(e){}})();`;
+export const INTRO_BOOT_SCRIPT = `(function(){try{var d=document.documentElement;if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;if(window.sessionStorage.getItem("${INTRO_STORAGE_KEY}")!==null)return;d.dataset.intro="play";window.__portfolioIntroTimer=window.setTimeout(function(){delete d.dataset.intro},4000)}catch(e){}})();`;
 
 /** Records that the intro started in this browser session. Storage may be blocked. */
 export const markIntroPlayed = (): void => {

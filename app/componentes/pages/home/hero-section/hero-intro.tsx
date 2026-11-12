@@ -9,37 +9,32 @@ import { ease } from "@/app/lib/motion";
 import { markIntroPlayed } from "./intro-flag";
 
 type HeroIntroProps = {
-  /** The hero <section>; the intro drives its [data-hero] elements in place. */
+  /** The hero <section>. */
   rootRef: RefObject<HTMLElement | null>;
 };
 
 type Range = readonly [number, number];
 
-// Timeline in ms (Motion board 12:21). The page is usable at ~1000 ms.
+// Outline timeline in ms (Motion board 12:21), measured from first paint. The name, photo
+// and copy entrances are CSS keyframes in globals.css so they do not wait for hydration;
+// this component only draws the outline, writes the session flag and cleans up.
 const T = {
-  nameDuration: 700,
-  lastNameDelay: 90,
-  photo: [250, 1000],
-  copy: [600, 1000],
   outlineDraw: [800, 1400],
   handles: [1100, 1400],
   tagType: [1400, 1750],
   outlineOut: [2400, 2600],
+  end: 2650,
   // Hard stop in case a timer is lost: nothing may stay hidden.
   safety: 3000,
 } as const satisfies Record<string, number | Range>;
 
-const CLEARED_PROPS = ["transform", "opacity", "clip-path"] as const;
+const TAG_WAIT_MS = 300;
 
-type Curve = typeof ease.out | ((t: number) => number);
-type Keyframes = Record<string, string[] | number[]>;
-
-// Orchestrates the one-time hero entrance. The hidden initial states live in
-// globals.css under html[data-intro="play"] (set by INTRO_BOOT_SCRIPT before paint);
-// this component animates to the natural state and then removes the attribute.
+// Draws the Inspect outline around the "Gazolla" line, types its measurement, fades it
+// out, then removes <html data-intro> (the CSS entrances end on the normal visible state).
 export const HeroIntro = ({ rootRef }: HeroIntroProps) => {
   const reduceMotion = useReducedMotion();
-  const [nameEl, setNameEl] = useState<HTMLElement | null>(null);
+  const [target, setTarget] = useState<HTMLElement | null>(null);
   const startedRef = useRef(false);
   const stopRef = useRef<(() => void) | null>(null);
   const pendingStopRef = useRef<number | null>(null);
@@ -63,112 +58,98 @@ export const HeroIntro = ({ rootRef }: HeroIntroProps) => {
     if (!root || html.dataset.intro !== "play") return;
     startedRef.current = true;
     markIntroPlayed();
+    // This component owns the end of the intro from here on.
+    if (window.__portfolioIntroTimer !== undefined) window.clearTimeout(window.__portfolioIntroTimer);
 
-    const clearAll = () => {
-      html.removeAttribute("data-intro");
-      for (const el of Array.from(root.querySelectorAll<HTMLElement>("[data-hero]"))) {
-        for (const prop of CLEARED_PROPS) el.style.removeProperty(prop);
-      }
-    };
-
-    if (reduceMotion) {
-      // No movement and no outline; the boot script normally never sets "play" here.
-      clearAll();
-      return;
-    }
+    // The CSS timeline started at first paint; read its clock so the outline stays in sync.
+    const cssClock = root.querySelector<HTMLElement>('[data-hero="name-line"]')?.getAnimations?.()[0]?.currentTime;
+    const startElapsed = typeof cssClock === "number" ? cssClock : 0;
+    const t0 = performance.now() - startElapsed;
+    const elapsed = () => performance.now() - t0;
 
     const controls: AnimationPlaybackControls[] = [];
     const timers: number[] = [];
-    const all = (scope: ParentNode, selector: string) =>
-      Array.from(scope.querySelectorAll<HTMLElement>(selector));
+    let frame = 0;
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      window.cancelAnimationFrame(frame);
+      timers.forEach((id) => window.clearTimeout(id));
+      controls.forEach((c) => c.cancel());
+      html.removeAttribute("data-intro");
+      setTarget(null);
+    };
+    stopRef.current = finish;
+
+    if (reduceMotion) {
+      // No outline; the boot script normally never sets "play" here.
+      finish();
+      return;
+    }
+
+    timers.push(window.setTimeout(finish, Math.max(0, T.end - elapsed())));
+    timers.push(window.setTimeout(finish, Math.max(0, T.safety - elapsed())));
+
     const run = (
       els: HTMLElement[],
-      keyframes: Keyframes,
+      keyframes: Record<string, string[] | number[]>,
       [from, to]: Range,
-      curve: Curve = ease.out,
-      extraDelay = 0,
+      curve: typeof ease.out | ((t: number) => number) = ease.out,
     ) => {
       for (const el of els) {
         controls.push(
           animate(el, keyframes, {
             duration: (to - from) / 1000,
-            delay: (from + extraDelay) / 1000,
+            delay: Math.max(0, from - elapsed()) / 1000,
             ease: curve,
           }),
         );
       }
     };
 
-    const t0 = performance.now();
-    const rise = { transform: ["translateY(100%)", "translateY(0%)"] };
-    const [first, last] = all(root, '[data-hero="name-line"]');
-    if (first) run([first], rise, [0, T.nameDuration]);
-    if (last) run([last], rise, [0, T.nameDuration], ease.out, T.lastNameDelay);
-    run(all(root, '[data-hero="photo"]'), { clipPath: ["inset(100% 0 0 0)", "inset(0% 0 0 0)"] }, T.photo);
-    run(
-      all(root, '[data-hero="bio"], [data-hero="actions"]'),
-      { opacity: [0, 1], transform: ["translateY(12px)", "translateY(0px)"] },
-      T.copy,
-    );
+    const playOutline = (outline: HTMLElement) => {
+      const parts = (selector: string) => Array.from(outline.querySelectorAll<HTMLElement>(selector));
+      const tag = outline.querySelector<HTMLElement>('[data-part="tag"]');
+      // Hidden states set by hand so nothing shows during the delay before each part.
+      for (const box of parts('[data-part="box"]')) box.style.clipPath = "inset(0 100% 100% 0)";
+      for (const handle of parts('[data-part="handle"]')) handle.style.opacity = "0";
+      if (tag) tag.style.clipPath = "inset(0 100% 0 0)";
+      outline.style.opacity = "1";
 
-    let finished = false;
-    const finish = () => {
-      if (finished) return;
-      finished = true;
-      timers.forEach((id) => window.clearTimeout(id));
-      controls.forEach((c) => c.cancel());
-      clearAll();
-      setNameEl(null);
+      run(parts('[data-part="box"]'), { clipPath: ["inset(0 100% 100% 0)", "inset(0% 0% 0% 0%)"] }, T.outlineDraw, ease.inOut);
+      run(parts('[data-part="handle"]'), { opacity: [0, 1] }, T.handles);
+      if (tag) {
+        const steps = Math.max(1, tag.textContent?.length ?? 1);
+        run([tag], { clipPath: ["inset(0 100% 0 0)", "inset(0 0% 0 0)"] }, T.tagType, (t) => Math.floor(t * steps) / steps);
+      }
+      run([outline], { opacity: [1, 0] }, T.outlineOut);
     };
-    stopRef.current = finish;
-    timers.push(window.setTimeout(finish, T.outlineOut[1] + 50));
-    timers.push(window.setTimeout(finish, T.safety));
 
-    // The outline mounts through a portal into the h1; give it a tick to render and measure.
-    timers.push(
-      window.setTimeout(() => {
-        if (finished) return;
-        setNameEl(root.querySelector<HTMLElement>('[data-hero="name"]'));
-        timers.push(
-          window.setTimeout(() => {
-            if (finished) return;
-            const outline = root.querySelector<HTMLElement>('[data-hero="name"] > [aria-hidden="true"]');
-            if (!outline) return;
-            // Delays are relative to t0, so subtract the time already elapsed.
-            const elapsed = performance.now() - t0;
-            const at = ([from, to]: Range): Range => [from - elapsed, to - elapsed];
-            const tag = outline.querySelector<HTMLElement>('[data-part="tag"]');
-            const steps = Math.max(1, tag?.textContent?.length ?? 1);
-
-            // Set the hidden states by hand so nothing shows during the delay before each part.
-            for (const box of all(outline, '[data-part="box"]')) box.style.clipPath = "inset(0 100% 100% 0)";
-            for (const handle of all(outline, '[data-part="handle"]')) handle.style.opacity = "0";
-            outline.style.opacity = "1";
-            run(
-              all(outline, '[data-part="box"]'),
-              { clipPath: ["inset(0 100% 100% 0)", "inset(0% 0% 0% 0%)"] },
-              at(T.outlineDraw),
-              ease.inOut,
-            );
-            run(all(outline, '[data-part="handle"]'), { opacity: [0, 1] }, at(T.handles));
-            if (tag) {
-              tag.style.clipPath = "inset(0 100% 0 0)";
-              run(
-                [tag],
-                { clipPath: ["inset(0 100% 0 0)", "inset(0 0% 0 0)"] },
-                at(T.tagType),
-                (t) => Math.floor(t * steps) / steps,
-              );
-            }
-            run([outline], { opacity: [1, 0] }, at(T.outlineOut));
-          }, 50),
-        );
-      }, 0),
-    );
+    // Mount the outline through a portal, then poll (per frame) until its tag has measured.
+    // Without a tag (touch devices) the box and handles play alone after TAG_WAIT_MS.
+    const lastName = root.querySelector<HTMLElement>('[data-hero="name-last"]');
+    let waitStart = 0;
+    const poll = (now: number) => {
+      if (finished) return;
+      if (!waitStart) waitStart = now;
+      const outline = lastName?.querySelector<HTMLElement>(':scope > [aria-hidden="true"]');
+      const tagReady = outline?.querySelector('[data-part="tag"]');
+      if (outline && (tagReady || now - waitStart >= TAG_WAIT_MS)) {
+        playOutline(outline);
+        return;
+      }
+      frame = window.requestAnimationFrame(poll);
+    };
+    frame = window.requestAnimationFrame(() => {
+      if (finished) return;
+      setTarget(lastName);
+      frame = window.requestAnimationFrame(poll);
+    });
 
     return scheduleStop;
   }, [reduceMotion, rootRef]);
 
-  if (!nameEl) return null;
-  return createPortal(<InspectOutline measure selector="h1" className="opacity-0" />, nameEl);
+  if (!target) return null;
+  return createPortal(<InspectOutline measure selector="h1.name" className="opacity-0" />, target);
 };
