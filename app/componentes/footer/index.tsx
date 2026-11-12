@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/app/componentes/link";
 import { IoMdHeart } from "react-icons/io";
 import { useLanguage } from "@/app/componentes/context/language-context";
 
@@ -16,7 +16,8 @@ export const Footer = () => {
         <strong className="font-medium">
           <Link
             href={"https://www.instagram.com/eduardogazolla/"}
-            target="_blank"
+            arrow={false}
+            className="text-inherit"
           >
             Eduardo Gazolla
           </Link>

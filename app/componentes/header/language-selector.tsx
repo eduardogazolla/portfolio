@@ -36,7 +36,7 @@ export const LanguageSelector = () => {
             }}
             className={cn(
               "relative rounded-full px-3 py-1.5 text-label-m transition-colors duration-fast ease-out motion-reduce:transition-none",
-              active ? "text-on-accent" : "text-text-muted hover:text-text"
+              active ? "text-on-accent" : "text-text-muted [@media(hover:hover)_and_(pointer:fine)]:hover:text-text"
             )}
           >
             {active && (

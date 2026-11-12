@@ -1,4 +1,5 @@
 import { render, screen, act } from '@testing-library/react';
+import { renderToString } from 'react-dom/server';
 import { LanguageProvider } from '../../app/componentes/context/language-context';
 import { InspectOutline } from '../../app/componentes/inspect-outline';
 
@@ -112,11 +113,24 @@ describe('InspectOutline', () => {
       expect(disconnect).toHaveBeenCalledTimes(1);
     });
 
-    it('does not observe without a fine hover pointer, but still measures once', () => {
+    it('renders no tag text and does not observe without a fine hover pointer', () => {
       mockMatchMedia(false);
-      renderOutline(<InspectOutline measure selector="h1" />);
+      const { container } = renderOutline(<InspectOutline measure selector="h1" />);
       expect(observe).not.toHaveBeenCalled();
-      expect(screen.getByText(/^h1 \d+ × \d+$/)).toBeInTheDocument();
+      expect(container.querySelector('[data-part="tag"]')).toBeNull();
+      expect(screen.queryByText(/^h1 \d+ × \d+$/)).toBeNull();
+    });
+
+    it('renders no tag text before the effect confirms hover (SSR markup)', () => {
+      const html = renderToString(
+        <LanguageProvider>
+          <div>
+            <InspectOutline measure selector="h1" />
+          </div>
+        </LanguageProvider>
+      );
+      expect(html).not.toMatch(/h1 \d+ × \d+/);
+      expect(html).not.toContain('data-part="tag"');
     });
 
     it('does not crash when ResizeObserver is unavailable', () => {

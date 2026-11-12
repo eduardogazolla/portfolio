@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/app/componentes/button";
+import { Link } from "@/app/componentes/link";
 import { CMSIcon } from "@/app/componentes/cms-icon";
 import { RichText } from "@/app/componentes/rich-text";
 import { TechBadge } from "@/app/componentes/tech-badge";
@@ -36,7 +37,7 @@ export const HeroSection = ({ homeInfo }: HomeSectionProps) => {
           transition={{ duration: 0.5 }}
         >
           <p className="font-mono text-blue-400">{translations.hero.greeting}</p>
-          <h2 className="text-4xl font-medium mt-2">Eduardo Gazolla</h2>
+          <h1 className="text-4xl font-medium mt-2">Eduardo Gazolla</h1>
 
           <div className="text-gray-400 my-6 text-sm sm:text-base">
             <RichText content={homeInfo.introduction.raw} />
@@ -57,14 +58,14 @@ export const HeroSection = ({ homeInfo }: HomeSectionProps) => {
             </Button>
             <div className="text-gray-600 text2xl flex items-center h-20 gap-3">
               {homeInfo.socials.map((contact, index) => (
-                <a
+                <Link
                   href={contact.url}
                   key={`contact-${index}`}
-                  target="_blank"
+                  arrow={false}
                   className="hover:text-gray-100 transition-colors"
                 >
                   <CMSIcon icon={contact.iconSvg} />
-                </a>
+                </Link>
               ))}
             </div>
           </div>

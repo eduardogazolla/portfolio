@@ -55,11 +55,14 @@ describe.each([
     expect(lines[1].className).toMatch(/peer-focus:scale-x-100/);
   });
 
-  it('turns the line danger on error and hides the accent overlay', () => {
+  it('turns the line danger on error and keeps a danger focus overlay', () => {
     const { container } = render(<Field label="Nome" error="Erro" />);
     const lines = container.querySelectorAll('[aria-hidden="true"]');
     expect(lines[0].className).toMatch(/bg-danger/);
-    expect(lines[1].className).toMatch(/(^|\s)hidden(\s|$)/);
+    expect(lines[1].className).not.toMatch(/(^|\s)hidden(\s|$)/);
+    expect(lines[1].className).toMatch(/(^|\s)bg-danger(\s|$)/);
+    expect(lines[1].className).not.toMatch(/bg-accent/);
+    expect(lines[1].className).toMatch(/peer-focus:scale-x-100/);
   });
 
   it('keeps the label muted, text on focus-within and on error', () => {

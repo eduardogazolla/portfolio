@@ -1,5 +1,6 @@
 "use client";
 
+import { Link } from "@/app/componentes/link";
 import { RichText } from "@/app/componentes/rich-text";
 import { TechBadge } from "@/app/componentes/tech-badge";
 import { fadeUpAnimation } from "@/app/lib/animations";
@@ -90,14 +91,14 @@ export const ExperienceItem = ({ experience }: ExperienceItemProps) => {
 
       <div>
         <div className="flex flex-col gap-2 text-sm sm:text-base">
-          <a
+          <Link
             href={companyUrl}
-            target="_blank"
+            arrow={false}
             className="text-gray-500 hover:text-blue-500 transition-colors"
           >
             @ {companyName}
-          </a>
-          <h4 className="text-gray-300">{role}</h4>
+          </Link>
+          <h3 className="text-gray-300">{role}</h3>
           <span className="text-gray-500">
             {formattedStartDate} • {formattedEndDate} • ({formattedDuration})
           </span>

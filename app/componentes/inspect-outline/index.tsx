@@ -44,6 +44,12 @@ export const InspectOutline = ({
     const target = rootRef.current?.parentElement;
     if (!measure || !target) return;
 
+    // The measure tag only exists for a mouse: it is absent from SSR and on touch devices.
+    const canHover =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (!canHover) return;
+
     const update = () => {
       const { width, height } = target.getBoundingClientRect();
       const next = { width: Math.round(width), height: Math.round(height) };
@@ -55,11 +61,7 @@ export const InspectOutline = ({
     };
     update();
 
-    // The measure tag is only visible with a mouse, so only then keep it live.
-    const canHover =
-      typeof window.matchMedia === "function" &&
-      window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    if (!canHover || typeof ResizeObserver === "undefined") return;
+    if (typeof ResizeObserver === "undefined") return;
     const observer = new ResizeObserver(update);
     observer.observe(target);
     return () => observer.disconnect();
@@ -67,10 +69,10 @@ export const InspectOutline = ({
 
   const baseLabel =
     label ?? (variant === "dashed" ? translations.a11y.elementNotFound : undefined);
-  const tagText =
-    measure && size
-      ? `${selector} ${size.width} × ${size.height}`.trim()
-      : baseLabel;
+  // With `measure` the tag shows only the measured size (set once hover is confirmed).
+  const tagText = measure
+    ? size && `${selector} ${size.width} × ${size.height}`.trim()
+    : baseLabel;
 
   return (
     <span

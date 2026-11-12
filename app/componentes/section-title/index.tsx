@@ -1,5 +1,3 @@
-"use client";
-
 import { cn } from "@/app/lib/utils";
 import { InspectOutline } from "@/app/componentes/inspect-outline";
 

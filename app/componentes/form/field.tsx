@@ -53,10 +53,10 @@ export const Underline = ({ error }: { error: boolean }) => (
     <span
       aria-hidden="true"
       className={cn(
-        "absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-accent",
+        "absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0",
+        error ? "bg-danger" : "bg-accent",
         "transition-transform duration-base ease-out peer-focus:scale-x-100",
-        "motion-reduce:transition-none",
-        error && "hidden"
+        "motion-reduce:transition-none"
       )}
     />
   </>
