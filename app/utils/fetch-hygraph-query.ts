@@ -17,13 +17,18 @@ export const fetchHygraphQuery = async <T>(
   { variables, revalidate }: FetchHygraphQueryOptions = {},
 ): Promise<T> => {
   const operation = getOperationName(query);
+  const url = process.env.HYGRAPH_URL;
+  const token = process.env.HYGRAPH_TOKEN;
 
-  const response = await fetch(process.env.HYGRAPH_URL!, {
+  if (!url) throw new Error('Missing required environment variable HYGRAPH_URL');
+  if (!token) throw new Error('Missing required environment variable HYGRAPH_TOKEN');
+
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      Authorization: `Bearer ${process.env.HYGRAPH_TOKEN}`,
+      Authorization: `Bearer ${token}`,
     },
     next: {
       revalidate,
@@ -35,12 +40,18 @@ export const fetchHygraphQuery = async <T>(
     throw new Error(`Hygraph request "${operation}" failed with status ${response.status}`);
   }
 
-  const { data, errors } = await response.json();
+  let body: { data?: T; errors?: { message?: string }[] };
+  try {
+    body = await response.json();
+  } catch {
+    throw new Error(`Hygraph request "${operation}" returned a non-JSON response`);
+  }
+  const { data, errors } = body;
 
   if (errors?.length) {
     const messages = errors.map((e: { message?: string }) => e.message).join('; ');
     throw new Error(`Hygraph operation "${operation}" returned errors: ${messages}`);
   }
 
-  return data;
+  return data as T;
 };

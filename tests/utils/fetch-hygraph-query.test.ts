@@ -57,11 +57,55 @@ describe('fetchHygraphQuery', () => {
     );
   });
 
+  const caughtMessage = async (promise: Promise<unknown>) => {
+    try {
+      await promise;
+    } catch (e) {
+      return (e as Error).message;
+    }
+    throw new Error('expected promise to reject');
+  };
+
+  it('does not leak the token on GraphQL errors', async () => {
+    mockFetch.mockResolvedValue(okResponse({ errors: [{ message: 'boom' }] }));
+    const message = await caughtMessage(fetchHygraphQuery('query Foo { a }'));
+    expect(message).toMatch(/Foo/);
+    expect(message).not.toContain('secret-token');
+  });
+
   it('throws on a non-OK response without leaking the token', async () => {
     mockFetch.mockResolvedValue({ ok: false, status: 500, json: () => Promise.resolve({}) });
+    const message = await caughtMessage(fetchHygraphQuery('query Foo { a }'));
+    expect(message).toMatch(/500/);
+    expect(message).not.toContain('secret-token');
+  });
 
-    const promise = fetchHygraphQuery('query Foo { a }');
-    await expect(promise).rejects.toThrow(/500/);
-    await expect(promise).rejects.not.toThrow(/secret-token/);
+  it('throws with the operation name on a non-JSON body, without leaking the token', async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: () => Promise.reject(new SyntaxError('Unexpected token < in JSON')),
+    });
+    const message = await caughtMessage(fetchHygraphQuery('query Foo { a }'));
+    expect(message).toMatch(/Foo/);
+    expect(message).not.toContain('secret-token');
+  });
+
+  describe('missing configuration', () => {
+    const originalUrl = process.env.HYGRAPH_URL;
+    const originalToken = process.env.HYGRAPH_TOKEN;
+
+    afterEach(() => {
+      process.env.HYGRAPH_URL = originalUrl;
+      process.env.HYGRAPH_TOKEN = originalToken;
+    });
+
+    it.each(['HYGRAPH_URL', 'HYGRAPH_TOKEN'])('fails fast naming %s', async (name) => {
+      delete process.env[name];
+      const message = await caughtMessage(fetchHygraphQuery('query Foo { a }'));
+      expect(message).toContain(name);
+      expect(message).not.toContain('secret-token');
+      expect(mockFetch).not.toHaveBeenCalled();
+    });
   });
 });
