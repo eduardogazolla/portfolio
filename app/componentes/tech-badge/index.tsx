@@ -1,19 +1,18 @@
-'use client'
+import { ComponentProps } from "react";
+import { cn } from "@/app/lib/utils";
 
-import { motion } from 'motion/react'
-import { ComponentProps } from 'react'
+type TechBadgeProps = Omit<ComponentProps<"span">, "children"> & {
+  name: string;
+};
 
-type TechBadgeProps = ComponentProps<typeof motion.span> & {
-  name: string
-}
-
-export const TechBadge = ({ name, ...props }: TechBadgeProps) => {
-  return (
-    <motion.span
-      className="text-blue-400 bg-blue-900/80 text-sm py-1 px-3 rounded-lg"
-      {...props}
-    >
-      {name}
-    </motion.span>
-  )
-}
+export const TechBadge = ({ name, className, ...props }: TechBadgeProps) => (
+  <span
+    className={cn(
+      "inline-flex items-center rounded-full border border-line px-3 py-1 text-label-m text-text-muted",
+      className
+    )}
+    {...props}
+  >
+    {name}
+  </span>
+);

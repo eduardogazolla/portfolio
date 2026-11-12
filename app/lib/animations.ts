@@ -7,6 +7,4 @@ const fadeUp = {
   transition: { duration: duration.base, ease: ease.out },
 };
 
-export const techBadgeAnimation = fadeUp;
-
 export const fadeUpAnimation = fadeUp;

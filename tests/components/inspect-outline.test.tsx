@@ -21,6 +21,7 @@ describe('InspectOutline', () => {
   it('static variant shows the received label', () => {
     renderOutline(<InspectOutline variant="static" label="h1.hero-name" />);
     expect(screen.getByText('h1.hero-name')).toBeInTheDocument();
+    expect(screen.getByText('h1.hero-name').className).toMatch(/text-mono-s.*text-on-accent|text-on-accent.*text-mono-s/);
   });
 
   it('renders no tag when label is omitted', () => {
@@ -36,6 +37,7 @@ describe('InspectOutline', () => {
   });
 
   it('dashed variant uses a dashed border and the "element not found" tag', async () => {
+    localStorage.setItem('portfolio-gazolla:locale', 'pt-BR');
     const { container } = renderOutline(<InspectOutline variant="dashed" />);
     expect(await screen.findByText('elemento não encontrado')).toBeInTheDocument();
     expect(container.querySelector('[data-part="box"]')!.className).toMatch(/border-dashed/);

@@ -14,7 +14,7 @@ export const PageIntroduction = () => {
       <SectionTitle
         subtitle={translations.projectsPage.subtitle}
         title={translations.projectsPage.title}
-        className="text-center items-center [&>h3]:text-4xl"
+        className="text-center items-center"
       />
 
       <motion.div

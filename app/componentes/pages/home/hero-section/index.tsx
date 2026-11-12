@@ -8,7 +8,6 @@ import { HomePageInfo } from "@/app/types/page-info";
 import Image from "next/image";
 import { HiArrowNarrowRight } from "react-icons/hi";
 import { motion } from "motion/react";
-import { techBadgeAnimation } from "@/app/lib/animations";
 import { useLanguage } from "@/app/componentes/context/language-context";
 
 type HomeSectionProps = {
@@ -44,12 +43,10 @@ export const HeroSection = ({ homeInfo }: HomeSectionProps) => {
           </div>
 
           <div className="flex flex-wrap gap-x-2 gap-y-3 lg:max-w-[340px]">
-            {homeInfo.technologies.map((tech, i) => (
+            {homeInfo.technologies.map((tech) => (
               <TechBadge
                 name={tech.name}
                 key={`intro-tech-${tech.name}`}
-                {...techBadgeAnimation}
-                transition={{ duration: 0.2, delay: i * 0.1 }}
               />
             ))}
           </div>

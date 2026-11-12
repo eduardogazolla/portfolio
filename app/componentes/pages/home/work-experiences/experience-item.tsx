@@ -2,7 +2,7 @@
 
 import { RichText } from "@/app/componentes/rich-text";
 import { TechBadge } from "@/app/componentes/tech-badge";
-import { fadeUpAnimation, techBadgeAnimation } from "@/app/lib/animations";
+import { fadeUpAnimation } from "@/app/lib/animations";
 import { WorkExperience } from "@/app/types/work-experience";
 import { differenceInMonths, differenceInYears, format } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
@@ -109,12 +109,10 @@ export const ExperienceItem = ({ experience }: ExperienceItemProps) => {
           {locale === "en" ? "Skills" : "Competências"}
         </p>
         <div className="flex gap-x-2 gap-y-3 flex-wrap lg:max-w-[350px] mb-8">
-          {technologies.map((tech, i) => (
+          {technologies.map((tech) => (
             <TechBadge
               key={`experience-${companyName}-tech-${tech.name}`}
               name={tech.name}
-              {...techBadgeAnimation}
-              transition={{ duration: 0.2, delay: i * 0.1 }}
             />
           ))}
         </div>
