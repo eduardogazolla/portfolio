@@ -18,7 +18,7 @@ export const SectionTitle = ({
   className,
 }: SectionTitleProps) => (
   <div className={cn("flex flex-col gap-4", className)}>
-    <Heading className="group relative w-fit font-display font-extrabold leading-[0.92] tracking-[-3px] text-text [font-size:clamp(64px,8vw_+_1rem,112px)]">
+    <Heading className="group relative w-fit max-w-full break-words font-display font-extrabold leading-[0.92] tracking-[-3px] text-text [font-size:clamp(64px,8vw_+_1rem,112px)]">
       {title}
       <InspectOutline variant="hover" measure selector={Heading} />
     </Heading>

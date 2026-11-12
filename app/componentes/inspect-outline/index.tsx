@@ -35,7 +35,7 @@ export const InspectOutline = ({
   className,
 }: InspectOutlineProps) => {
   const { translations } = useLanguage();
-  const rootRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLSpanElement>(null);
   const [size, setSize] = useState<{ width: number; height: number } | null>(
     null
   );
@@ -46,11 +46,20 @@ export const InspectOutline = ({
 
     const update = () => {
       const { width, height } = target.getBoundingClientRect();
-      setSize({ width: Math.round(width), height: Math.round(height) });
+      const next = { width: Math.round(width), height: Math.round(height) };
+      setSize((prev) =>
+        prev && prev.width === next.width && prev.height === next.height
+          ? prev
+          : next
+      );
     };
     update();
 
-    if (typeof ResizeObserver === "undefined") return;
+    // The measure tag is only visible with a mouse, so only then keep it live.
+    const canHover =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (!canHover || typeof ResizeObserver === "undefined") return;
     const observer = new ResizeObserver(update);
     observer.observe(target);
     return () => observer.disconnect();
@@ -64,17 +73,17 @@ export const InspectOutline = ({
       : baseLabel;
 
   return (
-    <div
+    <span
       ref={rootRef}
       aria-hidden="true"
       className={cn(
-        "pointer-events-none absolute inset-0",
+        "pointer-events-none absolute inset-0 block",
         variant === "hover" &&
           "opacity-0 transition-opacity duration-fast ease-out motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100",
         className
       )}
     >
-      <div
+      <span
         data-part="box"
         className={cn(
           "absolute inset-0 border border-accent",
@@ -96,6 +105,6 @@ export const InspectOutline = ({
           {tagText}
         </span>
       )}
-    </div>
+    </span>
   );
 };

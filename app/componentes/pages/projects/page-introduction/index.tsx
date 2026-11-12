@@ -12,6 +12,7 @@ export const PageIntroduction = () => {
   return (
     <section className="w-full h-[450px] lg:h-[630px] flex flex-col items-center justify-center px-2">
       <SectionTitle
+        as="h1"
         subtitle={translations.projectsPage.subtitle}
         title={translations.projectsPage.title}
         className="text-center items-center"

@@ -12,6 +12,21 @@ const renderOutline = (ui: React.ReactElement) =>
 beforeEach(() => localStorage.clear());
 
 describe('InspectOutline', () => {
+  it('renders only span elements so it is valid inside a heading', () => {
+    const { container } = render(
+      <LanguageProvider>
+        <h1 data-testid="h">
+          Title
+          <InspectOutline variant="hover" label="h1" measure selector="h1" />
+        </h1>
+      </LanguageProvider>
+    );
+    const heading = container.querySelector('[data-testid="h"]')!;
+    const tags = Array.from(heading.querySelectorAll('*')).map((e) => e.tagName);
+    expect(tags.length).toBeGreaterThan(0);
+    expect(new Set(tags)).toEqual(new Set(['SPAN']));
+  });
+
   it('is decorative: root has aria-hidden', () => {
     const { container } = renderOutline(<InspectOutline label="h1" />);
     const root = container.querySelector('[data-testid="parent"]')!.firstElementChild!;
@@ -57,7 +72,15 @@ describe('InspectOutline', () => {
     const disconnect = jest.fn();
     const original = global.ResizeObserver;
 
+    const originalMatchMedia = window.matchMedia;
+    const mockMatchMedia = (matches: boolean) => {
+      window.matchMedia = jest.fn().mockReturnValue({ matches }) as unknown as typeof window.matchMedia;
+    };
+
     beforeEach(() => {
+      observe.mockClear();
+      disconnect.mockClear();
+      mockMatchMedia(true);
       global.ResizeObserver = jest.fn((cb: () => void) => {
         callback = cb;
         return { observe, disconnect, unobserve: jest.fn() };
@@ -65,6 +88,7 @@ describe('InspectOutline', () => {
     });
     afterEach(() => {
       global.ResizeObserver = original;
+      window.matchMedia = originalMatchMedia;
     });
 
     it('writes "selector W × H" from the parent rect and updates on resize', () => {
@@ -79,6 +103,20 @@ describe('InspectOutline', () => {
       act(() => callback());
       expect(screen.getByText('h1 600 × 90')).toBeInTheDocument();
       spy.mockRestore();
+    });
+
+    it('disconnects the observer on unmount', () => {
+      const { unmount } = renderOutline(<InspectOutline measure selector="h1" />);
+      expect(observe).toHaveBeenCalledTimes(1);
+      unmount();
+      expect(disconnect).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not observe without a fine hover pointer, but still measures once', () => {
+      mockMatchMedia(false);
+      renderOutline(<InspectOutline measure selector="h1" />);
+      expect(observe).not.toHaveBeenCalled();
+      expect(screen.getByText(/^h1 \d+ × \d+$/)).toBeInTheDocument();
     });
 
     it('does not crash when ResizeObserver is unavailable', () => {

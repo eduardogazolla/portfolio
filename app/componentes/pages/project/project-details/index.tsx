@@ -32,6 +32,7 @@ export const ProjectDetails = ({ project }: ProjectDetailsProps) => {
       />
 
       <SectionTitle
+        as="h1"
         subtitle={translations.projectsPage.subtitle}
         title={project.title}
         className="text-center items-center"
