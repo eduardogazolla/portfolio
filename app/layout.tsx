@@ -66,7 +66,9 @@ const getSiteSocials = async (): Promise<Social[]> => {
       siteSocialsQuery,
       60 * 60 * 24 // 24 horas, same as the pages
     );
-    return result?.pages?.[0]?.socials ?? [];
+    const socials = result?.pages?.[0]?.socials;
+    if (!socials) console.error("SiteSocials query returned no data");
+    return socials ?? [];
   } catch (error) {
     // The footer still renders (without socials) if the CMS is unreachable.
     console.error("SiteSocials query failed", error);
