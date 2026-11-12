@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect } from 'react'
-import Link from 'next/link'
 import { Button } from './componentes/button'
 import { HiArrowNarrowLeft } from 'react-icons/hi'
 import { useLanguage } from './componentes/context/language-context'
@@ -19,12 +18,10 @@ export default function NotFound() {
       <h2 className="text-3xl font-medium text-gray-400 mb-4">
         {translations.notFound.title}
       </h2>
-      <Link href="/">
-        <Button>
-          <HiArrowNarrowLeft size={20} />
-          {translations.notFound.backToHome}
-        </Button>
-      </Link>
+      <Button href="/">
+        <HiArrowNarrowLeft size={20} />
+        {translations.notFound.backToHome}
+      </Button>
     </div>
   )
 }

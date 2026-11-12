@@ -57,21 +57,17 @@ export const ProjectDetails = ({ project }: ProjectDetailsProps) => {
         {...fadeUpAnimation}
       >
         {project?.gitHubUrl && (
-          <a href={project.gitHubUrl} target="_blank">
-            <Button className="min-w-[180px]">
-              <TbBrandGithub size={20} />
-              {locale === "en" ? "Repository" : "Repositório"}
-            </Button>
-          </a>
+          <Button href={project.gitHubUrl} target="_blank" className="min-w-[180px]">
+            <TbBrandGithub size={20} />
+            {locale === "en" ? "Repository" : "Repositório"}
+          </Button>
         )}
 
         {project?.liveProjectUrl && (
-          <a href={project.liveProjectUrl} target="_blank">
-            <Button className="min-w-[180px] ">
-              <FiGlobe size={20} />
-              {locale === "en" ? "Live Project" : "Projeto Online"}
-            </Button>
-          </a>
+          <Button href={project.liveProjectUrl} target="_blank" className="min-w-[180px]">
+            <FiGlobe size={20} />
+            {locale === "en" ? "Live Project" : "Projeto Online"}
+          </Button>
         )}
       </motion.div>
       <Link href={"/projects"}>
