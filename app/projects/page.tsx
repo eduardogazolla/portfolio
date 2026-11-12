@@ -1,52 +1,65 @@
-import { PageIntroduction } from "../componentes/pages/projects/page-introduction";
+import { ContactBand } from "../componentes/contact-band";
 import { ProjectsListClient } from "../componentes/pages/projects/projects-list-client";
-import { LocalizedProjectsPageData } from "../types/page-info";
+import { LocalizedProjectsPageData, Social } from "../types/page-info";
 import { fetchHygraphQuery } from "../utils/fetch-hygraph-query";
 
 export const metadata = {
-  title: 'Projetos'
+  title: 'Projetos',
+  description: 'Projetos de Eduardo Gazolla: desenvolvimento front-end e testes, com contexto, tecnologias e links.',
 }
 
-const getPageData = async (): Promise<LocalizedProjectsPageData> => {
-  const query = `
-      query ProjectsQuery {
-        ptProjects: projects(locales: [pt_BR, en]) {
-          shortDescription
-          slug
-          title
-          thumbnail {
-            url
-          }
-          technologies {
-            name
-          }
-        }
-        enProjects: projects(locales: [en, pt_BR]) {
-          shortDescription
-          slug
-          title
-          thumbnail {
-            url
-          }
-          technologies {
-            name
-          }
-        }
-      }
-      `;
+// Keep in sync with the `ProjectsPage` operation in
+// specs/002-redesign/contracts/hygraph-queries.graphql.
+const query = `
+  fragment ProjectCard on Project {
+    slug
+    title
+    context
+    shortDescription
+    thumbnail {
+      url
+    }
+    technologies {
+      name
+    }
+  }
 
-  return fetchHygraphQuery(
-    query,
-    60 * 60 * 24 // 24 hours
-  );
+  query ProjectsPage {
+    ptProjects: projects(locales: [pt_BR, en]) {
+      ...ProjectCard
+    }
+    enProjects: projects(locales: [en, pt_BR]) {
+      ...ProjectCard
+    }
+    pages(where: { slug: "home" }, locales: [pt_BR]) {
+      socials {
+        name
+        url
+      }
+    }
+  }
+`;
+
+const getPageData = async (): Promise<LocalizedProjectsPageData> => {
+  const data = await fetchHygraphQuery<Partial<Omit<LocalizedProjectsPageData, "socials">> & {
+      pages?: { socials: Social[] }[];
+    }>(query, {
+    revalidate: 60 * 60 * 24, // 24 hours
+  });
+
+  return {
+    ptProjects: data?.ptProjects ?? [],
+    enProjects: data?.enProjects ?? [],
+    socials: data?.pages?.[0]?.socials ?? [],
+  };
 };
 
 export default async function Projects() {
   const data = await getPageData();
   return (
     <>
-      <PageIntroduction />
       <ProjectsListClient data={data} />
+      <ContactBand />
     </>
   );
 }

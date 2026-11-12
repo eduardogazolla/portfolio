@@ -1,33 +1,57 @@
 "use client";
 
+import { useId } from "react";
+import { motion } from "motion/react";
 import { useLanguage } from "@/app/componentes/context/language-context";
-import { motion } from "framer-motion";
+import { spring } from "@/app/lib/motion";
+import { usePrefersReducedMotion } from "@/app/lib/use-prefers-reduced-motion";
+import { cn } from "@/app/lib/utils";
+import type { Locale } from "@/app/utils/translations";
+
+const OPTIONS: { locale: Locale; label: string }[] = [
+  { locale: "pt-BR", label: "PT" },
+  { locale: "en", label: "EN" },
+];
 
 export const LanguageSelector = () => {
-  const { locale, toggleLocale } = useLanguage();
+  const { locale, setLocale, translations } = useLanguage();
+  const reduceMotion = usePrefersReducedMotion();
+  // Per-instance id so several switches on a page never share one pill.
+  const pillId = useId();
 
   return (
-    <motion.button
-      onClick={toggleLocale}
-      className="flex items-center gap-1 text-sm font-mono text-gray-400 hover:text-gray-50 transition-colors bg-gray-800/50 backdrop-blur-sm rounded-full px-3 py-1.5 border border-gray-700/50 hover:border-blue-500/50"
-      whileTap={{ scale: 0.95 }}
-      whileHover={{ scale: 1.05 }}
-      title={locale === "pt-BR" ? "Switch to English" : "Mudar para Português"}
+    <div
+      role="group"
+      aria-label={translations.a11y.languageGroup}
+      className="inline-flex items-center gap-0.5 rounded-full border border-line p-1"
     >
-      <motion.span
-        key={locale}
-        initial={{ y: -10, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: 10, opacity: 0 }}
-        transition={{ duration: 0.2 }}
-        className="text-blue-400 font-medium"
-      >
-        {locale === "pt-BR" ? "PT" : "EN"}
-      </motion.span>
-      <span className="text-gray-600">/</span>
-      <span className="text-gray-500">
-        {locale === "pt-BR" ? "EN" : "PT"}
-      </span>
-    </motion.button>
+      {OPTIONS.map((option) => {
+        const active = option.locale === locale;
+        return (
+          <button
+            key={option.locale}
+            type="button"
+            aria-pressed={active}
+            onClick={() => {
+              if (!active) setLocale(option.locale);
+            }}
+            className={cn(
+              "relative rounded-full px-3 py-1.5 text-label-m transition-colors duration-fast ease-out motion-reduce:transition-none",
+              active ? "text-on-accent" : "text-text-muted [@media(hover:hover)_and_(pointer:fine)]:hover:text-text"
+            )}
+          >
+            {active && (
+              <motion.span
+                layoutId={pillId}
+                aria-hidden="true"
+                className="absolute inset-0 rounded-full bg-text"
+                transition={reduceMotion ? { duration: 0 } : spring.ui}
+              />
+            )}
+            <span className="relative">{option.label}</span>
+          </button>
+        );
+      })}
+    </div>
   );
 };

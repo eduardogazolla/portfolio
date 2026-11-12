@@ -3,9 +3,9 @@
 import {
   createContext,
   useContext,
-  useState,
-  useEffect,
+  useSyncExternalStore,
   useCallback,
+  useEffect,
   ReactNode,
 } from "react";
 import {
@@ -20,46 +20,84 @@ type LanguageContextProps = {
   locale: Locale;
   translations: TranslationDictionary;
   toggleLocale: () => void;
+  setLocale: (locale: Locale) => void;
 };
 
 const LanguageContext = createContext<LanguageContextProps | undefined>(
   undefined
 );
 
-function getInitialLocale(): Locale {
+// Locale kept in memory when localStorage is unavailable (blocked or full), so
+// the choice still applies for the current page session.
+let memoryLocale: Locale | null = null;
+
+function readStoredLocale(): Locale | null {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored === "en" || stored === "pt-BR") return stored;
+  } catch {
+    // Storage unavailable: fall through to the in-memory or browser rule.
+  }
+  return null;
+}
+
+// Live snapshot reader for the store.
+function readLocale(): Locale {
   if (typeof window === "undefined") return "pt-BR";
 
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored === "en" || stored === "pt-BR") return stored;
+  const stored = readStoredLocale();
+  if (stored) return stored;
+  if (memoryLocale) return memoryLocale;
 
   const browserLang = navigator.language;
   if (browserLang.startsWith("pt")) return "pt-BR";
   return "en";
 }
 
+const listeners = new Set<() => void>();
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
+// Server and hydration render use "pt-BR"; the client then switches to the
+// stored/browser locale without a hydration mismatch.
+const getServerSnapshot = (): Locale => "pt-BR";
+
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [locale, setLocale] = useState<Locale>("pt-BR");
-  const [mounted, setMounted] = useState(false);
+  const locale = useSyncExternalStore(
+    subscribe,
+    readLocale,
+    getServerSnapshot
+  );
 
-  useEffect(() => {
-    setLocale(getInitialLocale());
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (mounted) {
-      localStorage.setItem(STORAGE_KEY, locale);
+  const setLocale = useCallback((next: Locale) => {
+    if (readLocale() === next) return;
+    try {
+      localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      memoryLocale = next;
     }
-  }, [locale, mounted]);
+    listeners.forEach((listener) => listener());
+  }, []);
 
   const toggleLocale = useCallback(() => {
-    setLocale((prev) => (prev === "pt-BR" ? "en" : "pt-BR"));
-  }, []);
+    setLocale(readLocale() === "pt-BR" ? "en" : "pt-BR");
+  }, [setLocale]);
+
+  // Keep <html lang> in step with the active locale, including the first
+  // client render with a stored locale.
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
 
   const translations = getTranslations(locale);
 
   return (
-    <LanguageContext.Provider value={{ locale, translations, toggleLocale }}>
+    <LanguageContext.Provider value={{ locale, translations, toggleLocale, setLocale }}>
       {children}
     </LanguageContext.Provider>
   );

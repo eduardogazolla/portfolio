@@ -68,8 +68,9 @@ logs/
 build/
 dist/
 
-# Package manager lock files (uncomment if you want to ignore)
-/package-lock.json
-/yarn.lock
-/pnpm-lock.yaml
+# Agent instructions
+AGENTS.md
 
+# Playwright
+/test-results/
+/playwright-report/

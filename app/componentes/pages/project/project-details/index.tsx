@@ -1,84 +1,103 @@
 "use client";
 
-import { Button } from "@/app/componentes/button";
-import { SectionTitle } from "@/app/componentes/section-title";
-import { TechBadge } from "@/app/componentes/tech-badge";
-import { TbBrandGithub } from "react-icons/tb";
-import { FiGlobe } from "react-icons/fi";
-import { Link } from "@/app/componentes/link";
-import { HiArrowNarrowLeft } from "react-icons/hi";
-import { RichText } from "@/app/componentes/rich-text";
-import { Project } from "@/app/types/projects";
-import { motion } from "framer-motion";
-import { fadeUpAnimation, techBadgeAnimation } from "@/app/lib/animations";
+import type { ReactNode } from "react";
 import { useLanguage } from "@/app/componentes/context/language-context";
+import { Link } from "@/app/componentes/link";
+import { PageSection } from "@/app/componentes/page-section";
+import { PageTitle } from "@/app/componentes/page-title";
+import { RichText } from "@/app/componentes/rich-text";
+
+import { TechBadge } from "@/app/componentes/tech-badge";
+import { cn } from "@/app/lib/utils";
+import { Project } from "@/app/types/projects";
+import { MainImage } from "./main-image";
 
 type ProjectDetailsProps = {
   project: Project;
 };
 
+type MetaColumnProps = {
+  label: string;
+  children: ReactNode;
+  /** Mobile (Figma 11:402) shows no label, so it stays for screen readers only. */
+  labelOnlyDesktop?: boolean;
+};
+
+const MetaColumn = ({ label, children, labelOnlyDesktop }: MetaColumnProps) => (
+  <div className="flex flex-col gap-1.5 border-t border-line pt-3.5 md:gap-3 md:pt-5">
+    <p className={cn("text-label-m text-text-muted", labelOnlyDesktop && "sr-only md:not-sr-only")}>{label}</p>
+    {children}
+  </div>
+);
+
 export const ProjectDetails = ({ project }: ProjectDetailsProps) => {
-  const { locale, translations } = useLanguage();
+  const { translations } = useLanguage();
+  const { backToProjects, whatItIs, context, links, about, technologies } = translations.projectDetail;
+  const { viewCode, viewLive } = translations.projectsSection;
+  const hasLinks = Boolean(project.gitHubUrl || project.liveProjectUrl);
+  const imageUrl = project.pageThumbnail?.url;
+  const valueClass = "text-body-m text-text md:text-body-l";
+
   return (
-    <section className="w-full sm:min-h-[750px] flex flex-col items-center justify-end relative pb-10 sm:pb-24 py-24 px-6 overflow-hidden">
-      <motion.div
-        className="absolute inset-0 z-[-1]"
-        style={{
-          background: `url(/images/hero-bg.jpeg) no-repeat center/cover`,
-        }}
-        initial={{ opacity: 0, scale: 1.3 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-      />
+    <>
+      {/* Figma 9:243 (desktop) / 11:413 (mobile) */}
+      <PageSection className="py-8 md:py-16" innerClassName="flex flex-col gap-6 md:gap-10">
+        <Link href="/projects" arrow className="text-label-m">
+          {backToProjects}
+        </Link>
+        <PageTitle title={project.title} />
+        <div className="grid gap-6 md:grid-cols-[3fr_3fr_4fr] md:gap-0">
+          <MetaColumn label={whatItIs}>
+            <p className={valueClass}>{project.shortDescription}</p>
+          </MetaColumn>
+          {project.context && (
+            <MetaColumn label={context}>
+              <p className={valueClass}>{project.context}</p>
+            </MetaColumn>
+          )}
+          {hasLinks && (
+            <MetaColumn label={links} labelOnlyDesktop>
+              <div className="flex gap-6">
+                {project.gitHubUrl && (
+                  <Link href={project.gitHubUrl} className="text-label-m">
+                    {viewCode}
+                  </Link>
+                )}
+                {project.liveProjectUrl && (
+                  <Link href={project.liveProjectUrl} className="text-label-m">
+                    {viewLive}
+                  </Link>
+                )}
+              </div>
+            </MetaColumn>
+          )}
+        </div>
+      </PageSection>
 
-      <SectionTitle
-        subtitle={translations.projectsPage.subtitle}
-        title={project.title}
-        className="text-center items-center sm:[&>h3]:text-4xl"
-      />
+      {imageUrl && <MainImage src={imageUrl} alt={project.title} />}
 
-      <motion.div
-        className="text-gray-400 text-center max-w-[640px] my-4 sm:my-6 text-sm sm:text-base"
-        {...fadeUpAnimation}
+      {/* Figma 9:277 (desktop) / 11:444 (mobile) */}
+      <PageSection
+        className="py-14 md:py-[120px]"
+        innerClassName="grid gap-5 md:grid-cols-[480px_1fr] md:grid-rows-[auto_1fr] md:gap-x-[120px] md:gap-y-6"
       >
-        <RichText content={project.description.raw} />
-      </motion.div>
-      <div className="w-full max-w-[330px] flex flex-wrap gap-2 items-center justify-center">
-        {project.technologies.map((tech, i) => (
-          <TechBadge
-            key={tech.name}
-            name={tech.name}
-            {...techBadgeAnimation}
-            transition={{ duration: 0.3, delay: i * 0.1 }}
-          />
-        ))}
-      </div>
-      <motion.div
-        className="my-6 sm:my-12 flex items-center gap-2 sm:gap-4 flex-col sm:flex-row"
-        {...fadeUpAnimation}
-      >
-        {project?.gitHubUrl && (
-          <a href={project.gitHubUrl} target="_blank">
-            <Button className="min-w-[180px]">
-              <TbBrandGithub size={20} />
-              {locale === "en" ? "Repository" : "Repositório"}
-            </Button>
-          </a>
+        {project.description?.raw && (
+          <>
+            <h2 className="font-display text-h2 text-text md:text-h1">{about}</h2>
+            <div className="text-body-m text-text-muted md:col-start-2 md:row-span-2 md:row-start-1 md:max-w-[600px] md:text-body-l">
+              <RichText content={project.description.raw} />
+            </div>
+          </>
         )}
-
-        {project?.liveProjectUrl && (
-          <a href={project.liveProjectUrl} target="_blank">
-            <Button className="min-w-[180px] ">
-              <FiGlobe size={20} />
-              {locale === "en" ? "Live Project" : "Projeto Online"}
-            </Button>
-          </a>
-        )}
-      </motion.div>
-      <Link href={"/projects"}>
-        <HiArrowNarrowLeft size={20} />
-        {locale === "en" ? "Back to projects" : "Voltar para projetos"}
-      </Link>
-    </section>
+        <div className="flex flex-col gap-3 md:col-start-1 md:gap-6">
+          <p className="hidden text-label-m text-text-muted md:block">{technologies}</p>
+          <div className="flex flex-wrap gap-2">
+            {project.technologies.map((tech) => (
+              <TechBadge key={tech.name} name={tech.name} />
+            ))}
+          </div>
+        </div>
+      </PageSection>
+    </>
   );
 };

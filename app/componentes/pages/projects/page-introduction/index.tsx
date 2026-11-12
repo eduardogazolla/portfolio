@@ -1,37 +1,34 @@
 "use client";
 
-import { Link } from "@/app/componentes/link";
-import { SectionTitle } from "@/app/componentes/section-title";
-import { motion } from "framer-motion";
-import { HiArrowNarrowLeft } from "react-icons/hi";
+import type { ReactNode } from "react";
+import { PageSection } from "@/app/componentes/page-section";
+import { PageTitle } from "@/app/componentes/page-title";
 import { useLanguage } from "@/app/componentes/context/language-context";
 
-export const PageIntroduction = () => {
+type PageIntroductionProps = {
+  /** Project counter ("N projetos"), shown beside the title in list mode only. */
+  count?: number;
+  /** Tech filter, shown below the description in list mode only. */
+  children?: ReactNode;
+};
+
+export const PageIntroduction = ({ count, children }: PageIntroductionProps) => {
   const { translations } = useLanguage();
 
   return (
-    <section className="w-full h-[450px] lg:h-[630px] bg-hero-image bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center px-2">
-      <SectionTitle
-        subtitle={translations.projectsPage.subtitle}
-        title={translations.projectsPage.title}
-        className="text-center items-center [&>h3]:text-4xl"
-      />
-
-      <motion.div
-        className="flex flex-col items-center"
-        initial={{ opacity: 0, y: 100 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -100 }}
-        transition={{ duration: 0.6 }}
-      >
-        <p className="text-gray-400 text-center max-w-[640px] my-6 text-sm sm:text-base">
-          {translations.projectsPage.description}
-        </p>
-        <Link href={"/"}>
-          <HiArrowNarrowLeft size={20} />
-          {translations.projectsPage.backToHome}
-        </Link>
-      </motion.div>
-    </section>
+    <PageSection className="pb-10 pt-10 md:pb-16 md:pt-20" innerClassName="flex flex-col gap-5 md:gap-8">
+      <div className="flex items-end justify-between gap-6">
+        <PageTitle title={translations.projectsPage.title} />
+        {count !== undefined && (
+          <p aria-live="polite" className="shrink-0 text-label-m text-text-muted">
+            {translations.projectsSection.projectsCount(count)}
+          </p>
+        )}
+      </div>
+      <p className="max-w-[640px] text-body-m text-text-muted md:text-body-l">
+        {translations.projectsPage.description}
+      </p>
+      {children}
+    </PageSection>
   );
 };

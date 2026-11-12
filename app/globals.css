@@ -3,13 +3,66 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --color-bg: #050505;
+    --color-surface: #111113;
+    --color-line: #232327;
+    --color-text: #F2F2EF;
+    --color-text-muted: #8B8B92;
+
+    --accent-cobalto: #5B6BFF;
+    --accent-laranja: #FF5A1F;
+    --accent-lima: #C8FF2E;
+
+    --color-accent: var(--accent-cobalto);
+    --color-on-accent: #050505;
+    --color-danger: #FF5C5C;
+
+    --duration-fast: 140ms;
+    --duration-base: 220ms;
+    --duration-slow: 700ms;
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
   body {
-    @apply bg-gray-900 text-gray-100
+    @apply bg-bg text-text font-sans;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  /*
+   * Focus ring. Never remove an outline without a visible replacement.
+   * Inputs that use `focus:outline-none focus:ring-2` are fine: the ring is the replacement.
+   */
+  :focus-visible {
+    outline: 1px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
   }
 }
 
+html {
+  /* Sticky header is 86px (mobile) / 98px (desktop); keep hash anchors clear of it. */
+  scroll-padding-top: 6.5rem;
+}
+
 .container {
-  @apply mx-auto w-full max-w-[1200px] px-6
+  @apply mx-auto w-full max-w-content px-6;
+}
+
+/* Chrome 121+ ignores ::-webkit-scrollbar rules once scrollbar-color is set,
+   so the standard property only applies where the WebKit selector is unsupported (Firefox). */
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-color: var(--color-line) var(--color-bg);
+  }
 }
 
 *::-webkit-scrollbar {
@@ -17,11 +70,67 @@
 }
 
 *::-webkit-scrollbar-track {
-  background: #374151;
-  border-radius: 5px;
+  background: var(--color-bg);
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #2664eb;
+  background-color: var(--color-line);
   border-radius: 14px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-text-muted);
+}
+
+/* Hero intro (see hero-intro.tsx). Applies only while the boot script has set
+   <html data-intro="play">, so content is visible without JS and on repeat visits. The
+   timeline starts at first paint (Motion board 12:21); fill-mode both holds the hidden
+   start state during each delay. When the attribute is removed the elements fall back to
+   their normal state, which equals each animation's end frame, so nothing jumps. */
+@keyframes hero-rise {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes hero-reveal {
+  from { clip-path: inset(100% 0 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes hero-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+html[data-intro="play"] [data-hero="name-line"] {
+  animation: hero-rise 700ms var(--ease-out) both;
+}
+
+html[data-intro="play"] [data-hero="name-last"] [data-hero="name-line"] {
+  animation-delay: 90ms;
+}
+
+html[data-intro="play"] [data-hero="photo"] {
+  animation: hero-reveal 750ms var(--ease-out) 250ms both;
+}
+
+html[data-intro="play"] [data-hero="bio"],
+html[data-intro="play"] [data-hero="actions"] {
+  animation: hero-fade-up 400ms var(--ease-out) 600ms both;
+}
+
+/* Pulsing "current" dot ring (see experience-item.tsx). Motion board 12:21: scale 1 -> 2.2, 2s loop. */
+@keyframes pulse-ring {
+  from { transform: scale(1); opacity: 0.6; }
+  to { transform: scale(2.2); opacity: 0; }
+}
+
+.pulse-ring {
+  animation: pulse-ring 2s var(--ease-out) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-ring {
+    display: none;
+  }
 }

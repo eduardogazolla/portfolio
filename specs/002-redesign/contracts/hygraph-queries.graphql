@@ -1,0 +1,81 @@
+# Contrato das queries do Hygraph para o redesign (002).
+# Cada página busca os dois locales em paralelo com aliases; o fallback para PT
+# acontece no cliente (pickLocale). Dados dinâmicos entram SEMPRE como variáveis
+# (constitution VIII). Revalidação: 24 h.
+
+fragment SocialFields on Social {
+  name
+  url
+}
+
+fragment ProjectCard on Project {
+  slug
+  title
+  context
+  shortDescription
+  thumbnail { url }
+  technologies { name }
+}
+
+fragment ExperienceFields on WorkExperience {
+  role
+  companyName
+  companyUrl
+  startDate
+  endDate
+  description { raw }
+  technologies { name }
+}
+
+fragment HomeFields on Page {
+  role
+  introduction { raw }
+  profilePicture { url }
+  socials { ...SocialFields }
+  knownTechs { name startDate }
+  highlightProjects { ...ProjectCard }
+}
+
+# Home (app/page.tsx)
+query HomePage {
+  ptPages: pages(where: { slug: "home" }, locales: [pt_BR, en]) { ...HomeFields }
+  enPages: pages(where: { slug: "home" }, locales: [en, pt_BR]) { ...HomeFields }
+  ptWorkExperiences: workExperiences(orderBy: startDate_DESC, locales: [pt_BR, en]) { ...ExperienceFields }
+  enWorkExperiences: workExperiences(orderBy: startDate_DESC, locales: [en, pt_BR]) { ...ExperienceFields }
+}
+
+# Socials para header/menu/rodapé em páginas que não são a Home
+# (layout compartilhado; mesma revalidação).
+query SiteSocials {
+  pages(where: { slug: "home" }, locales: [pt_BR]) { socials { ...SocialFields } }
+}
+
+# Lista de projetos (app/projects/page.tsx)
+query ProjectsPage {
+  ptProjects: projects(locales: [pt_BR, en]) { ...ProjectCard }
+  enProjects: projects(locales: [en, pt_BR]) { ...ProjectCard }
+  # Socials para o link do GitHub em "Mais projetos chegando…"
+  pages(where: { slug: "home" }, locales: [pt_BR]) { socials { ...SocialFields } }
+}
+
+# `ProjectSection.title` é localizado (vem no locale ativo, com fallback para PT).
+# Detalhe (app/projects/[slug]/page.tsx): slug como variável, nunca interpolado.
+query ProjectDetail($slug: String!) {
+  ptProject: project(where: { slug: $slug }, locales: [pt_BR, en]) { ...ProjectDetailFields }
+  enProject: project(where: { slug: $slug }, locales: [en, pt_BR]) { ...ProjectDetailFields }
+  projectsConnection { aggregate { count } }
+}
+
+fragment ProjectDetailFields on Project {
+  ...ProjectCard
+  pageThumbnail { url }
+  description { raw text }
+  sections { title image { url } }
+  gitHubUrl
+  liveProjectUrl
+}
+
+# generateStaticParams
+query ProjectSlugs {
+  projects(first: 100) { slug }
+}

@@ -1,29 +1,25 @@
 "use client";
 
-import { CMSIcon } from "@/app/componentes/cms-icon"
-import { KnownTech as IKnownTech } from "@/app/types/projects"
-import { getRelativeTimeString } from "@/app/utils/get-relative-time"
-import { useLanguage } from "@/app/componentes/context/language-context"
+import { KnownTech } from "@/app/types/projects";
+import { useLanguage } from "@/app/componentes/context/language-context";
 
- type KnowTechProps = {
-    tech: IKnownTech
- }
+type KnownTechProps = {
+  tech: KnownTech;
+};
 
-export const KnowTech = ({tech}: KnowTechProps) => {
-    const { locale, translations } = useLanguage();
-    
-    const rawRelativeTime = getRelativeTimeString(new Date(tech.startDate), locale);
-    const relativeTime = locale === "en"
-        ? rawRelativeTime.replace(" ago", "")
-        : rawRelativeTime.replace("há", "").trim();
+export const KnowTech = ({ tech }: KnownTechProps) => {
+  const { translations } = useLanguage();
+  // startDate is an ISO date (YYYY-MM-DD): slice avoids timezone shifts.
+  const year = tech.startDate.slice(0, 4);
 
-    return (
-        <div className="p-6 rounded-lg bg-gray-600/20 text-gray-500 flex flex-col gap-2 hover:text-blue-500 hover:bg-gray-600/30 transition-all">
-            <div className="flex item-center justify-between">
-                <p className="font-medium">{tech.name}</p>
-                <CMSIcon icon={tech.iconSvg} />
-            </div>
-            <span>{relativeTime} {translations.knownTechs.experience}</span>
-        </div>
-    )
-}
+  return (
+    <li className="flex items-center justify-between gap-4 border-t border-line py-3 md:py-5">
+      <span className="font-display text-label-m font-semibold text-text md:text-h3">
+        {tech.name}
+      </span>
+      <span className="shrink-0 text-label-m text-text-muted">
+        {translations.stack.since} {year}
+      </span>
+    </li>
+  );
+};

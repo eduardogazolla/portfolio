@@ -1,41 +1,53 @@
 "use client";
 
-import { TbArrowNarrowUp } from "react-icons/tb";
-import { Button } from "../button";
-import { useCallback, useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { useLanguage } from "@/app/componentes/context/language-context";
+import { duration, ease } from "@/app/lib/motion";
+import { usePrefersReducedMotion } from "@/app/lib/use-prefers-reduced-motion";
+
+const SHOW_AFTER_VIEWPORTS = 1.5;
 
 export const BackToTop = () => {
+  const { translations } = useLanguage();
+  const reduceMotion = usePrefersReducedMotion();
   const [show, setShow] = useState(false);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  useEffect(() => {
+    const update = () =>
+      setShow(window.scrollY > window.innerHeight * SHOW_AFTER_VIEWPORTS);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
+
+  const handleClick = () => {
+    window.scrollTo({ top: 0, behavior: reduceMotion ? "instant" : "smooth" });
+    document.getElementById("main")?.focus({ preventScroll: true });
   };
 
-  const handleScroll = useCallback(() => {
-    if (!show && window.scrollY > 500) setShow(true);
-    if (show && window.scrollY <= 500) setShow(false);
-  }, [show]);
+  const hidden = { opacity: 0, y: reduceMotion ? 0 : 8 };
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
   return (
     <AnimatePresence>
       {show && (
         <motion.div
-          className="fixed right-4 bottom-4 z-20"
-          initial={{ opacity: 0, right: -10 }}
-          animate={{ opacity: 1, right: 16 }}
-          exit={{ opacity: 0, right: -10 }}
+          className="fixed bottom-4 right-4 z-20"
+          initial={hidden}
+          animate={{ opacity: 1, y: 0 }}
+          exit={hidden}
+          transition={{ duration: duration.base, ease: ease.out }}
         >
-          <Button
-            onClick={scrollToTop}
-            className="shadow-lg shadow-blue-400/20"
+          <button
+            type="button"
+            onClick={handleClick}
+            aria-label={translations.a11y.backToTop}
+            className="flex size-12 items-center justify-center rounded-full border border-line bg-surface text-text transition-transform duration-fast ease-out active:scale-[0.97] motion-reduce:active:scale-100 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-text [@media(hover:hover)_and_(pointer:fine)]:hover:text-bg"
           >
-            <TbArrowNarrowUp size={20} />
-          </Button>
+            <svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M10 16V4M5 9l5-5 5 5" />
+            </svg>
+          </button>
         </motion.div>
       )}
     </AnimatePresence>
