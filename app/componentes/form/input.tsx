@@ -1,6 +1,6 @@
 import type { InputHTMLAttributes, Ref } from "react";
 import { cn } from "@/app/lib/utils";
-import { FieldLabel, FieldMessage, Underline, fieldClasses, useField } from "./field";
+import { FieldLabel, FieldMessages, Underline, fieldClasses, useField } from "./field";
 
 type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "id"> & {
   label: string;
@@ -27,9 +27,7 @@ export const Input = ({ label, helper, error, id, className, ref, ...props }: In
         />
         <Underline error={!!error} />
       </div>
-      <FieldMessage id={field.messageId} error={!!error}>
-        {field.message}
-      </FieldMessage>
+      <FieldMessages errorId={field.errorId} helperId={field.helperId} error={error} helper={helper} />
     </div>
   );
 };

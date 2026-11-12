@@ -27,14 +27,15 @@ describe.each([
     expect(field).not.toHaveAttribute('aria-invalid', 'true');
   });
 
-  it('shows the error instead of the helper, links it and sets aria-invalid', () => {
+  it('shows the error together with the helper, links both and sets aria-invalid', () => {
     render(<Field label="Nome" helper="Ajuda" error="Campo obrigatorio" />);
     const field = screen.getByLabelText('Nome');
     const error = screen.getByText('Campo obrigatorio');
+    const helper = screen.getByText('Ajuda');
     expect(field).toHaveAttribute('aria-invalid', 'true');
-    expect(field.getAttribute('aria-describedby')).toContain(error.id);
+    expect(field.getAttribute('aria-describedby')).toBe(`${error.id} ${helper.id}`);
     expect(error.className).toMatch(/text-danger/);
-    expect(screen.queryByText('Ajuda')).not.toBeInTheDocument();
+    expect(helper.className).toMatch(/text-text-muted/);
   });
 
   it('has no aria-describedby when there is no helper or error', () => {
