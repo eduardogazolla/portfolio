@@ -1,3 +1,4 @@
+import { ContactBand } from "../componentes/contact-band";
 import { ProjectsListClient } from "../componentes/pages/projects/projects-list-client";
 import { LocalizedProjectsPageData, Social } from "../types/page-info";
 import { fetchHygraphQuery } from "../utils/fetch-hygraph-query";
@@ -57,6 +58,7 @@ export default async function Projects() {
   return (
     <>
       <ProjectsListClient data={data} />
+      <ContactBand />
     </>
   );
 }
