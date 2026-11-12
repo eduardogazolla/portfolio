@@ -6,6 +6,7 @@ import { Footer } from "./componentes/footer";
 import { BackToTop } from "./componentes/back-to-top";
 import { Toaster } from "./componentes/toaster";
 import { SkipLink } from "./componentes/skip-link";
+import { AppMotionConfig } from "./componentes/motion-config";
 import { LanguageProvider } from "./componentes/context/language-context";
 import { fetchHygraphQuery } from "./utils/fetch-hygraph-query";
 import type { Social } from "./types/page-info";
@@ -87,6 +88,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: INTRO_BOOT_SCRIPT }} />
       </head>
       <body>
+        <AppMotionConfig>
         <LanguageProvider>
           <SkipLink />
           <Toaster/>
@@ -99,6 +101,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <Footer socials={socials} />
           <BackToTop />
         </LanguageProvider>
+        </AppMotionConfig>
       </body>
     </html>
   );
