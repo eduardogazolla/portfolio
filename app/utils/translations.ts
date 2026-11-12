@@ -9,7 +9,6 @@ export type TranslationDictionary = {
     greeting: string;
     // legacy: removed in Part 3
     contactButton: string;
-    role: string;
     nowPrefix: string;
     nowAt: string;
     viewProjects: string;
@@ -153,7 +152,6 @@ const pt: TranslationDictionary = {
     greeting: 'Olá, meu nome é',
     // legacy: removed in Part 3
     contactButton: 'Entre em contato',
-    role: 'Desenvolvedor front-end e analista de testes',
     nowPrefix: 'Agora:',
     nowAt: 'na',
     viewProjects: 'Ver projetos',
@@ -302,7 +300,6 @@ const en: TranslationDictionary = {
     greeting: 'Hello, my name is',
     // legacy: removed in Part 3
     contactButton: 'Get in touch',
-    role: 'Front-end developer and test analyst',
     nowPrefix: 'Now:',
     nowAt: 'at',
     viewProjects: 'View projects',

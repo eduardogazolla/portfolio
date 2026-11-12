@@ -18,7 +18,7 @@ const merge = (pt: unknown, en: unknown): unknown => {
   if (isPlainObject(pt) && isPlainObject(en)) {
     const keys = new Set([...Object.keys(pt), ...Object.keys(en)]);
     return Object.fromEntries(
-      [...keys].map((key) => [key, merge(pt[key], en[key])]),
+      Array.from(keys).map((key) => [key, merge(pt[key], en[key])]),
     );
   }
   return en;

@@ -2,10 +2,9 @@
 
 import { Button } from "@/app/componentes/button";
 import { Link } from "@/app/componentes/link";
-import { CMSIcon } from "@/app/componentes/cms-icon";
 import { RichText } from "@/app/componentes/rich-text";
-import { TechBadge } from "@/app/componentes/tech-badge";
 import { HomePageInfo } from "@/app/types/page-info";
+import { getSocialLabel } from "@/app/utils/socials";
 import Image from "next/image";
 import { HiArrowNarrowRight } from "react-icons/hi";
 import { motion } from "motion/react";
@@ -43,14 +42,6 @@ export const HeroSection = ({ homeInfo }: HomeSectionProps) => {
             <RichText content={homeInfo.introduction.raw} />
           </div>
 
-          <div className="flex flex-wrap gap-x-2 gap-y-3 lg:max-w-[340px]">
-            {homeInfo.technologies.map((tech) => (
-              <TechBadge
-                name={tech.name}
-                key={`intro-tech-${tech.name}`}
-              />
-            ))}
-          </div>
           <div className="mt-6 lg:mt-10 flex sm:items-center sm:gap-5 flex-col sm:flex-row">
             <Button className="w-max" onClick={handleContact}>
               {translations.hero.contactButton}
@@ -64,7 +55,7 @@ export const HeroSection = ({ homeInfo }: HomeSectionProps) => {
                   arrow={false}
                   className="hover:text-gray-100 transition-colors"
                 >
-                  <CMSIcon icon={contact.iconSvg} />
+                  {getSocialLabel(contact)}
                 </Link>
               ))}
             </div>

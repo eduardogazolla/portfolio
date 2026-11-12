@@ -9,7 +9,6 @@ import { differenceInMonths, differenceInYears, format } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
 import enUS from "date-fns/locale/en-US";
 import { motion } from "motion/react";
-import Image from "next/image";
 import { useLanguage } from "@/app/componentes/context/language-context";
 
 type ExperienceItemProps = {
@@ -22,7 +21,6 @@ export const ExperienceItem = ({ experience }: ExperienceItemProps) => {
 
   const {
     endDate,
-    companyLogo,
     companyName,
     companyUrl,
     description,
@@ -71,40 +69,34 @@ export const ExperienceItem = ({ experience }: ExperienceItemProps) => {
       transition={{ duration: 0.5 }}
     >
       <div className="flex items-center flex-col gap-4">
-        <div className="rounded-full border border-gray-500 p-0.5 w-[52px] h-[52px] flex items-center justify-center bg-gray-800">
-          {companyLogo?.url ? (
-            <Image
-              src={companyLogo.url}
-              width={48}
-              height={48}
-              className="rounded-full object-cover"
-              alt={`Logo da ${companyName}`}
-            />
-          ) : (
-            <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center text-xs font-mono text-gray-400">
-              {companyName.substring(0, 2).toUpperCase()}
-            </div>
-          )}
+        <div className="rounded-full border border-gray-500 w-[52px] h-[52px] flex items-center justify-center bg-gray-800 text-xs font-mono text-gray-400">
+          {companyName.substring(0, 2).toUpperCase()}
         </div>
         <div className="h-full w-[1px] bg-gray-800"></div>
       </div>
 
       <div>
         <div className="flex flex-col gap-2 text-sm sm:text-base">
-          <Link
-            href={companyUrl}
-            arrow={false}
-            className="text-gray-500 hover:text-blue-500 transition-colors"
-          >
-            @ {companyName}
-          </Link>
+          {companyUrl ? (
+            <Link
+              href={companyUrl}
+              arrow={false}
+              className="text-gray-500 hover:text-blue-500 transition-colors"
+            >
+              @ {companyName}
+            </Link>
+          ) : (
+            <span className="text-gray-500">@ {companyName}</span>
+          )}
           <h3 className="text-gray-300">{role}</h3>
           <span className="text-gray-500">
             {formattedStartDate} • {formattedEndDate} • ({formattedDuration})
           </span>
-          <div className="text-gray-400">
-            <RichText content={description.raw} />
-          </div>
+          {description && (
+            <div className="text-gray-400">
+              <RichText content={description.raw} />
+            </div>
+          )}
         </div>
         <p className="text-gray-400 text-sm mb-3 mt-6 font-semibold">
           {locale === "en" ? "Skills" : "Competências"}
