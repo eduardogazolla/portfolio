@@ -4,18 +4,18 @@ import userEvent from '@testing-library/user-event';
 import ErrorPage from '../../app/error';
 import { LanguageProvider } from '../../app/componentes/context/language-context';
 
-type RouteError = Error & { digest?: string };
+type RouteError = unknown;
 
 const renderPage = (locale: string, error: RouteError = new Error('secret db password')) => {
   localStorage.clear();
   localStorage.setItem('portfolio-gazolla:locale', locale);
-  const reset = jest.fn();
+  const retry = jest.fn();
   render(
     <LanguageProvider>
-      <ErrorPage error={error} reset={reset} />
+      <ErrorPage error={error} retry={retry} />
     </LanguageProvider>
   );
-  return reset;
+  return retry;
 };
 
 describe('ErrorPage', () => {
@@ -25,12 +25,17 @@ describe('ErrorPage', () => {
   });
   afterEach(() => spy.mockRestore());
 
-  it('shows the message and actions (pt-BR) and calls reset on retry', async () => {
-    const reset = renderPage('pt-BR');
+  it('shows the message and actions (pt-BR) and calls retry on retry', async () => {
+    const retry = renderPage('pt-BR');
     expect(screen.getByRole('heading', { level: 1, name: 'Algo deu errado.' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Voltar para a Home' })).toHaveAttribute('href', '/');
     await userEvent.click(screen.getByRole('button', { name: 'Tentar de novo' }));
-    expect(reset).toHaveBeenCalledTimes(1);
+    expect(retry).toHaveBeenCalledTimes(1);
+  });
+
+  it('tolerates a null error', () => {
+    renderPage('pt-BR', null);
+    expect(spy).toHaveBeenCalledWith('Route error', undefined);
   });
 
   it('is translated to English', () => {
