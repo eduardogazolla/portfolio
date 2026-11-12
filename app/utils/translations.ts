@@ -120,6 +120,8 @@ export type TranslationDictionary = {
     links: string;
     onlyOneNotice: string;
     backToAll: string;
+    about: string;
+    technologies: string;
   };
 };
 
@@ -248,6 +250,8 @@ const pt: TranslationDictionary = {
     links: 'Links',
     onlyOneNotice: 'Por enquanto, este é o único projeto publicado.',
     backToAll: 'Voltar para todos os projetos',
+    about: 'Sobre o projeto',
+    technologies: 'Tecnologias',
   },
 };
 
@@ -376,6 +380,8 @@ const en: TranslationDictionary = {
     links: 'Links',
     onlyOneNotice: 'For now, this is the only published project.',
     backToAll: 'Back to all projects',
+    about: 'About the project',
+    technologies: 'Technologies',
   },
 };
 

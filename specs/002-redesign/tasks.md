@@ -215,7 +215,7 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
   - resposta não-OK lança erro.
 - [x] T056 [P] [US4] Teste de `getProjectsLayout` e `filterProjectsByTech` em `tests/utils/projects-layout.test.ts`: `count < 4` → `"featured"`, `count ≥ 4` → `"list"`; filtro `"all"` devolve tudo; filtro por tecnologia devolve só quem a tem, com o contador correto; techs únicas ordenadas alfabeticamente
 - [x] T057 [P] [US4] Teste da página Projetos em `tests/components/projects-list.test.tsx`: com 1 projeto, bloco de destaque sem filtros nem contador, com "Mais projetos chegando…"; com 4 fixtures, contador "4 projetos", filtros começando em "Todos" (botões com `aria-pressed`), filtrar atualiza a lista e o contador e mostra "Nenhum projeto com <tech>" com opção de limpar quando vazio
-- [ ] T058 [P] [US4] Teste do detalhe em `tests/components/project-detail.test.tsx`:
+- [x] T058 [P] [US4] Teste do detalhe em `tests/components/project-detail.test.tsx`:
   - mostra "Todos os projetos", `h1`, "O que é" (`shortDescription`), "Contexto" só com `context`, e "Repositório"/"Ver online" só quando as URLs existem;
   - mostra a imagem principal, "Sobre o projeto" com tecnologias e descrição, e um bloco por `section`;
   - mostra "Por enquanto, este é o único projeto publicado." quando o total é 1.
@@ -226,7 +226,7 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 - [x] T060 [P] [US4] Implementar `getProjectsLayout` e `filterProjectsByTech` em `app/utils/projects-layout.ts` (faz a T056 passar)
 - [x] T061 [US4] Ajustar as queries em `app/projects/page.tsx` e `app/projects/[slug]/page.tsx` aos contratos `ProjectsPage` e `ProjectDetail`: `$slug` como **variável** (sem interpolação), `context`, `projectsConnection { aggregate { count } }`; `generateMetadata` com `description.text` e a OG de `thumbnail`
 - [x] T062 [US4] Refazer a página Projetos em `app/componentes/pages/projects/page-introduction/index.tsx`, `projects-list-client.tsx`, `projects-list/index.tsx` e `projects-card/index.tsx` conforme o Figma `9:137` (destaque) e `24:242` (lista 4+); a prévia que segue o cursor usa `spring.cursor`, inclina até ±6° pela velocidade e entra com escala 0,9→1; com toque ou reduzir movimento, fica fixa ou não aparece; hover só com mouse
-- [ ] T063 [US4] Refazer o detalhe em `app/componentes/pages/project/project-detail-client.tsx`, `project-details/index.tsx` e `project-sections/index.tsx` conforme o Figma `9:227` / `11:402`: título `display-l` com InspectOutline; colunas O que é / Contexto / Links; imagem principal com zoom 1,08→1 e paralaxe de 40 px ligados à rolagem (estática com reduzir movimento); seções com `alt` do título da seção
+- [x] T063 [US4] Refazer o detalhe em `app/componentes/pages/project/project-detail-client.tsx`, `project-details/index.tsx` e `project-sections/index.tsx` conforme o Figma `9:227` / `11:402`: título `display-l` com InspectOutline; colunas O que é / Contexto / Links; imagem principal com zoom 1,08→1 e paralaxe de 40 px ligados à rolagem (estática com reduzir movimento); seções com `alt` do título da seção
 - [x] T064 [US4] Criar `app/componentes/contact-band/index.tsx` ("Vamos conversar?", "Vaga ou projeto, a mensagem chega direto para mim.", botão "Escrever mensagem" → `/#contact`) e mostrá-la em `/projects` e no detalhe, conforme FR-007
 
 **Checkpoint**: projetos navegáveis de ponta a ponta.
