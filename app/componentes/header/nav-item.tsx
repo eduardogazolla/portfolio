@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { isCurrentPath } from "@/app/lib/nav";
 import { cn } from "@/app/lib/utils";
 
 type NavItemProps = {
@@ -10,7 +11,7 @@ type NavItemProps = {
 };
 
 export const NavItem = ({ label, href }: NavItemProps) => {
-  const isActive = usePathname() === href;
+  const isActive = isCurrentPath(usePathname(), href);
 
   return (
     <Link

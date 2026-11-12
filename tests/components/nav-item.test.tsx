@@ -42,3 +42,29 @@ describe('NavItem', () => {
     expect(screen.getByRole('link', { name: 'Projects' }).className).toMatch(/(^|\s)text-text(\s|$)/);
   });
 });
+
+describe('NavItem on nested routes', () => {
+  it('stays current on child paths of its href', () => {
+    mockPathname.mockReturnValue('/projects/hour-sync');
+    render(<NavItem label="Projects" href="/projects" />);
+    expect(screen.getByRole('link', { name: 'Projects' })).toHaveAttribute('aria-current', 'page');
+  });
+
+  it('does not mark Home or hash links current on a child path', () => {
+    mockPathname.mockReturnValue('/projects/hour-sync');
+    render(
+      <>
+        <NavItem label="Home" href="/" />
+        <NavItem label="Contact" href="/#contact" />
+      </>
+    );
+    expect(screen.getByRole('link', { name: 'Home' })).not.toHaveAttribute('aria-current');
+    expect(screen.getByRole('link', { name: 'Contact' })).not.toHaveAttribute('aria-current');
+  });
+
+  it('does not match sibling prefixes', () => {
+    mockPathname.mockReturnValue('/projectsx');
+    render(<NavItem label="Projects" href="/projects" />);
+    expect(screen.getByRole('link', { name: 'Projects' })).not.toHaveAttribute('aria-current');
+  });
+});

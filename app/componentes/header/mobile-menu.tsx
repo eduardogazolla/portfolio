@@ -11,6 +11,7 @@ import { Link } from "@/app/componentes/link";
 import { useLanguage } from "@/app/componentes/context/language-context";
 import { LanguageSelector } from "./language-selector";
 import { ease } from "@/app/lib/motion";
+import { isCurrentPath } from "@/app/lib/nav";
 import { cn } from "@/app/lib/utils";
 import type { Social } from "@/app/types/page-info";
 import { getSocialLabel } from "@/app/utils/socials";
@@ -165,7 +166,7 @@ const MenuDialog = ({ id, label, origin, socials, onClose }: MenuDialogProps) =>
       <nav aria-label={translations.a11y.mainNavigation} className="py-10">
         <ul className="flex flex-col gap-1">
           {links.map((item, index) => {
-            const isCurrent = pathname === item.href;
+            const isCurrent = isCurrentPath(pathname, item.href);
             return (
               <motion.li
                 key={item.href}

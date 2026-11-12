@@ -75,6 +75,16 @@ describe('MobileMenu', () => {
     expect(dialog.querySelectorAll('nav [data-current-dot]')).toHaveLength(1);
   });
 
+  it('keeps Projects current on a project detail path', async () => {
+    mockPathname.mockReturnValue('/projects/hour-sync');
+    renderMenu();
+    await openMenu();
+    const dialog = await screen.findByRole('dialog');
+    const current = dialog.querySelectorAll('nav [aria-current="page"]');
+    expect(current).toHaveLength(1);
+    expect(current[0]).toHaveAttribute('href', '/projects');
+  });
+
   it('moves focus into the dialog and traps Tab / Shift+Tab', async () => {
     renderMenu();
     const { user } = await openMenu();
