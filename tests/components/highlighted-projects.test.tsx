@@ -99,7 +99,7 @@ describe('HighlightedProjects', () => {
   });
 
   it('hides the empty thumbnail placeholder from assistive tech', () => {
-    const { container } = renderSection([makeProject({ thumbnail: undefined })]);
-    expect(container.querySelector('article > div')).toHaveAttribute('aria-hidden', 'true');
+    renderSection([makeProject({ thumbnail: undefined })]);
+    expect(screen.getByTestId('project-thumbnail')).toHaveAttribute('aria-hidden', 'true');
   });
 });
