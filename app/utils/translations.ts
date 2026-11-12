@@ -36,6 +36,14 @@ export type TranslationDictionary = {
     viewProjects: string;
     code: string;
   };
+  errorPage: {
+    title: string;
+    description: string;
+    retry: string;
+    backToHome: string;
+    code: string;
+    label: string;
+  };
   a11y: {
     opensInNewTab: string;
     backToTop: string;
@@ -161,6 +169,15 @@ const pt: TranslationDictionary = {
     backToHome: 'Voltar para a Home',
     viewProjects: 'Ver projetos',
     code: '404',
+  },
+  errorPage: {
+    title: 'Algo deu errado.',
+    description:
+      'Não foi possível carregar este conteúdo agora. Tente de novo ou volte para a Home.',
+    retry: 'Tentar de novo',
+    backToHome: 'Voltar para a Home',
+    code: '500',
+    label: 'erro inesperado',
   },
   a11y: {
     opensInNewTab: '(abre em nova aba)',
@@ -291,6 +308,15 @@ const en: TranslationDictionary = {
     backToHome: 'Back to Home',
     viewProjects: 'View projects',
     code: '404',
+  },
+  errorPage: {
+    title: 'Something went wrong.',
+    description:
+      'This content could not be loaded right now. Try again or go back to Home.',
+    retry: 'Try again',
+    backToHome: 'Back to Home',
+    code: '500',
+    label: 'unexpected error',
   },
   a11y: {
     opensInNewTab: '(opens in a new tab)',
