@@ -15,7 +15,7 @@ Rota existente (`app/api/contact/route.ts`), ajustada para os estados do formul�
 | `name` | string, aparada, 3–100 caracteres |
 | `email` | string, e-mail válido, até 254 caracteres |
 | `message` | string, aparada, 1–500 caracteres |
-| `company_url` | opcional (honeypot), string até 200 caracteres, padrão `""` |
+| `company_url` | opcional (honeypot), string sem limite (nunca gera 400; a rota responde o 200 isca), padrão `""` |
 
 Caracteres de controle ASCII são removidos (em `message` ficam `
 ` e `	`) antes da validação.

@@ -261,7 +261,7 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
   - webhook falha ou passa de 10 s → `502 delivery_failed`;
   - sem `WEBHOOK_URL` → `500 unexpected`;
   - nenhuma resposta vaza detalhes.
-- [ ] T069 [P] [US2] Teste do ContactForm em `tests/components/contact-form.test.tsx`, cobrindo os estados com `fetch`/`axios` mockado:
+- [x] T069 [P] [US2] Teste do ContactForm em `tests/components/contact-form.test.tsx`, cobrindo os estados com `fetch`/`axios` mockado:
   - **invalid**: erros abaixo dos campos, foco no 1º campo com erro, erro some ao corrigir e sair do campo;
   - **submitting**: campos e botão desabilitados, "Enviando…";
   - **sent**: "Mensagem enviada." com foco no título, e "Enviar outra mensagem" volta vazio;

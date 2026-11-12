@@ -151,10 +151,10 @@ idle ──submit válido────▶ submitting ──200──▶ sent ─�
 | Estado | Campos | Botão | Anúncio (`aria-live`) | Foco |
 |--------|--------|-------|-----------------------|------|
 | `idle` | editáveis | "Enviar mensagem" | — | — |
-| `invalid` | erro abaixo de cada campo, `aria-invalid`, `aria-describedby` | "Enviar mensagem" | resumo dos erros | 1º campo com erro |
-| `submitting` | desabilitados | "Enviando…" + spinner (sem girar com reduzir movimento) | "Enviando mensagem" | mantém |
-| `sent` | form substituído | "Enviar outra mensagem" | "Mensagem enviada." | título da confirmação |
-| `failed` | mantêm os dados | "Tentar de novo" | "Não consegui enviar agora." (`role="alert"`) | aviso |
+| `invalid` | erro abaixo de cada campo, `aria-invalid`, `aria-describedby` | "Enviar mensagem" | — (sem anúncio de resumo) | 1º campo com erro |
+| `submitting` | desabilitados | `aria-disabled` + "Enviando…" + spinner (sem girar com reduzir movimento) | "Enviando mensagem" | mantém no botão |
+| `sent` | form substituído | "Enviar outra mensagem" | — (o título focado é lido) | título da confirmação |
+| `failed` | mantêm os dados | "Tentar de novo" + link do LinkedIn | `role="alert"`: "Não consegui enviar agora." | aviso |
 
 Validação: nome 3–100, e-mail válido, mensagem 1–500 (o mesmo schema zod no cliente e no servidor).
 
