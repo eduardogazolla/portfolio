@@ -65,7 +65,9 @@ export const ContactForm = ({ socials = [] }: { socials?: Social[] }) => {
 
   // Re-run validation for the fields showing an error so the messages follow the language.
   const errorsRef = useRef(errors);
-  errorsRef.current = errors;
+  useEffect(() => {
+    errorsRef.current = errors;
+  });
   useEffect(() => {
     const invalid = (Object.keys(errorsRef.current) as (keyof ContactFormInput)[]).filter((field) => errorsRef.current[field]);
     if (invalid.length > 0) void trigger(invalid);
