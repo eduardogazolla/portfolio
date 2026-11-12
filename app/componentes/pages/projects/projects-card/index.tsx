@@ -13,7 +13,7 @@ type ProjectCardProps = {
 // Featured block (fewer than 4 projects). Unlike the Home card, the whole card is the
 // link on mobile (arrow beside the title, pressed scale 0.98) and "Ver projeto" shows from md.
 export const ProjectCard = ({ project, viewProjectLabel, priority = false }: ProjectCardProps) => (
-  <article className="relative flex flex-col gap-4 border-t border-line pt-6 transition-transform duration-fast ease-out active:scale-[0.98] motion-reduce:active:scale-100 md:gap-8 md:border-t-0 md:pt-0 md:active:scale-100">
+  <article className="relative flex flex-col max-md:has-[:focus-visible]:outline max-md:has-[:focus-visible]:outline-1 max-md:has-[:focus-visible]:outline-offset-4 max-md:has-[:focus-visible]:outline-accent gap-4 border-t border-line pt-6 transition-transform duration-fast ease-out active:scale-[0.98] motion-reduce:active:scale-100 md:gap-8 md:border-t-0 md:pt-0 md:active:scale-100">
     <div
       data-testid="project-thumbnail"
       aria-hidden={project.thumbnail?.url ? undefined : "true"}
