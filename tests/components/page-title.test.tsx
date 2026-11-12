@@ -11,7 +11,7 @@ describe('PageTitle', () => {
       </LanguageProvider>
     );
     const h1 = screen.getByRole('heading', { level: 1, name: 'Hour Sync' });
-    expect(h1.className).toMatch(/text-\[96px\]/);
+    expect(h1.className).toMatch(/text-display-title-s/);
     expect(h1.className).toMatch(/md:text-display-xl/);
     expect(h1.className).toMatch(/break-words/);
     expect(container.querySelector('[aria-hidden="true"]')).not.toBeNull();
