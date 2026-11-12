@@ -1,11 +1,12 @@
-export const techBadgeAnimation = {
-  initial: { opacity: 0, scale: 0 },
-  whileInView: { opacity: 1, scale: 1 },
-  exit: { opacity: 0, scale: 0 },
+import { duration, ease } from "./motion";
+
+const fadeUp = {
+  initial: { opacity: 0, y: 8 },
+  whileInView: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: 8 },
+  transition: { duration: duration.base, ease: ease.out },
 };
 
-export const fadeUpAnimation = {
-  initial: { opacity: 0, y: 50 },
-  whileInView: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: 50 },
-};
+export const techBadgeAnimation = fadeUp;
+
+export const fadeUpAnimation = fadeUp;

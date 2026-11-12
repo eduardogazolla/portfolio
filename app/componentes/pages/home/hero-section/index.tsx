@@ -27,7 +27,7 @@ export const HeroSection = ({ homeInfo }: HomeSectionProps) => {
     }
   };
   return (
-    <section className="w-full lg:h-[755px] bg-hero-image bg-cover bg-center bg-no-repeat flex flex-col justify-end pb-10 sm:pb-32 py-32 lg:pb-[110px]">
+    <section className="w-full lg:h-[755px] flex flex-col justify-end pb-10 sm:pb-32 py-32 lg:pb-[110px]">
       <div className="container flex items-start justify-between flex-col-reverse lg:flex-row">
         <motion.div
           className="w-full lg:max-w-[530px]"
@@ -54,7 +54,7 @@ export const HeroSection = ({ homeInfo }: HomeSectionProps) => {
             ))}
           </div>
           <div className="mt-6 lg:mt-10 flex sm:items-center sm:gap-5 flex-col sm:flex-row">
-            <Button className="w-max shadow-button" onClick={handleContact}>
+            <Button className="w-max" onClick={handleContact}>
               {translations.hero.contactButton}
               <HiArrowNarrowRight size={18} />
             </Button>
