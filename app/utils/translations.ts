@@ -11,24 +11,7 @@ export type TranslationDictionary = {
     nowAt: string;
     viewProjects: string;
   };
-  // legacy: the groups knownTechs, highlightedProjects, workExperience
-  // and contact are removed in Part 3
-  knownTechs: {
-    subtitle: string;
-    title: string;
-    experience: string;
-  };
-  highlightedProjects: {
-    subtitle: string;
-    title: string;
-    interested: string;
-    viewAll: string;
-  };
-  workExperience: {
-    subtitle: string;
-    title: string;
-    description: string;
-  };
+  // legacy: the group contact is removed in Part 5 (form rewrite)
   contact: {
     subtitle: string;
     title: string;
@@ -147,23 +130,6 @@ const pt: TranslationDictionary = {
     nowPrefix: 'Agora:',
     nowAt: 'na',
     viewProjects: 'Ver projetos',
-  },
-  knownTechs: {
-    subtitle: 'competências',
-    title: 'Conhecimentos',
-    experience: 'de experiência',
-  },
-  highlightedProjects: {
-    subtitle: 'destaques',
-    title: 'Projetos',
-    interested: 'Se interessou?',
-    viewAll: 'Ver todos',
-  },
-  workExperience: {
-    subtitle: 'experiências',
-    title: 'Experiência Profissional',
-    description:
-      'Estou sempre aberto a novos desafios e projetos emocionantes. Vamos trabalhar juntos para criar soluções incríveis para sua empresa!',
   },
   contact: {
     subtitle: 'contato',
@@ -289,23 +255,6 @@ const en: TranslationDictionary = {
     nowPrefix: 'Now:',
     nowAt: 'at',
     viewProjects: 'View projects',
-  },
-  knownTechs: {
-    subtitle: 'skills',
-    title: 'Knowledge',
-    experience: 'of experience',
-  },
-  highlightedProjects: {
-    subtitle: 'highlights',
-    title: 'Projects',
-    interested: 'Interested?',
-    viewAll: 'View all',
-  },
-  workExperience: {
-    subtitle: 'experiences',
-    title: 'Work Experience',
-    description:
-      'I am always open to new challenges and exciting projects. Let\'s work together to create amazing solutions for your company!',
   },
   contact: {
     subtitle: 'contact',

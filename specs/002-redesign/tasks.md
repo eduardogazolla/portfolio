@@ -188,7 +188,7 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
   - SectionTitle com o subtítulo "Do suporte de TI à qualidade de software: …";
   - item atual completo com o ponto pulsante (escala 1→2,2, loop de 2 s; parado com reduzir movimento; `aria-hidden`);
   - anteriores compactos em sanfona (`grid-template-rows 0fr → 1fr`, `duration-base`, `ease-in-out`; "+" gira 45° e vira "×"; abre sem animação com reduzir movimento).
-- [ ] T053 [US3] Refazer o destaque de projetos da Home em `app/componentes/pages/home/highlighted-projects/index.tsx` e `project-card/index.tsx`:
+- [x] T053 [US3] Refazer o destaque de projetos da Home em `app/componentes/pages/home/highlighted-projects/index.tsx` e `project-card/index.tsx`:
   - SectionTitle "Projetos" com "Ver todos os projetos";
   - imagem `next/image` com `alt` do título;
   - rótulo `context` só se preenchido; título `h2`; descrição curta; badges; "Ver projeto";
