@@ -18,7 +18,7 @@ Componentes usam só as classes geradas (constitution III).
 | `text-muted` | `--color-text-muted` | `#8B8B92` | apoio, datas, placeholders |
 | `accent` | `--color-accent` | `var(--accent-cobalto)` | links ativos, foco, contorno, botão primário |
 | `on-accent` | `--color-on-accent` | `#050505` | texto sobre o accent |
-| `danger` | `--color-danger` | ler do componente Input/Error (5:101) na Parte 1 | erros do form; contraste ≥ 4,5:1 sobre `bg` |
+| `danger` | `--color-danger` | `#FF5C5C` | erros do form (6,7:1 sobre `bg`; lido do Input/Error 5:101) |
 | `accent-cobalto` | `--accent-cobalto` | `#5B6BFF` | opção ativa (4,8:1 sobre `bg`) |
 | `accent-laranja` | `--accent-laranja` | `#FF5A1F` | opção alternativa |
 | `accent-lima` | `--accent-lima` | `#C8FF2E` | opção alternativa |

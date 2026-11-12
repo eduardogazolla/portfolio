@@ -63,7 +63,7 @@ que atendem.
 
 ### Parte 1 `feat/redesign-tokens`
 
-- [ ] T011 Ler no Figma o valor exato da cor de erro no componente Input / State=Error (nó `5:101`, fileKey `nuxSe49ViC40aYOcI0nImY`) e confirmar contraste ≥ 4,5:1 sobre `#050505`; registrar em `specs/002-redesign/data-model.md` §1 (token `danger`)
+- [x] T011 Ler no Figma o valor exato da cor de erro no componente Input / State=Error (nó `5:101`, fileKey `nuxSe49ViC40aYOcI0nImY`) e confirmar contraste ≥ 4,5:1 sobre `#050505`; registrar em `specs/002-redesign/data-model.md` §1 (token `danger`)
 - [ ] T012 Declarar os tokens como CSS vars em `:root` de `app/globals.css`: `--color-bg #050505`, `--color-surface #111113`, `--color-line #232327`, `--color-text #F2F2EF`, `--color-text-muted #8B8B92`, `--accent-cobalto #5B6BFF`, `--accent-laranja #FF5A1F`, `--accent-lima #C8FF2E`, `--color-accent var(--accent-cobalto)`, `--color-on-accent #050505`, `--color-danger` (T011); motion `--duration-fast 140ms`, `--duration-base 220ms`, `--duration-slow 700ms`, `--ease-out cubic-bezier(0.22, 1, 0.36, 1)`, `--ease-in-out cubic-bezier(0.65, 0, 0.35, 1)`; `body` com `bg`/`text`; seleção de texto e scrollbar no tema novo
 - [ ] T013 Mapear os tokens em `tailwind.config.js`:
   - cores (`bg`, `surface`, `line`, `text`, `text-muted`, `accent`, `on-accent`, `danger` via `var()`);
