@@ -1,5 +1,5 @@
 import NextLink from "next/link";
-import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from "react";
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, Ref } from "react";
 import { cn } from "@/app/lib/utils";
 import { isExternalUrl, isSchemeUrl } from "@/app/lib/url";
 import { NewTabHint } from "@/app/componentes/link/new-tab-hint";
@@ -13,6 +13,7 @@ type CommonProps = {
 type ButtonAsButton = CommonProps &
   Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> & {
     href?: undefined;
+    ref?: Ref<HTMLButtonElement>;
     type?: "button" | "submit" | "reset";
     /**
      * Sets aria-busy and aria-disabled, shows a spinner and ignores clicks. The button is not natively

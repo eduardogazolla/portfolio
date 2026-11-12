@@ -45,6 +45,7 @@ export const ContactForm = ({ socials = [] }: { socials?: Social[] }) => {
   const linkedIn = socials.find(isLinkedInSocial);
   const [status, setStatus] = useState<Status>("idle");
   const sending = useRef(false);
+  const submitRef = useRef<HTMLButtonElement>(null);
   const confirmationRef = useRef<HTMLHeadingElement>(null);
   const failureRef = useRef<HTMLDivElement>(null);
 
@@ -92,6 +93,8 @@ export const ContactForm = ({ socials = [] }: { socials?: Social[] }) => {
       return;
     }
     sending.current = true;
+    // The fields get disabled while sending: keep focus on the button so it is not lost to <body>.
+    submitRef.current?.focus();
     setStatus("submitting");
     const ok = await sendMessage(data);
     sending.current = false;
@@ -199,7 +202,7 @@ export const ContactForm = ({ socials = [] }: { socials?: Social[] }) => {
                 </p>
               </div>
             )}
-            <Button type="submit" loading={submitting} className="w-full md:w-fit md:px-7 md:py-4">
+            <Button ref={submitRef} type="submit" loading={submitting} className="w-full md:w-fit md:px-7 md:py-4">
               {submitting ? t.submitting : status === "failed" ? t.retry : t.submit}
             </Button>
           </form>

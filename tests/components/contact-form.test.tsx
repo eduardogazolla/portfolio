@@ -207,6 +207,17 @@ describe.each(['pt-BR', 'en'] as const)('ContactForm (%s)', (locale) => {
     await settle(calls[0], respond(true, { ok: true }));
   });
 
+  it('submitting: pressing Enter in a field moves focus to the submit button', async () => {
+    const { calls } = mockFetch();
+    const { user, t } = setup(locale);
+    await fillValid(user, t);
+    await user.type(screen.getByLabelText(t.name), '{Enter}');
+    const button = await screen.findByRole('button', { name: t.submitting });
+    expect(button).toHaveFocus();
+    expect(screen.getByLabelText(t.name)).toBeDisabled();
+    await settle(calls[0], respond(true, { ok: true }));
+  });
+
   it('the live region announces the submission but not the confirmation', async () => {
     const { calls } = mockFetch();
     const { user, t } = setup(locale);

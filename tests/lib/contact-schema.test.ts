@@ -127,10 +127,10 @@ describe("createContactSchema abuse hardening", () => {
     expect(result.success && result.data.company_url).toBe("");
   });
 
-  it("accepts a filled honeypot (the route decides what to do) but caps it", () => {
+  it("accepts any honeypot value (the route decides what to do)", () => {
     const schema = createContactSchema("pt");
     expect(schema.safeParse({ ...valid, company_url: "http://spam" }).success).toBe(true);
-    expect(schema.safeParse({ ...valid, company_url: "x".repeat(201) }).success).toBe(false);
+    expect(schema.safeParse({ ...valid, company_url: "x".repeat(500) }).success).toBe(true);
   });
 
   it("strips ASCII control characters from name and email", () => {

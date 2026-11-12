@@ -240,6 +240,13 @@ describe("POST /api/contact", () => {
     expect(post).not.toHaveBeenCalled();
   });
 
+  it("oversized honeypot never 400s: decoy 200 without calling the webhook", async () => {
+    const res = await POST(makeRequest({ ...valid, company_url: "x".repeat(500) }));
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ ok: true });
+    expect(post).not.toHaveBeenCalled();
+  });
+
   it("empty or whitespace honeypot still delivers", async () => {
     const res = await POST(makeRequest({ ...valid, company_url: "   " }));
     expect(res.status).toBe(200);

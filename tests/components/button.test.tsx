@@ -29,7 +29,7 @@ describe('Button', () => {
     expect(screen.getByRole('button')).toHaveAttribute('type', 'submit');
   });
 
-  it('loading disables, sets aria-busy and shows an aria-hidden spinner with text', () => {
+  it('loading sets aria-disabled (not disabled, so focus stays), aria-busy and shows an aria-hidden spinner with text', () => {
     render(<Button loading>Enviando…</Button>);
     const btn = screen.getByRole('button', { name: 'Enviando…' });
     expect(btn).toHaveAttribute('aria-disabled', 'true');
