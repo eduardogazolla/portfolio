@@ -2,6 +2,7 @@
 
 import { HiArrowNarrowRight } from "react-icons/hi";
 import { Button } from "../button";
+import { PageSection } from "../page-section";
 import { SectionTitle } from "../section-title";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -43,9 +44,10 @@ export const ContactForm = () => {
   };
 
   return (
-    <section
+    <PageSection
       id="contact"
-      className="container flex flex-col gap-7 pt-28 md:flex-row md:justify-between md:gap-12 md:pt-10 md:pb-40"
+      className="pt-28 md:pt-10 md:pb-40"
+      innerClassName="flex flex-col gap-7 md:flex-row md:justify-between md:gap-12"
     >
       <SectionTitle
         title={translations.contactVoice.title}
@@ -85,6 +87,6 @@ export const ContactForm = () => {
           </div>
         </motion.form>
       </div>
-    </section>
+    </PageSection>
   );
 };

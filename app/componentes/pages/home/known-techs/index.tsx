@@ -1,5 +1,6 @@
 "use client";
 
+import { PageSection } from "@/app/componentes/page-section";
 import { SectionTitle } from "@/app/componentes/section-title";
 import { KnowTech } from "./known-tech";
 import { KnownTech as IKnownTech } from "@/app/types/projects";
@@ -18,7 +19,7 @@ export const KnownTechs = ({ techs }: KnownTechsProps) => {
   );
 
   return (
-    <section id="stack" className="container pt-28 md:py-[120px]">
+    <PageSection id="stack" className="pt-28 md:py-[120px]">
       <SectionTitle
         title={translations.stack.title}
         subtitle={translations.stack.subtitle}
@@ -30,6 +31,6 @@ export const KnownTechs = ({ techs }: KnownTechsProps) => {
           <KnowTech key={tech.name} tech={tech} />
         ))}
       </ul>
-    </section>
+    </PageSection>
   );
 };

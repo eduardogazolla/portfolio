@@ -11,13 +11,13 @@ type ProjectCardProps = {
 // Static layout for now; the scroll-linked version of this card is Part 6.
 export const ProjectCard = ({ project, viewProjectLabel }: ProjectCardProps) => (
   <article className="flex flex-col gap-6 md:gap-8">
-    <div className="relative aspect-[5/3] w-full overflow-hidden rounded-md bg-surface md:aspect-[1200/620]">
+    <div aria-hidden={project.thumbnail?.url ? undefined : "true"} className="relative aspect-[5/3] w-full overflow-hidden rounded-md bg-surface md:aspect-[1200/620]">
       {project.thumbnail?.url && (
         <Image
           src={project.thumbnail.url}
           alt={project.title}
           fill
-          sizes="(min-width: 1440px) 1200px, calc(100vw - 40px)"
+          sizes="(min-width: 1440px) 1200px, (min-width: 1024px) calc(100vw - 80px), calc(100vw - 40px)"
           className="object-cover"
         />
       )}

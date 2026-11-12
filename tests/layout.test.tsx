@@ -47,6 +47,11 @@ describe('RootLayout', () => {
     expect(document.querySelector('[data-testid="footer"]')).toHaveAttribute('data-socials', '1');
   });
 
+  it('does not render the contact form (it lives on the Home page only)', () => {
+    expect(document.getElementById('contact')).toBeNull();
+    expect(document.querySelector('form')).toBeNull();
+  });
+
   it('places BackToTop after the footer in DOM order', () => {
     const footer = document.querySelector('[data-testid="footer"]')!;
     const back = document.querySelector('[data-testid="back-to-top"]')!;

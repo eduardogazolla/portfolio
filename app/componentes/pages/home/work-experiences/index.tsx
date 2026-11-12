@@ -1,5 +1,6 @@
 "use client";
 
+import { PageSection } from "@/app/componentes/page-section";
 import { SectionTitle } from "@/app/componentes/section-title";
 import { ExperienceItem } from "./experience-item";
 import { WorkExperience as IWorkExperience } from "@/app/types/work-experience";
@@ -16,7 +17,7 @@ export const WorkExperience = ({ experiences }: WorkExperienceProps) => {
   const current = getCurrentExperience(experiences);
 
   return (
-    <section id="experience" className="container pt-28 md:pt-10 md:pb-40">
+    <PageSection id="experience" className="pt-28 md:pt-10 md:pb-40">
       <SectionTitle
         title={translations.experience.sectionTitle}
         subtitle={
@@ -37,6 +38,6 @@ export const WorkExperience = ({ experiences }: WorkExperienceProps) => {
           />
         ))}
       </div>
-    </section>
+    </PageSection>
   );
 };
