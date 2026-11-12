@@ -1,45 +1,76 @@
 "use client";
 
-import { HiArrowNarrowRight } from "react-icons/hi";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../button";
+import { Input } from "../form/input";
+import { Textarea } from "../form/textarea";
 import { PageSection } from "../page-section";
 import { SectionTitle } from "../section-title";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import toast from "react-hot-toast";
 import { useLanguage } from "@/app/componentes/context/language-context";
+import { CONTACT_LIMITS, createContactSchema, type ContactFormData } from "@/app/lib/contact-schema";
 
-const contactFormSchema = z.object({
-  name: z.string().min(3).max(100),
-  email: z.string().email(),
-  message: z.string().min(1).max(500),
-});
+// `invalid` is derived from the form errors while the status is `idle`.
+type Status = "idle" | "submitting" | "sent" | "failed";
 
-type ContactFormData = z.infer<typeof contactFormSchema>;
+const EMPTY: ContactFormData = { name: "", email: "", message: "" };
+
+// The API answers 200 { ok: true } on success; anything else counts as a failure.
+const sendMessage = async (data: ContactFormData): Promise<boolean> => {
+  try {
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) return false;
+    const body = await response.json();
+    return body?.ok === true;
+  } catch {
+    return false;
+  }
+};
 
 export const ContactForm = () => {
-  const { translations } = useLanguage();
+  const { locale, translations } = useLanguage();
+  const t = translations.contactVoice;
+  const [status, setStatus] = useState<Status>("idle");
+  const sending = useRef(false);
+  const confirmationRef = useRef<HTMLHeadingElement>(null);
+  const failureRef = useRef<HTMLDivElement>(null);
 
+  const schema = useMemo(() => createContactSchema(locale === "en" ? "en" : "pt"), [locale]);
   const {
     handleSubmit,
     register,
     reset,
-    formState: { isSubmitting },
+    watch,
+    formState: { errors },
   } = useForm<ContactFormData>({
-    resolver: zodResolver(contactFormSchema),
+    mode: "onTouched",
+    resolver: zodResolver(schema),
+    defaultValues: EMPTY,
   });
 
+  // Move focus to the confirmation or the failure notice once it is on screen.
+  useEffect(() => {
+    if (status === "sent") confirmationRef.current?.focus();
+    if (status === "failed") failureRef.current?.focus();
+  }, [status]);
+
   const onSubmit = async (data: ContactFormData) => {
-    try {
-      await axios.post("/api/contact", data);
-      toast.success(translations.contact.successMessage);
-      reset();
-    } catch {
-      toast.error(translations.contact.errorMessage);
-    }
+    if (sending.current) return;
+    sending.current = true;
+    setStatus("submitting");
+    const ok = await sendMessage(data);
+    sending.current = false;
+    if (ok) reset(EMPTY);
+    setStatus(ok ? "sent" : "failed");
   };
+
+  const submitting = status === "submitting";
+  const messageLength = watch("message").length;
 
   return (
     <PageSection
@@ -48,41 +79,83 @@ export const ContactForm = () => {
       innerClassName="flex flex-col gap-7 md:flex-row md:justify-between md:gap-12"
     >
       <SectionTitle
-        title={translations.contactVoice.title}
-        subtitle={translations.contactVoice.description}
+        title={t.title}
+        subtitle={t.description}
         className="gap-7 md:gap-6"
         subtitleClassName="md:max-w-[440px] md:text-body-l"
       />
       <div className="w-full md:max-w-[480px] md:shrink-0">
+        <div aria-live="polite" className="sr-only">
+          {submitting ? t.submittingAnnouncement : status === "sent" ? t.sent : ""}
+        </div>
 
-        <form
-          className="w-full flex flex-col gap-4"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <input
-            placeholder={translations.contact.namePlaceholder}
-            className="w-full h-14 bg-gray-800 rounded-lg placeholder:text-gray-400 text-gray-50 p-4 focus:outline-none focus:ring-2 ring-blue-600"
-            {...register("name")}
-          />
-          <input
-            placeholder={translations.contact.emailPlaceholder}
-            type="email"
-            className="w-full h-14 bg-gray-800 rounded-lg placeholder:text-gray-400 text-gray-50 p-4 focus:outline-none focus:ring-2 ring-blue-600"
-            {...register("email")}
-          />
-          <textarea
-            placeholder={translations.contact.messagePlaceholder}
-            className="resize-none w-full h-[138px] bg-gray-800 rounded-lg placeholder:text-gray-400 text-gray-50 p-4 focus:outline-none focus:ring-2 ring-blue-600"
-            maxLength={500}
-            {...register("message")}
-          />
-          <div className="mx-auto mt-6">
-            <Button type="submit" className="h-max" disabled={isSubmitting}>
-              {translations.contact.sendButton}
-              <HiArrowNarrowRight size={18} />
+        {status === "sent" ? (
+          <div className="flex flex-col items-start gap-4 rounded-md bg-surface px-7 py-8">
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 32 32"
+              className="size-8 text-accent"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M7 17l6 6 12-13" />
+            </svg>
+            <h3 ref={confirmationRef} tabIndex={-1} className="text-h2 text-text focus:outline-none">
+              {t.sent}
+            </h3>
+            <p className="text-body-m text-text-muted">{t.sentDescription}</p>
+            <Button variant="secondary" onClick={() => setStatus("idle")}>
+              {t.sendAnother}
             </Button>
           </div>
-        </form>
+        ) : (
+          <form noValidate className="flex w-full flex-col gap-7 md:gap-9" onSubmit={handleSubmit(onSubmit)}>
+            <Input
+              label={t.nameLabel}
+              placeholder={t.namePlaceholder}
+              autoComplete="name"
+              maxLength={CONTACT_LIMITS.nameMax}
+              disabled={submitting}
+              error={errors.name?.message}
+              {...register("name")}
+            />
+            <Input
+              label={t.emailLabel}
+              placeholder={t.emailPlaceholder}
+              type="email"
+              autoComplete="email"
+              disabled={submitting}
+              error={errors.email?.message}
+              {...register("email")}
+            />
+            <Textarea
+              label={t.messageLabel}
+              placeholder={t.messagePlaceholder}
+              maxLength={CONTACT_LIMITS.messageMax}
+              helper={`${messageLength}/${CONTACT_LIMITS.messageMax}`}
+              disabled={submitting}
+              error={errors.message?.message}
+              {...register("message")}
+            />
+            {status === "failed" && (
+              <div
+                ref={failureRef}
+                role="alert"
+                tabIndex={-1}
+                className="flex flex-col gap-1.5 rounded-md border border-danger px-[18px] py-4 focus:outline-none"
+              >
+                <p className="text-label-m text-danger">{t.failed}</p>
+                <p className="text-body-m text-text-muted">{t.failedDescription}</p>
+              </div>
+            )}
+            <Button type="submit" loading={submitting} className="w-full md:w-fit md:px-7 md:py-4">
+              {submitting ? t.submitting : status === "failed" ? t.retry : t.submit}
+            </Button>
+          </form>
+        )}
       </div>
     </PageSection>
   );
