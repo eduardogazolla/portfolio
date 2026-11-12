@@ -1,5 +1,5 @@
 /// <reference types="@testing-library/jest-dom" />
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { HeroSection } from '../../app/componentes/pages/home/hero-section';
 import { LanguageProvider } from '../../app/componentes/context/language-context';
@@ -98,16 +98,9 @@ describe('HeroSection', () => {
     document.getElementById('contact')?.remove();
   });
 
-  it('exposes the intro state and renders final content immediately', () => {
-    const { container, unmount } = renderHero();
-    expect(container.querySelector('section')).toHaveAttribute('data-intro', 'play');
+  it('renders final content without any intro attribute or hidden state', () => {
+    renderHero();
+    expect(document.documentElement).not.toHaveAttribute('data-intro');
     expect(screen.getByRole('heading', { level: 1 })).toBeVisible();
-    unmount();
-
-    sessionStorage.setItem('portfolio-gazolla:intro', '1');
-    const second = renderHero();
-    expect(second.container.querySelector('section')).toHaveAttribute('data-intro', 'skip');
-    const section = second.container.querySelector('section') as HTMLElement;
-    expect(within(section).getByRole('heading', { level: 1 })).toBeVisible();
   });
 });

@@ -76,3 +76,19 @@
 *::-webkit-scrollbar-thumb:hover {
   background-color: var(--color-text-muted);
 }
+
+/* Hero intro initial states (see hero-intro.tsx). Applied only while the boot script
+   has set <html data-intro="play">, so content is visible without JS and on repeat visits. */
+html[data-intro="play"] [data-hero="name-line"] {
+  transform: translateY(100%);
+}
+
+html[data-intro="play"] [data-hero="photo"] {
+  clip-path: inset(100% 0 0 0);
+}
+
+html[data-intro="play"] [data-hero="bio"],
+html[data-intro="play"] [data-hero="actions"] {
+  opacity: 0;
+  transform: translateY(12px);
+}

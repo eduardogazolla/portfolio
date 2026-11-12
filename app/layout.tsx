@@ -10,6 +10,7 @@ import { SkipLink } from "./componentes/skip-link";
 import { LanguageProvider } from "./componentes/context/language-context";
 import { fetchHygraphQuery } from "./utils/fetch-hygraph-query";
 import type { Social } from "./types/page-info";
+import { INTRO_BOOT_SCRIPT } from "./componentes/pages/home/hero-section/intro-flag";
 
 export const metadata = {
   title: {
@@ -81,6 +82,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 
   return (
     <html lang="pt-BR" className={`${bricolage.variable} ${geist.variable} ${plexMono.variable}`} suppressHydrationWarning>
+      <head>
+        {/* Constant boot script (no interpolated data): marks <html data-intro="play"> before
+            paint on a session's first visit so the hero can start hidden without a flash. */}
+        <script dangerouslySetInnerHTML={{ __html: INTRO_BOOT_SCRIPT }} />
+      </head>
       <body>
         <LanguageProvider>
           <SkipLink />

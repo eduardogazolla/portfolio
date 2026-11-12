@@ -129,7 +129,7 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
   - foto via `next/image` com `priority` e `alt` descritivo;
   - linha "Agora: …" com ponto decorativo;
   - sociais com Link externo.
-- [ ] T041 [US1] Implementar a entrada orquestrada do hero em `app/componentes/pages/home/hero-section/hero-intro.tsx`, seguindo a linha do tempo do board `12:21`:
+- [x] T041 [US1] Implementar a entrada orquestrada do hero em `app/componentes/pages/home/hero-section/hero-intro.tsx`, seguindo a linha do tempo do board `12:21`:
   - "Eduardo" e "Gazolla" sobem por máscara (0–700 ms, com 90 ms de atraso no segundo);
   - a foto revela de baixo com `clip-path` (250–1000 ms);
   - bio e botões entram com opacity + `y` 12→0 (600–1000 ms);

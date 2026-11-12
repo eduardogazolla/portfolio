@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import { useReducedMotion } from "motion/react";
 import { Button } from "@/app/componentes/button";
@@ -10,11 +10,7 @@ import { useLanguage } from "@/app/componentes/context/language-context";
 import { HomePageInfo } from "@/app/types/page-info";
 import { WorkExperience } from "@/app/types/work-experience";
 import { getSocialLabel } from "@/app/utils/socials";
-import {
-  readIntroPlayed,
-  readIntroPlayedOnServer,
-  subscribeIntroFlag,
-} from "./intro-flag";
+import { HeroIntro } from "./hero-intro";
 
 type HeroSectionProps = {
   homeInfo: HomePageInfo;
@@ -25,16 +21,12 @@ type HeroSectionProps = {
 const FIRST_NAME = "Eduardo";
 const LAST_NAME = "Gazolla";
 
-// Hooks for the intro animation (hero-intro.tsx): every animatable piece carries
-// a data-hero attribute and the section exposes data-intro="play" | "skip".
+// Hooks for the intro animation (hero-intro.tsx, initial states in globals.css):
+// every animatable piece carries a data-hero attribute.
 export const HeroSection = ({ homeInfo, currentExperience }: HeroSectionProps) => {
   const { translations } = useLanguage();
   const reduceMotion = useReducedMotion();
-  const introPlayed = useSyncExternalStore(
-    subscribeIntroFlag,
-    readIntroPlayed,
-    readIntroPlayedOnServer
-  );
+  const sectionRef = useRef<HTMLElement>(null);
 
   const handleContact = () => {
     const contact = document.getElementById("contact");
@@ -47,9 +39,10 @@ export const HeroSection = ({ homeInfo, currentExperience }: HeroSectionProps) =
 
   return (
     <section
-      data-intro={introPlayed ? "skip" : "play"}
+      ref={sectionRef}
       className="w-full px-5 pb-16 pt-[118px] lg:px-10 lg:pb-[118px] lg:pt-[154px]"
     >
+      <HeroIntro rootRef={sectionRef} />
       <div className="mx-auto grid w-full max-w-content lg:grid-cols-[minmax(0,1fr)_400px]">
         <div className="flex min-w-0 flex-col">
           {homeInfo.role && (
@@ -60,13 +53,17 @@ export const HeroSection = ({ homeInfo, currentExperience }: HeroSectionProps) =
 
           <h1
             data-hero="name"
-            className="-ml-1 mt-4 font-display text-display-xl tracking-[-0.04em] text-text [font-size:clamp(64px,26vw,104px)] md:[font-size:clamp(64px,22vw,168px)] lg:-ml-3 lg:mt-7 lg:[font-size:clamp(64px,calc((100vw-480px)/3.5),232px)]"
+            className="relative -ml-1 mt-4 font-display text-display-xl tracking-[-0.04em] text-text [font-size:clamp(64px,26vw,104px)] md:[font-size:clamp(64px,22vw,168px)] lg:-ml-3 lg:mt-7 lg:[font-size:clamp(64px,calc((100vw-480px)/3.5),232px)]"
           >
-            <span data-hero="name-line" className="relative block">
-              {FIRST_NAME}
+            <span className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
+              <span data-hero="name-line" className="block">
+                {FIRST_NAME}
+              </span>
             </span>{" "}
-            <span data-hero="name-line" className="relative block">
-              {LAST_NAME}
+            <span className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
+              <span data-hero="name-line" className="block">
+                {LAST_NAME}
+              </span>
             </span>
           </h1>
 
