@@ -85,6 +85,7 @@ export default async function Project({ params }: ProjectProps) {
   return <ProjectDetailClient data={data} />;
 }
 
+// Intentionally throws on CMS failure: a loud build failure beats deploying without project pages.
 export async function generateStaticParams() {
   const query = `
     query ProjectSlugs {
@@ -112,9 +113,8 @@ export async function generateMetadata({
   const { slug } = await params;
   const data = await getProjectDetails(slug);
 
-  if (!data) {
-    notFound();
-  }
+  // The page itself calls notFound(); metadata just stays empty.
+  if (!data) return {};
 
   const project = data.ptProject;
   const image = project.thumbnail?.url;
@@ -123,7 +123,7 @@ export async function generateMetadata({
     title: project.title,
     description: project.description?.text,
     openGraph: {
-      images: image ? [{ url: image, width: 1200, height: 630 }] : [],
+      images: image ? [{ url: image }] : [],
     },
   };
 }
