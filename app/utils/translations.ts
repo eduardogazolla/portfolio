@@ -100,16 +100,8 @@ export type TranslationDictionary = {
     sendAnother: string;
     failed: string;
     failedDescription: string;
+    failedLinkLabel: string;
     retry: string;
-    errors: {
-      nameRequired: string;
-      nameMin: string;
-      nameMax: string;
-      emailRequired: string;
-      emailInvalid: string;
-      messageRequired: string;
-      messageMax: string;
-    };
   };
   projectDetail: {
     backToProjects: string;
@@ -229,17 +221,9 @@ const pt: TranslationDictionary = {
     sendAnother: 'Enviar outra mensagem',
     failed: 'Não consegui enviar agora.',
     failedDescription:
-      'Seus dados continuam aqui. Tente de novo ou me chame no LinkedIn.',
+      'Seus dados continuam aqui. Tente de novo ou me chame no',
+    failedLinkLabel: 'LinkedIn',
     retry: 'Tentar de novo',
-    errors: {
-      nameRequired: 'Informe seu nome.',
-      nameMin: 'O nome precisa ter pelo menos 3 caracteres.',
-      nameMax: 'O nome pode ter no máximo 100 caracteres.',
-      emailRequired: 'Informe seu e-mail.',
-      emailInvalid: 'Falta o domínio. Use algo como nome@gmail.com.',
-      messageRequired: 'Escreva sua mensagem antes de enviar.',
-      messageMax: 'A mensagem pode ter no máximo 500 caracteres.',
-    },
   },
   projectDetail: {
     backToProjects: 'Todos os projetos',
@@ -359,17 +343,9 @@ const en: TranslationDictionary = {
     sendAnother: 'Send another message',
     failed: 'I could not send it right now.',
     failedDescription:
-      'Your details are still here. Try again or reach me on LinkedIn.',
+      'Your details are still here. Try again or reach me on',
+    failedLinkLabel: 'LinkedIn',
     retry: 'Try again',
-    errors: {
-      nameRequired: 'Enter your name.',
-      nameMin: 'The name must have at least 3 characters.',
-      nameMax: 'The name can have at most 100 characters.',
-      emailRequired: 'Enter your email.',
-      emailInvalid: 'The domain is missing. Use something like name@gmail.com.',
-      messageRequired: 'Write your message before sending.',
-      messageMax: 'The message can have at most 500 characters.',
-    },
   },
   projectDetail: {
     backToProjects: 'All projects',
