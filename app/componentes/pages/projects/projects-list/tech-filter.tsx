@@ -33,7 +33,7 @@ export const TechFilter = ({ techs, value, onChange, allRef }: TechFilterProps) 
             aria-pressed={active}
             onClick={() => onChange(option.value)}
             className={cn(
-              "inline-flex items-center rounded-full border px-3 py-1 text-label-m transition-colors duration-fast ease-out",
+              "inline-flex items-center rounded-full border px-3 py-1 text-label-m transition-colors duration-fast ease-out motion-reduce:transition-none",
               active
                 ? "border-accent text-text"
                 : "border-line text-text-muted [@media(hover:hover)_and_(pointer:fine)]:hover:border-text [@media(hover:hover)_and_(pointer:fine)]:hover:text-text",
