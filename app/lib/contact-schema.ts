@@ -11,11 +11,9 @@ export const CONTACT_LIMITS = {
   websiteMax: 200,
 } as const;
 
-/* eslint-disable no-control-regex */
 const CONTROL_CHARS = /[\u0000-\u001f\u007f]/g;
 // The message keeps \n (0x0A) and \t (0x09).
 const CONTROL_CHARS_EXCEPT_NEWLINE_TAB = /[\u0000-\u0008\u000b-\u001f\u007f]/g;
-/* eslint-enable no-control-regex */
 
 type EmailProblem =
   | "empty"

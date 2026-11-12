@@ -118,7 +118,7 @@ export const ContactForm = () => {
             </Button>
           </div>
         ) : (
-          <form noValidate className="relative flex w-full flex-col gap-7 md:gap-9" onSubmit={handleSubmit(onSubmit)}>
+          <form noValidate className="relative flex w-full flex-col gap-7 md:gap-9" onSubmit={(event) => void handleSubmit(onSubmit)(event)}>
             <Input
               label={t.nameLabel}
               placeholder={t.namePlaceholder}
