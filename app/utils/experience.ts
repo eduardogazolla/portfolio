@@ -17,7 +17,10 @@ export type DurationLabels = {
 
 const dateLocales = { 'pt-BR': ptBR, en: enUS } as const;
 
-/** The open experience (no endDate) with the most recent startDate, or null. */
+/**
+ * The open experience (no endDate) with the most recent startDate, or null.
+ * ISO date strings (YYYY-MM-DD) compare correctly as plain strings.
+ */
 export const getCurrentExperience = <T extends ExperiencePeriod>(
   experiences: T[],
 ): T | null =>

@@ -26,6 +26,34 @@ describe('getSocialLabel', () => {
     expect(getSocialLabel({ url: 'https://api.foo.dev/x' })).toBe('foo.dev');
   });
 
+  it('handles urls without a protocol', () => {
+    expect(getSocialLabel({ url: 'github.com/user' })).toBe('GitHub');
+    expect(getSocialLabel({ url: 'www.example.com/x' })).toBe('example.com');
+  });
+
+  it('matches known hosts on subdomains only at a dot boundary', () => {
+    expect(getSocialLabel({ url: 'https://gist.github.com/x' })).toBe('GitHub');
+    expect(getSocialLabel({ url: 'https://br.linkedin.com/in/x' })).toBe(
+      'LinkedIn',
+    );
+    expect(getSocialLabel({ url: 'https://notgithub.com/x' })).toBe(
+      'notgithub.com',
+    );
+  });
+
+  it('returns the url for schemes without a host', () => {
+    expect(getSocialLabel({ url: 'mailto:me@example.com' })).toBe(
+      'mailto:me@example.com',
+    );
+    expect(getSocialLabel({ url: 'tel:+5511999999999' })).toBe(
+      'tel:+5511999999999',
+    );
+  });
+
+  it('returns the url for a blank name and an invalid url', () => {
+    expect(getSocialLabel({ name: '   ', url: 'not a url' })).toBe('not a url');
+  });
+
   it('returns the raw url when it cannot be parsed', () => {
     expect(getSocialLabel({ url: 'not a url' })).toBe('not a url');
   });

@@ -75,6 +75,21 @@ describe('formatDuration', () => {
     );
   });
 
+  it('counts full months only across month ends', () => {
+    expect(formatDuration('2026-01-31', '2026-02-28', pt)).toBe('1 mês');
+    expect(formatDuration('2026-01-31', '2026-03-30', pt)).toBe('1 mês');
+  });
+
+  it('uses singular year and month together', () => {
+    expect(formatDuration('2025-10-01', '2026-11-15', pt)).toBe(
+      '1 ano e 1 mês',
+    );
+  });
+
+  it('has a minimum of 1 month when end is before start', () => {
+    expect(formatDuration('2026-11-10', '2026-10-01', pt)).toBe('1 mês');
+  });
+
   it('has a minimum of 1 month', () => {
     expect(formatDuration('2026-11-10', '2026-11-15', pt)).toBe(
       '1 mês',

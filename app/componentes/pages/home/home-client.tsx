@@ -15,13 +15,9 @@ type HomeClientProps = {
 export const HomeClient = ({ data }: HomeClientProps) => {
   const { locale } = useLanguage();
 
-  const pageData = data.ptPage
-    ? pickLocale(data.ptPage, data.enPage, locale)
-    : null;
-
-  if (!pageData) {
-    return <div className="min-h-screen flex items-center justify-center text-gray-400">Loading...</div>;
-  }
+  const base = data.ptPage ?? data.enPage;
+  if (!base) return null;
+  const pageData = pickLocale(base, data.enPage, locale);
 
   const workExperiences = pickLocale(
     data.ptWorkExperiences,
