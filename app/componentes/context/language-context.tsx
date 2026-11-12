@@ -5,6 +5,7 @@ import {
   useContext,
   useSyncExternalStore,
   useCallback,
+  useEffect,
   ReactNode,
 } from "react";
 import {
@@ -19,6 +20,7 @@ type LanguageContextProps = {
   locale: Locale;
   translations: TranslationDictionary;
   toggleLocale: () => void;
+  setLocale: (locale: Locale) => void;
 };
 
 const LanguageContext = createContext<LanguageContextProps | undefined>(
@@ -72,8 +74,8 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     getServerSnapshot
   );
 
-  const toggleLocale = useCallback(() => {
-    const next: Locale = readLocale() === "pt-BR" ? "en" : "pt-BR";
+  const setLocale = useCallback((next: Locale) => {
+    if (readLocale() === next) return;
     try {
       localStorage.setItem(STORAGE_KEY, next);
     } catch {
@@ -82,10 +84,20 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     listeners.forEach((listener) => listener());
   }, []);
 
+  const toggleLocale = useCallback(() => {
+    setLocale(readLocale() === "pt-BR" ? "en" : "pt-BR");
+  }, [setLocale]);
+
+  // Keep <html lang> in step with the active locale, including the first
+  // client render with a stored locale.
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
+
   const translations = getTranslations(locale);
 
   return (
-    <LanguageContext.Provider value={{ locale, translations, toggleLocale }}>
+    <LanguageContext.Provider value={{ locale, translations, toggleLocale, setLocale }}>
       {children}
     </LanguageContext.Provider>
   );
