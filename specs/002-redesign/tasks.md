@@ -177,14 +177,14 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
   - EN: "1 year and 9 months";
   - meses arredondados para baixo, `end` ausente = hoje (com relógio fixo);
   - período "fev 2025 – atual" / "Feb 2025 – present".
-- [ ] T048 [P] [US3] Teste do KnownTechs em `tests/components/known-techs.test.tsx`: só nome e "desde <ano>", ordenados por `startDate` crescente, sem ícone
-- [ ] T049 [P] [US3] Teste do WorkExperience em `tests/components/work-experience.test.tsx`: a atual mostra período, duração, cargo, empresa com link, descrição e badges; as anteriores mostram uma linha e um botão "+" com `aria-expanded` que abre e fecha com clique, Enter e Espaço; sem descrição e sem tecnologias, não há "+"
+- [x] T048 [P] [US3] Teste do KnownTechs em `tests/components/known-techs.test.tsx`: só nome e "desde <ano>", ordenados por `startDate` crescente, sem ícone
+- [x] T049 [P] [US3] Teste do WorkExperience em `tests/components/work-experience.test.tsx`: a atual mostra período, duração, cargo, empresa com link, descrição e badges; as anteriores mostram uma linha e um botão "+" com `aria-expanded` que abre e fecha com clique, Enter e Espaço; sem descrição e sem tecnologias, não há "+"
 
 ### Implementation
 
 - [x] T050 [US3] Implementar `formatDuration` e `formatPeriod` em `app/utils/experience.ts` com `date-fns` (já é dependência), usando os locales `ptBR` e `enUS` (faz a T047 passar); remover `app/utils/get-relative-time.tsx` se ficar sem uso
-- [ ] T051 [US3] Refazer a Stack em `app/componentes/pages/home/known-techs/index.tsx` e `known-tech.tsx` conforme o Figma: SectionTitle "Stack" com o subtítulo "Tecnologias que uso no dia a dia."; duas colunas com divisores `line` no desktop e uma no mobile; lista estática, sem animação
-- [ ] T052 [US3] Refazer a Experiência em `app/componentes/pages/home/work-experiences/index.tsx` e `experience-item.tsx` conforme o Figma:
+- [x] T051 [US3] Refazer a Stack em `app/componentes/pages/home/known-techs/index.tsx` e `known-tech.tsx` conforme o Figma: SectionTitle "Stack" com o subtítulo "Tecnologias que uso no dia a dia."; duas colunas com divisores `line` no desktop e uma no mobile; lista estática, sem animação
+- [x] T052 [US3] Refazer a Experiência em `app/componentes/pages/home/work-experiences/index.tsx` e `experience-item.tsx` conforme o Figma:
   - SectionTitle com o subtítulo "Do suporte de TI à qualidade de software: …";
   - item atual completo com o ponto pulsante (escala 1→2,2, loop de 2 s; parado com reduzir movimento; `aria-hidden`);
   - anteriores compactos em sanfona (`grid-template-rows 0fr → 1fr`, `duration-base`, `ease-in-out`; "+" gira 45° e vira "×"; abre sem animação com reduzir movimento).
