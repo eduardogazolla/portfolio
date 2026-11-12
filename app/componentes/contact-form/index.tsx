@@ -2,14 +2,13 @@
 
 import { HiArrowNarrowRight } from "react-icons/hi";
 import { Button } from "../button";
+import { PageSection } from "../page-section";
 import { SectionTitle } from "../section-title";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { motion } from "motion/react";
-import { fadeUpAnimation } from "@/app/lib/animations";
 import { useLanguage } from "@/app/componentes/context/language-context";
 
 const contactFormSchema = z.object({
@@ -43,21 +42,22 @@ export const ContactForm = () => {
   };
 
   return (
-    <section
+    <PageSection
       id="contact"
-      className="py-16 px-6 md:py-32 flex items-center justify-center bg-gray-950"
+      className="pt-28 md:pt-10 md:pb-40"
+      innerClassName="flex flex-col gap-7 md:flex-row md:justify-between md:gap-12"
     >
-      <div className="w-full max-w-[420px] mx-auto">
-        <SectionTitle
-          subtitle={translations.contact.subtitle}
-          title={translations.contact.title}
-          className="items-center text-center"
-        />
+      <SectionTitle
+        title={translations.contactVoice.title}
+        subtitle={translations.contactVoice.description}
+        className="gap-7 md:gap-6"
+        subtitleClassName="md:max-w-[440px] md:text-body-l"
+      />
+      <div className="w-full md:max-w-[480px] md:shrink-0">
 
-        <motion.form
-          className="mt-12 w-full flex flex-col gap-4"
+        <form
+          className="w-full flex flex-col gap-4"
           onSubmit={handleSubmit(onSubmit)}
-          {...fadeUpAnimation}
         >
           <input
             placeholder={translations.contact.namePlaceholder}
@@ -82,8 +82,8 @@ export const ContactForm = () => {
               <HiArrowNarrowRight size={18} />
             </Button>
           </div>
-        </motion.form>
+        </form>
       </div>
-    </section>
+    </PageSection>
   );
 };

@@ -110,18 +110,18 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 
 ### Tests (escrever primeiro e ver falhar)
 
-- [ ] T032 [P] [US1] Teste de `getCurrentExperience` em `tests/utils/experience.test.ts`: retorna a experiência sem `endDate` de `startDate` mais recente; com duas atuais, a mais recente; sem nenhuma, `null`
-- [ ] T033 [P] [US1] Teste de `getSocialLabel` em `tests/utils/socials.test.ts`: usa `name` aparado; sem `name`, mapeia `github.com` → "GitHub", `linkedin.com` → "LinkedIn", `api.whatsapp.com` e `wa.me` → "WhatsApp"; host desconhecido → domínio sem `www.`/`api.`
-- [ ] T034 [P] [US1] Teste de `pickLocale` em `tests/utils/locale.test.ts`: com EN ativo, campos EN vazios ou `null` caem para o valor PT, campo a campo
-- [ ] T035 [P] [US1] Teste do Hero em `tests/components/hero.test.tsx`: renderiza papel, nome em `h1`, apresentação, "Agora: <cargo> na <empresa>" só quando há experiência atual, sociais com rótulos, "Vamos conversar" e "Ver projetos"; com `sessionStorage` marcado, não anima
+- [x] T032 [P] [US1] Teste de `getCurrentExperience` em `tests/utils/experience.test.ts`: retorna a experiência sem `endDate` de `startDate` mais recente; com duas atuais, a mais recente; sem nenhuma, `null`
+- [x] T033 [P] [US1] Teste de `getSocialLabel` em `tests/utils/socials.test.ts`: usa `name` aparado; sem `name`, mapeia `github.com` → "GitHub", `linkedin.com` → "LinkedIn", `api.whatsapp.com` e `wa.me` → "WhatsApp"; host desconhecido → domínio sem `www.`/`api.`
+- [x] T034 [P] [US1] Teste de `pickLocale` em `tests/utils/locale.test.ts`: com EN ativo, campos EN vazios ou `null` caem para o valor PT, campo a campo
+- [x] T035 [P] [US1] Teste do Hero em `tests/components/hero.test.tsx`: renderiza papel, nome em `h1`, apresentação, "Agora: <cargo> na <empresa>" só quando há experiência atual, sociais com rótulos, "Vamos conversar" e "Ver projetos"; com `sessionStorage` marcado, não anima
 
 ### Implementation
 
-- [ ] T036 [P] [US1] Implementar `getCurrentExperience` em `app/utils/experience.ts` (faz a T032 passar)
-- [ ] T037 [P] [US1] Implementar `getSocialLabel` em `app/utils/socials.ts` (faz a T033 passar)
-- [ ] T038 [P] [US1] Implementar `pickLocale` em `app/utils/locale.ts` (faz a T034 passar) e usá-lo em `app/componentes/pages/home/home-client.tsx` no lugar do fallback atual
-- [ ] T039 [US1] Ajustar a query da Home em `app/page.tsx` ao contrato `HomePage` de `specs/002-redesign/contracts/hygraph-queries.graphql`: incluir `Social.name`, `Project.context` e `workExperiences(orderBy: startDate_DESC)`; remover `technologies`, `iconSvg` e `companyLogo`; atualizar `app/types/page-info.ts`, `app/types/projects.ts` (`context?: string`) e `app/types/work-experience.ts`
-- [ ] T040 [US1] Refazer o Hero em `app/componentes/pages/home/hero-section/index.tsx` conforme o Figma `6:21` / mobile `8:29`:
+- [x] T036 [P] [US1] Implementar `getCurrentExperience` em `app/utils/experience.ts` (faz a T032 passar)
+- [x] T037 [P] [US1] Implementar `getSocialLabel` em `app/utils/socials.ts` (faz a T033 passar)
+- [x] T038 [P] [US1] Implementar `pickLocale` em `app/utils/locale.ts` (faz a T034 passar) e usá-lo em `app/componentes/pages/home/home-client.tsx` no lugar do fallback atual
+- [x] T039 [US1] Ajustar a query da Home em `app/page.tsx` ao contrato `HomePage` de `specs/002-redesign/contracts/hygraph-queries.graphql`: incluir `Social.name`, `Project.context` e `workExperiences(orderBy: startDate_DESC)`; remover `technologies`, `iconSvg` e `companyLogo`; atualizar `app/types/page-info.ts`, `app/types/projects.ts` (`context?: string`) e `app/types/work-experience.ts`
+- [x] T040 [US1] Refazer o Hero em `app/componentes/pages/home/hero-section/index.tsx` conforme o Figma `6:21` / mobile `8:29`:
   - papel (`label-m`, `text-muted`);
   - nome em duas linhas `display-xl` (`clamp` até 64 px no mobile);
   - apresentação em rich text `body-l`;
@@ -129,16 +129,16 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
   - foto via `next/image` com `priority` e `alt` descritivo;
   - linha "Agora: …" com ponto decorativo;
   - sociais com Link externo.
-- [ ] T041 [US1] Implementar a entrada orquestrada do hero em `app/componentes/pages/home/hero-section/hero-intro.tsx`, seguindo a linha do tempo do board `12:21`:
+- [x] T041 [US1] Implementar a entrada orquestrada do hero em `app/componentes/pages/home/hero-section/hero-intro.tsx`, seguindo a linha do tempo do board `12:21`:
   - "Eduardo" e "Gazolla" sobem por máscara (0–700 ms, com 90 ms de atraso no segundo);
   - a foto revela de baixo com `clip-path` (250–1000 ms);
   - bio e botões entram com opacity + `y` 12→0 (600–1000 ms);
   - o InspectOutline com `measure` desenha (800–1400 ms), a etiqueta digita as medidas (1400–1750 ms), e etiqueta e contorno somem em 2400–2600 ms;
   - roda só se `sessionStorage['portfolio-gazolla:intro']` não existir, e grava a flag;
   - nunca bloqueia clique;
-  - com `useReducedMotion`, só um fade de 140 ms e sem contorno;
-  - conteúdo visível sem JS (estado inicial via classe adicionada no cliente).
-- [ ] T042 [US1] Atualizar `app/componentes/footer/index.tsx`: "© <ano atual> Eduardo Gazolla", sociais do CMS via `getSocialLabel` e BackToTop; buscar as sociais com a query `SiteSocials` em `app/layout.tsx` (server component) e passar por props
+  - com movimento reduzido, a entrada é ignorada por completo (sem fade e sem contorno), e o conteúdo aparece direto;
+  - conteúdo visível sem JS: o estado inicial escondido vem de `html[data-intro]`, definido pelo script de boot inline no `<head>` (`INTRO_BOOT_SCRIPT`), antes da primeira pintura.
+- [x] T042 [US1] Atualizar `app/componentes/footer/index.tsx`: "© <ano atual> Eduardo Gazolla", sociais do CMS via `getSocialLabel` (BackToTop é irmão do Footer no layout, não filho dele); buscar as sociais com a query `SiteSocials` em `app/layout.tsx` (server component) e passar por props
 
 **Checkpoint**: US1 funcional na Home (quickstart V1–V3).
 
@@ -150,10 +150,10 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 
 **Independent Test**: em 390 px, abrir e fechar o menu e navegar só com teclado (quickstart V10).
 
-- [ ] T043 [P] [US6] Teste do Header em `tests/header.test.tsx` (atualizar o existente): nome com link para `/`; nav desktop com Home, Projetos e Contato e `aria-current` no atual; LanguageSwitch; abaixo de 768 px, botão "Menu" com `aria-expanded` e `aria-controls`
-- [ ] T044 [P] [US6] Teste do MobileMenu em `tests/components/mobile-menu.test.tsx`: abre com "Menu", mostra Home, Projetos, Experiência e Contato, sociais e "Vamos conversar"; prende o foco; Esc, "Fechar" e clique em link fecham; ao fechar, o foco volta para "Menu"; o `body` não rola enquanto o menu está aberto
-- [ ] T045 [US6] Refazer `app/componentes/header/index.tsx` conforme o Figma `6:21` / `8:29`: fundo `bg`, sem animar `top`; Contato aponta para `/#contact`
-- [ ] T046 [US6] Criar `app/componentes/header/mobile-menu.tsx` conforme o Figma `8:228`:
+- [x] T043 [P] [US6] Teste do Header em `tests/header.test.tsx` (atualizar o existente): nome com link para `/`; nav desktop com Home, Projetos e Contato e `aria-current` no atual; LanguageSwitch; abaixo de 768 px, botão "Menu" com `aria-expanded` e `aria-controls`
+- [x] T044 [P] [US6] Teste do MobileMenu em `tests/components/mobile-menu.test.tsx`: abre com "Menu", mostra Home, Projetos, Experiência e Contato, sociais e "Vamos conversar"; prende o foco; Esc, "Fechar" e clique em link fecham; ao fechar, o foco volta para "Menu"; o `body` não rola enquanto o menu está aberto
+- [x] T045 [US6] Refazer `app/componentes/header/index.tsx` conforme o Figma `6:21` / `8:29`: fundo `bg`, sem animar `top`; Contato aponta para `/#contact`
+- [x] T046 [US6] Criar `app/componentes/header/mobile-menu.tsx` conforme o Figma `8:228`:
   - links em `display` grandes, com ponto no atual;
   - abre em círculo a partir do botão (`clip-path: circle()` via transform/opacity);
   - links sobem com 40 ms entre eles; fecha em 180 ms;
@@ -172,29 +172,29 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 
 ### Tests (primeiro)
 
-- [ ] T047 [P] [US3] Teste de `formatDuration` e `formatPeriod` em `tests/utils/experience.test.ts`:
+- [x] T047 [P] [US3] Teste de `formatDuration` e `formatPeriod` em `tests/utils/experience.test.ts`:
   - PT: "1 ano e 9 meses", "2 anos e 1 mês", "1 ano", mínimo "1 mês";
   - EN: "1 year and 9 months";
   - meses arredondados para baixo, `end` ausente = hoje (com relógio fixo);
   - período "fev 2025 – atual" / "Feb 2025 – present".
-- [ ] T048 [P] [US3] Teste do KnownTechs em `tests/components/known-techs.test.tsx`: só nome e "desde <ano>", ordenados por `startDate` crescente, sem ícone
-- [ ] T049 [P] [US3] Teste do WorkExperience em `tests/components/work-experience.test.tsx`: a atual mostra período, duração, cargo, empresa com link, descrição e badges; as anteriores mostram uma linha e um botão "+" com `aria-expanded` que abre e fecha com clique, Enter e Espaço; sem descrição e sem tecnologias, não há "+"
+- [x] T048 [P] [US3] Teste do KnownTechs em `tests/components/known-techs.test.tsx`: só nome e "desde <ano>", ordenados por `startDate` crescente, sem ícone
+- [x] T049 [P] [US3] Teste do WorkExperience em `tests/components/work-experience.test.tsx`: a atual mostra período, duração, cargo, empresa com link, descrição e badges; as anteriores mostram uma linha e, só quando há descrição, um botão "+" com `aria-expanded` que abre e fecha com clique, Enter e Espaço; o painel compacto não mostra badges (decisão do usuário); sem descrição, não há "+"
 
 ### Implementation
 
-- [ ] T050 [US3] Implementar `formatDuration` e `formatPeriod` em `app/utils/experience.ts` com `date-fns` (já é dependência), usando os locales `ptBR` e `enUS` (faz a T047 passar); remover `app/utils/get-relative-time.tsx` se ficar sem uso
-- [ ] T051 [US3] Refazer a Stack em `app/componentes/pages/home/known-techs/index.tsx` e `known-tech.tsx` conforme o Figma: SectionTitle "Stack" com o subtítulo "Tecnologias que uso no dia a dia."; duas colunas com divisores `line` no desktop e uma no mobile; lista estática, sem animação
-- [ ] T052 [US3] Refazer a Experiência em `app/componentes/pages/home/work-experiences/index.tsx` e `experience-item.tsx` conforme o Figma:
+- [x] T050 [US3] Implementar `formatDuration` e `formatPeriod` em `app/utils/experience.ts` com `date-fns` (já é dependência), usando os locales `ptBR` e `enUS` (faz a T047 passar); remover `app/utils/get-relative-time.tsx` se ficar sem uso
+- [x] T051 [US3] Refazer a Stack em `app/componentes/pages/home/known-techs/index.tsx` e `known-tech.tsx` conforme o Figma: SectionTitle "Stack" com o subtítulo "Tecnologias que uso no dia a dia."; duas colunas com divisores `line` no desktop e uma no mobile; lista estática, sem animação
+- [x] T052 [US3] Refazer a Experiência em `app/componentes/pages/home/work-experiences/index.tsx` e `experience-item.tsx` conforme o Figma:
   - SectionTitle com o subtítulo "Do suporte de TI à qualidade de software: …";
   - item atual completo com o ponto pulsante (escala 1→2,2, loop de 2 s; parado com reduzir movimento; `aria-hidden`);
   - anteriores compactos em sanfona (`grid-template-rows 0fr → 1fr`, `duration-base`, `ease-in-out`; "+" gira 45° e vira "×"; abre sem animação com reduzir movimento).
-- [ ] T053 [US3] Refazer o destaque de projetos da Home em `app/componentes/pages/home/highlighted-projects/index.tsx` e `project-card/index.tsx`:
+- [x] T053 [US3] Refazer o destaque de projetos da Home em `app/componentes/pages/home/highlighted-projects/index.tsx` e `project-card/index.tsx`:
   - SectionTitle "Projetos" com "Ver todos os projetos";
   - imagem `next/image` com `alt` do título;
-  - rótulo `context` só se preenchido; título `h2`; descrição curta; badges; "Ver projeto";
+  - rótulo `context` só se preenchido; título `h3` (sob o `h2` da seção); descrição curta; badges; "Ver projeto";
   - linha "Mais projetos chegando…" com o link GitHub vindo das sociais;
   - a seção some se não houver projeto em destaque.
-- [ ] T054 [US3] Montar a Home em `app/componentes/pages/home/home-client.tsx` na ordem do Figma (Hero, Stack, Projetos, Experiência, Contato `#contact`) e verificar a Parte 3: gates verdes, Playwright MCP com Home e menu em 1440/390 contra `6:21`, `8:29` e `8:228`, teclado e PT/EN. Abrir o PR
+- [x] T054 [US3] Montar a Home em `app/componentes/pages/home/home-client.tsx` na ordem do Figma (Hero, Stack, Projetos, Experiência, Contato `#contact`) e verificar a Parte 3: gates verdes, Playwright MCP com Home e menu em 1440/390 contra `6:21`, `8:29` e `8:228`, teclado e PT/EN. Abrir o PR
 
 **Checkpoint**: Home completa (exceto os estados do form, que ficam na Parte 5).
 

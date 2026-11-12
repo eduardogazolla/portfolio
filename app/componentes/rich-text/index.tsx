@@ -9,7 +9,7 @@ export const RichText = ({ ...props }: RichTextProps) => {
       {...props}
       renderers={{
         bold: ({ children }) => (
-          <b className="text-gray-50 font-medium">{children}</b>
+          <b className="text-text font-medium">{children}</b>
         ),
         ul: ({ children }) => (
           <ul className="list-disc list-inside pl-2 flex flex-col gap-1">
@@ -19,7 +19,7 @@ export const RichText = ({ ...props }: RichTextProps) => {
         a: ({ children, ...props }) => (
           <a
             {...props}
-            className="hover:text-blue-500 transition-colors underline"
+            className="underline [@media(hover:hover)_and_(pointer:fine)]:hover:text-accent"
           >
             {children}
           </a>

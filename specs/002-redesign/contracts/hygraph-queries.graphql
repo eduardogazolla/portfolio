@@ -28,6 +28,7 @@ fragment ExperienceFields on WorkExperience {
 }
 
 fragment HomeFields on Page {
+  role
   introduction { raw }
   profilePicture { url }
   socials { ...SocialFields }
@@ -55,6 +56,7 @@ query ProjectsPage {
   enProjects: projects(locales: [en, pt_BR]) { ...ProjectCard }
 }
 
+# `ProjectSection.title` é localizado (vem no locale ativo, com fallback para PT).
 # Detalhe (app/projects/[slug]/page.tsx): slug como variável, nunca interpolado.
 query ProjectDetail($slug: String!) {
   ptProject: project(where: { slug: $slug }, locales: [pt_BR, en]) { ...ProjectDetailFields }

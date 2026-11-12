@@ -3,113 +3,77 @@ import { WorkExperience } from "./types/work-experience";
 import { fetchHygraphQuery } from "./utils/fetch-hygraph-query";
 import { HomeClient } from "./componentes/pages/home/home-client";
 
-const getPageData = async (): Promise<LocalizedHomePageData> => {
-  const query = `
-    query PageInfoQuery {
-      ptPages: pages(where: {slug: "home"}, locales: [pt_BR, en]) {
-        introduction {
-          raw
-        }
-        technologies {
-          name
-        }
-        profilePicture {
-          url
-        }
-        socials {
-          url
-          iconSvg
-        }
-        knownTechs {
-          iconSvg
-          name
-          startDate
-        }
-        highlightProjects {
-          slug
-          thumbnail {
-            url
-          }
-          title
-          shortDescription
-          technologies {
-            name
-          }
-        }
+// Keep in sync with the `HomePage` operation in
+// specs/002-redesign/contracts/hygraph-queries.graphql.
+const query = `
+  fragment HomeFields on Page {
+    role
+    introduction {
+      raw
+    }
+    profilePicture {
+      url
+    }
+    socials {
+      name
+      url
+    }
+    knownTechs {
+      name
+      startDate
+    }
+    highlightProjects {
+      slug
+      title
+      context
+      shortDescription
+      thumbnail {
+        url
       }
-      enPages: pages(where: {slug: "home"}, locales: [en, pt_BR]) {
-        introduction {
-          raw
-        }
-        technologies {
-          name
-        }
-        profilePicture {
-          url
-        }
-        socials {
-          url
-          iconSvg
-        }
-        knownTechs {
-          iconSvg
-          name
-          startDate
-        }
-        highlightProjects {
-          slug
-          thumbnail {
-            url
-          }
-          title
-          shortDescription
-          technologies {
-            name
-          }
-        }
-      }
-      ptWorkExperiences: workExperiences(locales: [pt_BR, en]) {
-        companyLogo {
-          url
-        }
-        role
-        companyName
-        companyUrl
-        startDate
-        endDate
-        description {
-          raw
-        }
-        technologies {
-          name
-        }
-      }
-      enWorkExperiences: workExperiences(locales: [en, pt_BR]) {
-        companyLogo {
-          url
-        }
-        role
-        companyName
-        companyUrl
-        startDate
-        endDate
-        description {
-          raw
-        }
-        technologies {
-          name
-        }
+      technologies {
+        name
       }
     }
-  `;
-
-  interface QueryResponse {
-    ptPages: HomePageInfo[];
-    enPages: HomePageInfo[];
-    ptWorkExperiences: WorkExperience[];
-    enWorkExperiences: WorkExperience[];
   }
 
+  fragment ExperienceFields on WorkExperience {
+    role
+    companyName
+    companyUrl
+    startDate
+    endDate
+    description {
+      raw
+    }
+    technologies {
+      name
+    }
+  }
+
+  query HomePage {
+    ptPages: pages(where: { slug: "home" }, locales: [pt_BR, en]) {
+      ...HomeFields
+    }
+    enPages: pages(where: { slug: "home" }, locales: [en, pt_BR]) {
+      ...HomeFields
+    }
+    ptWorkExperiences: workExperiences(orderBy: startDate_DESC, locales: [pt_BR, en]) {
+      ...ExperienceFields
+    }
+    enWorkExperiences: workExperiences(orderBy: startDate_DESC, locales: [en, pt_BR]) {
+      ...ExperienceFields
+    }
+  }
+`;
+
+interface QueryResponse {
+  ptPages: HomePageInfo[];
+  enPages: HomePageInfo[];
+  ptWorkExperiences: WorkExperience[];
+  enWorkExperiences: WorkExperience[];
+}
+
+const getPageData = async (): Promise<LocalizedHomePageData> => {
   const result = await fetchHygraphQuery<QueryResponse>(
     query,
     60 * 60 * 24 // 24 horas

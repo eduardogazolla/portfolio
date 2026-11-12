@@ -3,16 +3,16 @@ import { KnownTech, Project } from "./projects";
 import { WorkExperience } from "./work-experience";
 
 export type Social = {
+  name?: string | null;
   url: string;
-  iconSvg: string;
 };
 
 export type HomePageInfo = {
-  introduction: {
+  role?: string | null;
+  introduction?: {
     raw: RichTextContent;
   };
-  technologies: KnownTech[];
-  profilePicture: {
+  profilePicture?: {
     url: string;
   };
   socials: Social[];
@@ -42,8 +42,8 @@ export type HomePageData = {
 // Localized types for aliased GraphQL queries (both locales fetched in parallel)
 
 export type LocalizedHomePageData = {
-  ptPage: HomePageInfo;
-  enPage: HomePageInfo;
+  ptPage: HomePageInfo | null;
+  enPage: HomePageInfo | null;
   ptWorkExperiences: WorkExperience[];
   enWorkExperiences: WorkExperience[];
 };

@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import RootLayout from '../app/layout';
+import { fetchHygraphQuery } from '../app/utils/fetch-hygraph-query';
 
 jest.mock('../app/globals.css', () => ({}), { virtual: true });
 jest.mock('next/font/google', () => {
@@ -8,8 +9,9 @@ jest.mock('next/font/google', () => {
   return { Bricolage_Grotesque: font, Geist: font, IBM_Plex_Mono: font };
 });
 jest.mock('../app/componentes/header', () => ({ Header: () => <header data-testid="header"><a href="/x">nav</a></header> }));
-jest.mock('../app/componentes/contact-form', () => ({ ContactForm: () => <section data-testid="contact" /> }));
-jest.mock('../app/componentes/footer', () => ({ Footer: () => <footer data-testid="footer" /> }));
+jest.mock('../app/componentes/footer', () => ({
+  Footer: ({ socials }: { socials: unknown[] }) => <footer data-testid="footer" data-socials={socials.length} />,
+}));
 jest.mock('../app/componentes/toaster', () => ({ Toaster: () => null }));
 jest.mock('../app/componentes/back-to-top', () => ({
   BackToTop: () => <button data-testid="back-to-top" type="button">top</button>,
@@ -18,14 +20,14 @@ jest.mock('../app/componentes/back-to-top', () => ({
 // RootLayout returns <html>, which React 19 hoists onto the jsdom document, so we render it
 // into the test document directly and query document.body.
 describe('RootLayout', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
-    render(
-      <RootLayout>
-        <p>page</p>
-      </RootLayout>,
-      { container: document, baseElement: document.body }
-    );
+    (fetchHygraphQuery as jest.Mock).mockResolvedValueOnce({
+      pages: [{ socials: [{ name: 'GitHub', url: 'https://github.com/x' }] }],
+    });
+    // RootLayout is an async server component: resolve it before rendering.
+    const layout = await RootLayout({ children: <p>page</p> });
+    render(layout, { container: document, baseElement: document.body });
   });
   afterEach(() => jest.restoreAllMocks());
 
@@ -39,6 +41,15 @@ describe('RootLayout', () => {
     expect(mains).toHaveLength(1);
     expect(mains[0]).toHaveAttribute('id', 'main');
     expect(mains[0]).toHaveAttribute('tabindex', '-1');
+  });
+
+  it('fetches the site socials and passes them to the footer', () => {
+    expect(document.querySelector('[data-testid="footer"]')).toHaveAttribute('data-socials', '1');
+  });
+
+  it('does not render the contact form (it lives on the Home page only)', () => {
+    expect(document.getElementById('contact')).toBeNull();
+    expect(document.querySelector('form')).toBeNull();
   });
 
   it('places BackToTop after the footer in DOM order', () => {

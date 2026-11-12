@@ -6,32 +6,12 @@ export type TranslationDictionary = {
     projects: string;
   };
   hero: {
-    greeting: string;
-    // legacy: removed in Part 3
-    contactButton: string;
-    role: string;
+    photoAlt: string;
     nowPrefix: string;
     nowAt: string;
     viewProjects: string;
   };
-  // legacy: the groups knownTechs, highlightedProjects, workExperience,
-  // contact and footer are removed in Part 3
-  knownTechs: {
-    subtitle: string;
-    title: string;
-    experience: string;
-  };
-  highlightedProjects: {
-    subtitle: string;
-    title: string;
-    interested: string;
-    viewAll: string;
-  };
-  workExperience: {
-    subtitle: string;
-    title: string;
-    description: string;
-  };
+  // legacy: the group contact is removed in Part 5 (form rewrite)
   contact: {
     subtitle: string;
     title: string;
@@ -41,10 +21,6 @@ export type TranslationDictionary = {
     sendButton: string;
     successMessage: string;
     errorMessage: string;
-  };
-  footer: {
-    madeWith: string;
-    by: string;
   };
   projectsPage: {
     subtitle: string;
@@ -82,9 +58,9 @@ export type TranslationDictionary = {
   experience: {
     sectionTitle: string;
     subtitle: string;
+    subtitleShort: string;
     current: string;
     showDetails: string;
-    hideDetails: string;
     duration: {
       and: string;
       year: string;
@@ -150,30 +126,10 @@ const pt: TranslationDictionary = {
     projects: 'Projetos',
   },
   hero: {
-    greeting: 'Olá, meu nome é',
-    // legacy: removed in Part 3
-    contactButton: 'Entre em contato',
-    role: 'Desenvolvedor front-end e analista de testes',
+    photoAlt: 'Retrato de Eduardo Gazolla sorrindo, com as mãos entrelaçadas.',
     nowPrefix: 'Agora:',
     nowAt: 'na',
     viewProjects: 'Ver projetos',
-  },
-  knownTechs: {
-    subtitle: 'competências',
-    title: 'Conhecimentos',
-    experience: 'de experiência',
-  },
-  highlightedProjects: {
-    subtitle: 'destaques',
-    title: 'Projetos',
-    interested: 'Se interessou?',
-    viewAll: 'Ver todos',
-  },
-  workExperience: {
-    subtitle: 'experiências',
-    title: 'Experiência Profissional',
-    description:
-      'Estou sempre aberto a novos desafios e projetos emocionantes. Vamos trabalhar juntos para criar soluções incríveis para sua empresa!',
   },
   contact: {
     subtitle: 'contato',
@@ -184,10 +140,6 @@ const pt: TranslationDictionary = {
     sendButton: 'Enviar mensagem',
     successMessage: 'Mensagem enviada com sucesso!',
     errorMessage: 'Ocorreu um erro ao enviar a mensagem. Tente novamente.',
-  },
-  footer: {
-    madeWith: 'Feito com',
-    by: 'por',
   },
   projectsPage: {
     subtitle: 'projetos',
@@ -227,10 +179,10 @@ const pt: TranslationDictionary = {
   experience: {
     sectionTitle: 'Experiência',
     subtitle:
-      'O suporte de TI à qualidade de software: cada etapa me deixou mais perto de quem usa o que eu construo.',
+      'Do suporte de TI à qualidade de software: cada etapa me deixou mais perto de quem usa o que eu construo.',
+    subtitleShort: 'Do suporte de TI à qualidade de software.',
     current: 'atual',
     showDetails: 'Ver detalhes',
-    hideDetails: 'Ocultar detalhes',
     duration: {
       and: 'e',
       year: 'ano',
@@ -299,30 +251,10 @@ const en: TranslationDictionary = {
     projects: 'Projects',
   },
   hero: {
-    greeting: 'Hello, my name is',
-    // legacy: removed in Part 3
-    contactButton: 'Get in touch',
-    role: 'Front-end developer and test analyst',
+    photoAlt: 'Portrait of Eduardo Gazolla smiling, hands clasped.',
     nowPrefix: 'Now:',
     nowAt: 'at',
     viewProjects: 'View projects',
-  },
-  knownTechs: {
-    subtitle: 'skills',
-    title: 'Knowledge',
-    experience: 'of experience',
-  },
-  highlightedProjects: {
-    subtitle: 'highlights',
-    title: 'Projects',
-    interested: 'Interested?',
-    viewAll: 'View all',
-  },
-  workExperience: {
-    subtitle: 'experiences',
-    title: 'Work Experience',
-    description:
-      'I am always open to new challenges and exciting projects. Let\'s work together to create amazing solutions for your company!',
   },
   contact: {
     subtitle: 'contact',
@@ -333,10 +265,6 @@ const en: TranslationDictionary = {
     sendButton: 'Send message',
     successMessage: 'Message sent successfully!',
     errorMessage: 'An error occurred while sending the message. Please try again.',
-  },
-  footer: {
-    madeWith: 'Made with',
-    by: 'by',
   },
   projectsPage: {
     subtitle: 'projects',
@@ -377,9 +305,9 @@ const en: TranslationDictionary = {
     sectionTitle: 'Experience',
     subtitle:
       'From IT support to software quality: each step brought me closer to the people who use what I build.',
+    subtitleShort: 'From IT support to software quality.',
     current: 'present',
-    showDetails: 'Show details',
-    hideDetails: 'Hide details',
+    showDetails: 'Details',
     duration: {
       and: 'and',
       year: 'year',
