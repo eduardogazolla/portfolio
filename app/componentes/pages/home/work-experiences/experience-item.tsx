@@ -33,8 +33,15 @@ const Description = ({ description }: Pick<WorkExperience, "description">) =>
 
 const CurrentExperience = ({ experience }: { experience: WorkExperience }) => {
   const { locale, translations } = useLanguage();
-  const { startDate, endDate, role, companyName, companyUrl, technologies, description } =
-    experience;
+  const {
+    startDate,
+    endDate,
+    role,
+    companyName,
+    companyUrl,
+    technologies,
+    description,
+  } = experience;
 
   return (
     <article className="flex flex-col gap-3 border-t border-line pb-8 pt-7 md:flex-row md:gap-12 md:py-10">
@@ -45,10 +52,18 @@ const CurrentExperience = ({ experience }: { experience: WorkExperience }) => {
             <span className="absolute inset-0 rounded-full bg-accent" />
           </span>
           <span className="text-label-m text-text">
-            {formatPeriod(startDate, endDate, locale, translations.experience.current)}
+            {formatPeriod(
+              startDate,
+              endDate,
+              locale,
+              translations.experience.current,
+            )}
           </span>
         </div>
-        <span className="text-label-m text-text-muted md:text-body-m">
+        <span
+          suppressHydrationWarning
+          className="text-label-m text-text-muted md:text-body-m"
+        >
           {formatDuration(startDate, endDate, translations.experience.duration)}
         </span>
       </div>
@@ -56,7 +71,10 @@ const CurrentExperience = ({ experience }: { experience: WorkExperience }) => {
       <div className="flex flex-col items-start gap-3">
         <h3 className="font-display text-h3 text-text">{role}</h3>
         {companyUrl ? (
-          <Link href={companyUrl} className="gap-1.5 text-label-m text-text-muted">
+          <Link
+            href={companyUrl}
+            className="gap-1.5 text-label-m text-text-muted"
+          >
             {companyName}
           </Link>
         ) : (
@@ -73,13 +91,17 @@ const PreviousExperience = ({ experience }: { experience: WorkExperience }) => {
   const { locale, translations } = useLanguage();
   const [open, setOpen] = useState(false);
   const panelId = useId();
-  const { startDate, endDate, role, companyName, technologies, description } = experience;
+  const { startDate, endDate, role, companyName, technologies, description } =
+    experience;
 
-  const period = formatPeriod(startDate, endDate, locale, translations.experience.current);
+  const period = formatPeriod(
+    startDate,
+    endDate,
+    locale,
+    translations.experience.current,
+  );
   const hasDetails = Boolean(description) || technologies.length > 0;
-  const toggleLabel = `${
-    open ? translations.experience.hideDetails : translations.experience.showDetails
-  }: ${role}`;
+  const toggleLabel = `${translations.experience.showDetails}: ${role}`;
 
   return (
     <article className="border-t border-line">
@@ -88,7 +110,9 @@ const PreviousExperience = ({ experience }: { experience: WorkExperience }) => {
           {period}
         </span>
         <div className="flex min-w-0 flex-1 flex-col gap-1 md:flex-row md:items-baseline md:gap-3.5">
-          <h3 className="font-display text-label-m text-text md:text-h3">{role}</h3>
+          <h3 className="font-display text-label-m text-text md:text-h3">
+            {role}
+          </h3>
           <p className="text-label-m text-text-muted">
             <span>{companyName}</span>
             <span className="md:hidden">
@@ -97,34 +121,43 @@ const PreviousExperience = ({ experience }: { experience: WorkExperience }) => {
             </span>
           </p>
         </div>
-        <span className="hidden text-label-m text-text-muted md:block">
-          {formatDuration(startDate, endDate, translations.experience.duration)}
-        </span>
-        {hasDetails && (
-          <button
-            type="button"
-            aria-expanded={open}
-            aria-controls={panelId}
-            aria-label={toggleLabel}
-            onClick={() => setOpen((value) => !value)}
-            className="-mr-3 flex size-11 shrink-0 items-center justify-center text-text"
+        <div className="flex items-center gap-5">
+          <span
+            suppressHydrationWarning
+            className="hidden text-label-m text-text-muted md:block"
           >
-            <svg
-              aria-hidden="true"
-              viewBox="0 0 20 20"
-              className={cn(
-                "size-5 transition-transform duration-base ease-in-out motion-reduce:transition-none",
-                open && "rotate-45"
-              )}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
+            {formatDuration(
+              startDate,
+              endDate,
+              translations.experience.duration,
+            )}
+          </span>
+          {hasDetails && (
+            <button
+              type="button"
+              aria-expanded={open}
+              aria-controls={panelId}
+              aria-label={toggleLabel}
+              onClick={() => setOpen((value) => !value)}
+              className="-mr-3 flex size-11 shrink-0 md:-ml-3 items-center justify-center text-text"
             >
-              <path d="M10 3v14M3 10h14" />
-            </svg>
-          </button>
-        )}
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 20 20"
+                className={cn(
+                  "size-5 transition-transform duration-base ease-in-out motion-reduce:transition-none",
+                  open && "rotate-45",
+                )}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              >
+                <path d="M10 3v14M3 10h14" />
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
 
       {hasDetails && (
@@ -133,13 +166,15 @@ const PreviousExperience = ({ experience }: { experience: WorkExperience }) => {
           inert={!open}
           className={cn(
             "grid transition-[grid-template-rows] duration-base ease-in-out motion-reduce:transition-none",
-            open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+            open ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
           )}
         >
           <div className="min-h-0 overflow-hidden">
             <div className="flex flex-col items-start gap-4 pb-6 md:pl-[288px]">
               <Description description={description} />
-              {technologies.length > 0 && <Badges technologies={technologies} />}
+              {technologies.length > 0 && (
+                <Badges technologies={technologies} />
+              )}
             </div>
           </div>
         </div>
@@ -148,7 +183,10 @@ const PreviousExperience = ({ experience }: { experience: WorkExperience }) => {
   );
 };
 
-export const ExperienceItem = ({ experience, isCurrent }: ExperienceItemProps) =>
+export const ExperienceItem = ({
+  experience,
+  isCurrent,
+}: ExperienceItemProps) =>
   isCurrent ? (
     <CurrentExperience experience={experience} />
   ) : (

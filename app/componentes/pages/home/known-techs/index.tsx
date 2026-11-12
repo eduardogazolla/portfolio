@@ -14,7 +14,7 @@ export const KnownTechs = ({ techs }: KnownTechsProps) => {
 
   // Oldest first. ISO dates compare correctly as plain strings.
   const sorted = [...(techs ?? [])].sort((a, b) =>
-    a.startDate.localeCompare(b.startDate)
+    a.startDate < b.startDate ? -1 : a.startDate > b.startDate ? 1 : 0
   );
 
   return (
@@ -25,7 +25,7 @@ export const KnownTechs = ({ techs }: KnownTechsProps) => {
         className="md:flex-row md:items-end md:justify-between"
         subtitleClassName="md:text-body-l"
       />
-      <ul className="mt-8 grid grid-cols-1 md:grid-cols-2 md:gap-x-10">
+      <ul className="mt-6 md:mt-8 grid grid-cols-1 md:grid-cols-2 md:gap-x-10">
         {sorted.map((tech) => (
           <KnowTech key={tech.name} tech={tech} />
         ))}

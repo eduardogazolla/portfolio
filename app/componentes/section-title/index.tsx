@@ -1,9 +1,10 @@
+import type { ReactNode } from "react";
 import { cn } from "@/app/lib/utils";
 import { InspectOutline } from "@/app/componentes/inspect-outline";
 
 type SectionTitleProps = {
   title: string;
-  subtitle?: string;
+  subtitle?: ReactNode;
   /** Heading level. Defaults to h2. */
   as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   className?: string;

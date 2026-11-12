@@ -14,7 +14,7 @@ export const KnowTech = ({ tech }: KnownTechProps) => {
 
   return (
     <li className="flex items-center justify-between gap-4 border-t border-line py-3 md:py-5">
-      <span className="font-display text-body-m font-semibold text-text md:text-h3">
+      <span className="font-display text-label-m font-semibold text-text md:text-h3">
         {tech.name}
       </span>
       <span className="shrink-0 text-label-m text-text-muted">

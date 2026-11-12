@@ -19,11 +19,16 @@ export const WorkExperience = ({ experiences }: WorkExperienceProps) => {
     <section id="experience" className="container pt-28 md:pt-10 md:pb-40">
       <SectionTitle
         title={translations.experience.sectionTitle}
-        subtitle={translations.experience.subtitle}
-        className="md:flex-row md:items-end md:justify-between md:gap-12"
-        subtitleClassName="md:max-w-[600px] md:text-body-l"
+        subtitle={
+          <>
+            <span className="md:hidden">{translations.experience.subtitleShort}</span>
+            <span className="hidden md:inline">{translations.experience.subtitle}</span>
+          </>
+        }
+        className="lg:flex-row lg:items-end lg:justify-between lg:gap-12"
+        subtitleClassName="md:text-body-l lg:max-w-[600px]"
       />
-      <div className="mt-8 md:mt-14">
+      <div className="mt-4 md:mt-14">
         {experiences.map((experience) => (
           <ExperienceItem
             key={`${experience.companyName}-${experience.startDate}`}

@@ -75,9 +75,9 @@ export type TranslationDictionary = {
   experience: {
     sectionTitle: string;
     subtitle: string;
+    subtitleShort: string;
     current: string;
     showDetails: string;
-    hideDetails: string;
     duration: {
       and: string;
       year: string;
@@ -214,9 +214,9 @@ const pt: TranslationDictionary = {
     sectionTitle: 'Experiência',
     subtitle:
       'Do suporte de TI à qualidade de software: cada etapa me deixou mais perto de quem usa o que eu construo.',
+    subtitleShort: 'Do suporte de TI à qualidade de software.',
     current: 'atual',
     showDetails: 'Ver detalhes',
-    hideDetails: 'Ocultar detalhes',
     duration: {
       and: 'e',
       year: 'ano',
@@ -356,9 +356,9 @@ const en: TranslationDictionary = {
     sectionTitle: 'Experience',
     subtitle:
       'From IT support to software quality: each step brought me closer to the people who use what I build.',
+    subtitleShort: 'From IT support to software quality.',
     current: 'present',
-    showDetails: 'Show details',
-    hideDetails: 'Hide details',
+    showDetails: 'Details',
     duration: {
       and: 'and',
       year: 'year',
