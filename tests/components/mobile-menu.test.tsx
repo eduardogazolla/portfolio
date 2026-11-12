@@ -1,5 +1,5 @@
 /// <reference types="@testing-library/jest-dom" />
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MobileMenu } from '../../app/componentes/header/mobile-menu';
 import { LanguageProvider } from '../../app/componentes/context/language-context';
@@ -143,8 +143,10 @@ describe('MobileMenu', () => {
     await screen.findByRole('dialog');
     await user.keyboard('{Escape}');
     expect(trigger).toHaveFocus();
-    await user.tab();
-    expect(screen.queryByRole('dialog')?.contains(document.activeElement) ?? false).toBe(false);
+    // The exiting dialog must neither hijack Tab (trap off) nor be reachable (inert).
+    expect(fireEvent.keyDown(trigger, { key: 'Tab' })).toBe(true);
+    const exiting = screen.queryByRole('dialog', { hidden: true });
+    if (exiting) expect(exiting).toHaveAttribute('inert');
   });
 
   it('makes the page content inert while open and restores it on close', async () => {

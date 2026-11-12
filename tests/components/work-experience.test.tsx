@@ -156,9 +156,17 @@ describe('WorkExperience', () => {
       expect(panel).toHaveTextContent('Consultas e alterações em banco de dados.');
     });
 
-    it('has a "+" when there are only technologies', () => {
+    it('has no "+" when there are only technologies', () => {
       renderExperience([current, withTechsOnly]);
-      expect(screen.getAllByRole('button')).toHaveLength(1);
+      expect(screen.queryByRole('button')).toBeNull();
+    });
+
+    it('shows no technology badges inside the panel', () => {
+      renderExperience([current, { ...withDescription, technologies: [{ name: 'Excel' }] }]);
+      const button = screen.getByRole('button');
+      const panel = document.getElementById(button.getAttribute('aria-controls') ?? '');
+      expect(panel).toHaveTextContent('Consultas e alterações em banco de dados.');
+      expect(panel).not.toHaveTextContent('Excel');
     });
 
     it('has no "+" without description and without technologies', () => {
