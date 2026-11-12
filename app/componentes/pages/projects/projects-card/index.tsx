@@ -26,6 +26,7 @@ export const ProjectCard = ({ project, viewProjectLabel, priority = false }: Pro
           fill
           loading={priority ? "eager" : undefined}
           fetchPriority={priority ? "high" : undefined}
+          quality={70}
           sizes="(min-width: 1440px) 1200px, (min-width: 1024px) calc(100vw - 80px), calc(100vw - 40px)"
           className="object-cover"
         />
