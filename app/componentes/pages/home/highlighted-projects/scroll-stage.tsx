@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, type ReactNode } from "react";
-import { motion, useMotionTemplate, useMotionValueEvent, useScroll, useTransform } from "motion/react";
+import { motion, useMotionTemplate, useScroll, useTransform } from "motion/react";
 import { useMediaQuery } from "@/app/lib/use-media-query";
 import { usePrefersReducedMotion } from "@/app/lib/use-prefers-reduced-motion";
 
@@ -10,7 +10,7 @@ type ScrollStageProps = {
   text: ReactNode;
 };
 
-// Motion board 12:21, "Projeto em destaque (Home)": the card is pinned for 1 screen of scroll; the
+// Motion board 12:21, "Projeto em destaque (Home)": the card is pinned for 1.5 screens of scroll; the
 // image grows 0.86 -> 1 while its radius goes 14 -> 0 (clip-path: it repaints each frame, but it is
 // the only way to round a scaling frame without distorting the corners; the scale itself is
 // transform-only); then title and text fade in. Linked to scroll progress, no timing curve.
@@ -36,13 +36,15 @@ export const ScrollStage = ({ media, text }: ScrollStageProps) => {
   const opacity = useTransform(scrollYProgress, [TEXT_START, TEXT_END], [0, 1], { clamp: true });
   const y = useTransform(scrollYProgress, [TEXT_START, TEXT_END], [12, 0], { clamp: true });
 
-  // Re-render only when the text crosses the threshold, not per frame.
-  const [textVisible, setTextVisible] = useState(false);
-  useMotionValueEvent(scrollYProgress, "change", (v) => setTextVisible(v >= TEXT_START));
+  // The text stays focusable (no `inert`: it would make Tab skip "Ver projeto"). Focus inside it
+  // shows it at once, overriding the scroll-linked fade instead of scrolling the page, which
+  // would make the pinned card jump. The browser already keeps the focused link in view because
+  // the card is sticky. Blur hands control back to the scroll progress.
+  const [focusWithin, setFocusWithin] = useState(false);
 
   return (
-    // 100svh pinned + 100svh of scroll = 200svh.
-    <div ref={ref} className="[@media(min-width:768px)_and_(min-height:640px)]:motion-safe:h-[200svh]">
+    // 100svh pinned + 150svh of scroll = 250svh (spec T076: sticky for 1.5 screens).
+    <div ref={ref} className="[@media(min-width:768px)_and_(min-height:640px)]:motion-safe:h-[250svh]">
       <div
         className="flex flex-col gap-6 md:gap-8 [@media(min-width:768px)_and_(min-height:640px)]:motion-safe:sticky [@media(min-width:768px)_and_(min-height:640px)]:motion-safe:top-0 [@media(min-width:768px)_and_(min-height:640px)]:motion-safe:h-[100svh] [@media(min-width:768px)_and_(min-height:640px)]:motion-safe:justify-center [@media(min-width:768px)_and_(min-height:640px)]:motion-safe:py-16"
       >
@@ -53,7 +55,13 @@ export const ScrollStage = ({ media, text }: ScrollStageProps) => {
         >
           {media}
         </motion.div>
-        <motion.div style={active ? { opacity, y } : undefined} inert={active && !textVisible}>
+        <motion.div
+          style={active ? (focusWithin ? { opacity: 1, y: 0 } : { opacity, y }) : undefined}
+          onFocusCapture={() => setFocusWithin(true)}
+          onBlurCapture={(e) => {
+            if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocusWithin(false);
+          }}
+        >
           {text}
         </motion.div>
       </div>

@@ -102,4 +102,25 @@ describe('HighlightedProjects', () => {
     renderSection([makeProject({ thumbnail: undefined })]);
     expect(screen.getByTestId('project-thumbnail')).toHaveAttribute('aria-hidden', 'true');
   });
+
+  describe('pinned stage (desktop, motion allowed)', () => {
+    const original = window.matchMedia;
+    beforeEach(() => {
+      window.matchMedia = ((query: string) => ({
+        matches: query.includes('min-width: 768px'),
+        media: query,
+        addEventListener: () => {},
+        removeEventListener: () => {},
+      })) as unknown as typeof window.matchMedia;
+    });
+    afterEach(() => {
+      window.matchMedia = original;
+    });
+
+    it('keeps the text out of `inert` so Tab reaches "Ver projeto"', () => {
+      renderSection([makeProject()]);
+      const link = screen.getByRole('link', { name: /Ver projeto/ });
+      expect(link.closest('[inert]')).toBeNull();
+    });
+  });
 });

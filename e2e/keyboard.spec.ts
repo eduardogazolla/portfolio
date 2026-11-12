@@ -80,3 +80,17 @@ test("back to top moves focus to main", async ({ page }) => {
   await expect(page.locator("#main")).toBeFocused();
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
 });
+
+test("Tab from 'Ver todos os projetos' reaches a visible 'Ver projeto' in the pinned card", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "the pinned scroll stage is desktop only");
+  await page.goto("/");
+  const all = page.getByRole("link", { name: pt.projectsSection.viewAllProjects }).first();
+  await all.focus();
+  await page.keyboard.press("Tab");
+  const link = page.getByRole("link", { name: pt.projectsSection.viewProject, exact: true });
+  await expect(link).toBeFocused();
+  await expect(link).toBeInViewport();
+  await expect
+    .poll(() => link.evaluate((el) => getComputedStyle(el.closest("[style]") as HTMLElement).opacity))
+    .toBe("1");
+});

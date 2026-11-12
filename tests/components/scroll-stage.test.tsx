@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react';
+import { fireEvent, waitFor, render, screen } from '@testing-library/react';
 import { motionValue } from 'motion/react';
 import { ScrollStage } from '../../app/componentes/pages/home/highlighted-projects/scroll-stage';
 
@@ -27,9 +27,9 @@ beforeEach(() => {
 });
 
 describe('ScrollStage', () => {
-  it('pins the card for 1 extra viewport on desktop', () => {
+  it('pins the card for 1.5 extra viewports on desktop', () => {
     const { container } = setup();
-    expect((container.firstElementChild as HTMLElement).className).toMatch(/:h-\[200svh\]/);
+    expect((container.firstElementChild as HTMLElement).className).toMatch(/:h-\[250svh\]/);
     expect(screen.getByTestId('media').closest('[class*="sticky"]')).not.toBeNull();
   });
 
@@ -71,13 +71,18 @@ describe('ScrollStage', () => {
     expect(screen.getByTestId('media')).toBe(before);
   });
 
-  it('makes the faded-out text inert until it starts to appear, then releases it', () => {
+  it('never makes the text inert, so Tab can reach it while it is faded out', () => {
+    setup();
+    expect(screen.getByTestId('text').parentElement!).not.toHaveAttribute('inert');
+  });
+
+  it('shows the text at once when focus enters it, and hands back to scroll on blur', async () => {
     setup();
     const wrapper = screen.getByTestId('text').parentElement!;
-    expect(wrapper).toHaveAttribute('inert');
-    act(() => mockProgress.set(0.7));
-    expect(wrapper).not.toHaveAttribute('inert');
-    act(() => mockProgress.set(0.3));
-    expect(wrapper).toHaveAttribute('inert');
+    expect(wrapper.getAttribute('style') ?? '').toMatch(/opacity:\s*0/);
+    fireEvent.focusIn(screen.getByTestId('text'));
+    await waitFor(() => expect(wrapper.getAttribute('style') ?? '').toMatch(/opacity:\s*1/));
+    fireEvent.focusOut(screen.getByTestId('text'));
+    await waitFor(() => expect(wrapper.getAttribute('style') ?? '').toMatch(/opacity:\s*0/));
   });
 });
