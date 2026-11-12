@@ -3,13 +3,13 @@ import { LanguageProvider, useLanguage } from '../../app/componentes/context/lan
 import { LanguageSelector } from '../../app/componentes/header/language-selector';
 
 const mockReducedMotion = jest.fn(() => false);
+jest.mock('@/app/lib/use-prefers-reduced-motion', () => ({ usePrefersReducedMotion: () => mockReducedMotion() }));
 let lastPillProps: { transition?: { duration?: number } } | undefined;
 jest.mock('motion/react', () => {
   const actual = jest.requireActual('motion/react');
   const React = jest.requireActual('react');
   return {
     ...actual,
-    useReducedMotion: () => mockReducedMotion(),
     motion: {
       ...actual.motion,
       span: (props: { transition?: { duration?: number }; layoutId?: string; className?: string }) => {

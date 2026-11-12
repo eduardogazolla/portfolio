@@ -1,9 +1,10 @@
 "use client";
 
 import { useId } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { useLanguage } from "@/app/componentes/context/language-context";
 import { spring } from "@/app/lib/motion";
+import { usePrefersReducedMotion } from "@/app/lib/use-prefers-reduced-motion";
 import { cn } from "@/app/lib/utils";
 import type { Locale } from "@/app/utils/translations";
 
@@ -14,7 +15,7 @@ const OPTIONS: { locale: Locale; label: string }[] = [
 
 export const LanguageSelector = () => {
   const { locale, setLocale, translations } = useLanguage();
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = usePrefersReducedMotion();
   // Per-instance id so several switches on a page never share one pill.
   const pillId = useId();
 

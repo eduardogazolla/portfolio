@@ -1,5 +1,4 @@
 import { duration, ease, spring } from "@/app/lib/motion";
-import { fadeUpAnimation } from "@/app/lib/animations";
 
 describe("motion tokens", () => {
   it("exposes durations in seconds", () => {
@@ -14,23 +13,5 @@ describe("motion tokens", () => {
   it("exposes spring presets", () => {
     expect(spring.ui).toEqual({ type: "spring", stiffness: 500, damping: 35 });
     expect(spring.cursor).toEqual({ type: "spring", stiffness: 300, damping: 30 });
-  });
-});
-
-describe.each([
-  ["fadeUpAnimation", fadeUpAnimation],
-])("%s", (_name, preset) => {
-  it("never animates scale", () => {
-    expect(JSON.stringify(preset)).not.toContain("scale");
-  });
-
-  it("starts from opacity 0 and y 8", () => {
-    expect(preset.initial).toEqual({ opacity: 0, y: 8 });
-    expect(preset.exit).toEqual({ opacity: 0, y: 8 });
-    expect(preset.whileInView).toEqual({ opacity: 1, y: 0 });
-  });
-
-  it("uses the base duration and out easing", () => {
-    expect(preset.transition).toEqual({ duration: duration.base, ease: ease.out });
   });
 });

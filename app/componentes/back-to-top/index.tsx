@@ -1,16 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { TbArrowNarrowUp } from "react-icons/tb";
+import { AnimatePresence, motion } from "motion/react";
 import { useLanguage } from "@/app/componentes/context/language-context";
 import { duration, ease } from "@/app/lib/motion";
+import { usePrefersReducedMotion } from "@/app/lib/use-prefers-reduced-motion";
 
 const SHOW_AFTER_VIEWPORTS = 1.5;
 
 export const BackToTop = () => {
   const { translations } = useLanguage();
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = usePrefersReducedMotion();
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -44,7 +44,9 @@ export const BackToTop = () => {
             aria-label={translations.a11y.backToTop}
             className="flex size-12 items-center justify-center rounded-full border border-line bg-surface text-text transition-transform duration-fast ease-out active:scale-[0.97] motion-reduce:active:scale-100 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-text [@media(hover:hover)_and_(pointer:fine)]:hover:text-bg"
           >
-            <TbArrowNarrowUp size={20} aria-hidden="true" />
+            <svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M10 16V4M5 9l5-5 5 5" />
+            </svg>
           </button>
         </motion.div>
       )}

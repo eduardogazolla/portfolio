@@ -5,12 +5,13 @@ import type { MouseEvent as ReactMouseEvent } from "react";
 import { usePathname } from "next/navigation";
 import NextLink from "next/link";
 import { createPortal } from "react-dom";
-import { AnimatePresence, motion, useIsPresent, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useIsPresent } from "motion/react";
 import { Button } from "@/app/componentes/button";
 import { Link } from "@/app/componentes/link";
 import { useLanguage } from "@/app/componentes/context/language-context";
 import { LanguageSelector } from "./language-selector";
 import { ease } from "@/app/lib/motion";
+import { usePrefersReducedMotion } from "@/app/lib/use-prefers-reduced-motion";
 import { getNavCurrent } from "@/app/lib/nav";
 import { cn } from "@/app/lib/utils";
 import type { Social } from "@/app/types/page-info";
@@ -57,7 +58,7 @@ type MenuDialogProps = {
 const MenuDialog = ({ id, label, origin, socials, onClose }: MenuDialogProps) => {
   const { translations } = useLanguage();
   const pathname = usePathname();
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = usePrefersReducedMotion();
   const dialogRef = useRef<HTMLDivElement>(null);
   // False while AnimatePresence plays the exit: the trap must let go so focus can return to the trigger.
   const isPresent = useIsPresent();
