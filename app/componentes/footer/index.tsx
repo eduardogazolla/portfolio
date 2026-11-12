@@ -1,8 +1,5 @@
-"use client";
-
-import { Link } from "@/app/componentes/link";
+import { SocialLinks } from "@/app/componentes/social-links";
 import { Social } from "@/app/types/page-info";
-import { getSocialLabel } from "@/app/utils/socials";
 
 type FooterProps = {
   socials: Social[];
@@ -14,17 +11,7 @@ export const Footer = ({ socials }: FooterProps) => (
       <p className="text-label-m text-text-muted">
         © {new Date().getFullYear()} Eduardo Gazolla
       </p>
-      {socials.length > 0 && (
-        <ul className="flex flex-wrap gap-x-5 gap-y-2 lg:gap-x-7">
-          {socials.map((social) => (
-            <li key={social.url}>
-              <Link href={social.url} className="text-label-m">
-                {getSocialLabel(social)}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      <SocialLinks socials={socials} className="gap-x-5 gap-y-2 lg:gap-x-7" />
     </div>
   </footer>
 );
