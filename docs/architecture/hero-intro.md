@@ -14,6 +14,19 @@ only under that attribute, so content stays visible without JS.
 - A 4 s timer removes the attribute as a last resort, so content can never stay hidden.
 - The script is a constant string with no interpolated data.
 
+## Why not `next/script` `beforeInteractive`
+
+In the App Router, `<Script strategy="beforeInteractive">` does not emit the code inline. It
+renders a tiny script that pushes the payload onto `self.__next_s`, and Next's client bootstrap
+(`app-bootstrap`) injects and runs it after the main bundle loads, just before hydration. That can
+be after first paint, so the hidden initial state would flash. A plain inline `<script>` in
+`<head>` runs while the parser reaches it, before paint, so it stays (Next 16.4.6). The
+`suppressHydrationWarning` on `<html>` stays too, because the script sets `data-intro`.
+
+Known dev-only noise: React logs "Encountered a script tag while rendering React component" when
+the root layout is rendered on the client (seen on the 404 page). The script has already run in the
+server HTML, so behavior is unaffected.
+
 ## CSP
 
 A future strict Content-Security-Policy must allow this script through a `sha256-...` hash of

@@ -240,7 +240,7 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 **Independent Test**: `/nao-existe` e `/projects/nao-existe` (quickstart V11).
 
 - [x] T065 [P] [US7] Teste do 404 em `tests/components/not-found.test.tsx`: "404" grande dentro do InspectOutline `dashed` com `aria-hidden`; `h1` "Essa página não existe."; texto de apoio; botões "Voltar para a Home" (`/`) e "Ver projetos" (`/projects`); textos em EN quando EN está ativo
-- [x] T066 [US7] Refazer `app/not-found.tsx` conforme o Figma `12:385` / `12:583` (remover `react-icons` daqui) e confirmar que o `notFound()` do detalhe cai nele; verificar a Parte 4 (gates, Playwright MCP com `9:137`, `24:242`, `9:227`, `12:385` e mobile) e abrir o PR
+- [ ] T066 [US7] Refazer `app/not-found.tsx` conforme o Figma `12:385` / `12:583` (remover `react-icons` daqui) e confirmar que o `notFound()` do detalhe cai nele; verificar a Parte 4 (gates, Playwright MCP com `9:137`, `24:242`, `9:227`, `12:385` e mobile) e abrir o PR (código e verificações prontos; PR pendente)
 
 **Checkpoint**: Parte 4 entregue.
 
