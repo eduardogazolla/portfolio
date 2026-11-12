@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../button";
 import { Input } from "../form/input";
@@ -45,7 +45,7 @@ export const ContactForm = () => {
     handleSubmit,
     register,
     reset,
-    watch,
+    control,
     formState: { errors },
   } = useForm<ContactFormData>({
     mode: "onTouched",
@@ -70,7 +70,7 @@ export const ContactForm = () => {
   };
 
   const submitting = status === "submitting";
-  const messageLength = watch("message").length;
+  const messageLength = (useWatch({ control, name: "message" }) ?? "").length;
 
   return (
     <PageSection

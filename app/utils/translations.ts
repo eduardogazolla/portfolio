@@ -11,17 +11,6 @@ export type TranslationDictionary = {
     nowAt: string;
     viewProjects: string;
   };
-  // legacy: the group contact is removed in Part 5 (form rewrite)
-  contact: {
-    subtitle: string;
-    title: string;
-    namePlaceholder: string;
-    emailPlaceholder: string;
-    messagePlaceholder: string;
-    sendButton: string;
-    successMessage: string;
-    errorMessage: string;
-  };
   projectsPage: {
     subtitle: string;
     title: string;
@@ -143,16 +132,6 @@ const pt: TranslationDictionary = {
     nowPrefix: 'Agora:',
     nowAt: 'na',
     viewProjects: 'Ver projetos',
-  },
-  contact: {
-    subtitle: 'contato',
-    title: 'Vamos trabalhar juntos? Entre em contato',
-    namePlaceholder: 'Nome',
-    emailPlaceholder: 'E-mail',
-    messagePlaceholder: 'Mensagem',
-    sendButton: 'Enviar mensagem',
-    successMessage: 'Mensagem enviada com sucesso!',
-    errorMessage: 'Ocorreu um erro ao enviar a mensagem. Tente novamente.',
   },
   projectsPage: {
     subtitle: 'projetos',
@@ -282,16 +261,6 @@ const en: TranslationDictionary = {
     nowPrefix: 'Now:',
     nowAt: 'at',
     viewProjects: 'View projects',
-  },
-  contact: {
-    subtitle: 'contact',
-    title: 'Let\'s work together? Get in touch',
-    namePlaceholder: 'Name',
-    emailPlaceholder: 'Email',
-    messagePlaceholder: 'Message',
-    sendButton: 'Send message',
-    successMessage: 'Message sent successfully!',
-    errorMessage: 'An error occurred while sending the message. Please try again.',
   },
   projectsPage: {
     subtitle: 'projects',
