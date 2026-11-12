@@ -77,7 +77,7 @@ que atendem.
 - [x] T014 Trocar as fontes em `app/layout.tsx`: remover `Inter`; adicionar `Bricolage_Grotesque` (pesos 600/700/800, `axes: ['opsz']` se exigido pelo tipo, `variable: '--font-display'`), `Geist` (400/500, `--font-sans`) e manter `IBM_Plex_Mono` (400, `--font-mono`), todas com `display: 'swap'`
 - [x] T015 [P] Criar `app/lib/motion.ts` exportando `duration = { fast: 0.14, base: 0.22, slow: 0.7 }`, `ease = { out: [0.22, 1, 0.36, 1], inOut: [0.65, 0, 0.35, 1] }`, `spring = { ui: { type: 'spring', stiffness: 500, damping: 35 }, cursor: { type: 'spring', stiffness: 300, damping: 30 } }`, e substituir `app/lib/animations.ts` (que anima a partir de `scale: 0`) por variantes com opacity + `y` 8→0 usando esses tokens
 - [x] T016 Adicionar o focus ring global em `app/globals.css`: `:focus-visible` com `outline: 1px solid var(--color-accent)` e `outline-offset: 4px` (o inspect outline sem etiqueta; os cantos ficam com o componente da T019); `:focus:not(:focus-visible)` sem anel; proibir `outline: none` sem substituto
-- [ ] T017 Verificar a Parte 1: gates verdes; as páginas atuais renderizam com as fontes e cores novas sem quebrar layout (Playwright MCP em 1440 e 390); abrir o PR
+- [x] T017 Verificar a Parte 1: gates verdes; as páginas atuais renderizam com as fontes e cores novas sem quebrar layout (Playwright MCP em 1440 e 390); abrir o PR
 
 ### Parte 2 `feat/redesign-components`
 
