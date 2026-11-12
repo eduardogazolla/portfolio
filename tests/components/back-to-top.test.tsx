@@ -86,4 +86,16 @@ describe('BackToTop', () => {
     fireEvent.click(screen.getByRole('button'));
     expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'instant' });
   });
+
+  it('registers a passive scroll listener and removes the same one on unmount', () => {
+    const add = jest.spyOn(window, 'addEventListener');
+    const remove = jest.spyOn(window, 'removeEventListener');
+    const { unmount } = setup();
+    const call = add.mock.calls.find(([type]) => type === 'scroll')!;
+    expect(call[2]).toEqual({ passive: true });
+    unmount();
+    expect(remove).toHaveBeenCalledWith('scroll', call[1]);
+    add.mockRestore();
+    remove.mockRestore();
+  });
 });

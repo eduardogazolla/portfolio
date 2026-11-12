@@ -61,4 +61,19 @@ describe('Link', () => {
     setup(<Link href="/" className="extra">Home</Link>);
     expect(screen.getByRole('link')).toHaveClass('extra');
   });
+
+  it.each(['mailto:a@b.co', 'tel:+5511999999999'])('%s is a plain anchor with no new tab, hint or arrow', (href) => {
+    setup(<Link href={href}>Contato</Link>);
+    const link = screen.getByRole('link', { name: 'Contato' });
+    expect(link).toHaveAttribute('href', href);
+    expect(link).not.toHaveAttribute('target');
+    expect(link.querySelector('[data-arrow]')).toBeNull();
+  });
+
+  it('protocol-relative urls are external', () => {
+    setup(<Link href="//example.com/x">Ext</Link>);
+    const link = screen.getByRole('link', { name: 'Ext (abre em nova aba)' });
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+  });
 });

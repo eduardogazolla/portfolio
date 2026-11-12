@@ -1,6 +1,8 @@
 import NextLink from "next/link";
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from "react";
 import { cn } from "@/app/lib/utils";
+import { isExternalUrl, isSchemeUrl } from "@/app/lib/url";
+import { NewTabHint } from "@/app/componentes/link/new-tab-hint";
 
 type Variant = "primary" | "secondary";
 
@@ -36,22 +38,28 @@ const variants: Record<Variant, string> = {
   secondary: `border border-line text-text ${hoverFinePointer}:border-text`,
 };
 
-const isExternal = (href: string) => /^https?:\/\//i.test(href);
-
 export const Button = (props: ButtonProps) => {
   if (props.href !== undefined) {
     const { variant = "primary", className, href, target, rel, children, ...rest } = props;
     const classes = cn(base, variants[variant], className);
 
-    if (isExternal(href) || target === "_blank") {
+    if (isExternalUrl(href) || target === "_blank") {
       return (
         <a
-          href={href}
-          target={target}
-          rel={target === "_blank" ? "noopener noreferrer" : rel}
-          className={classes}
           {...rest}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={classes}
         >
+          {children}
+          <NewTabHint />
+        </a>
+      );
+    }
+    if (isSchemeUrl(href)) {
+      return (
+        <a {...rest} href={href} target={target} rel={rel} className={classes}>
           {children}
         </a>
       );
@@ -75,11 +83,11 @@ export const Button = (props: ButtonProps) => {
 
   return (
     <button
+      {...rest}
       type={type}
       className={cn(base, variants[variant], className)}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
-      {...rest}
     >
       {loading && (
         <span

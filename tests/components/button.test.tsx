@@ -1,5 +1,11 @@
 import { render, screen } from '@testing-library/react';
+import { LanguageProvider } from '../../app/componentes/context/language-context';
 import { Button } from '../../app/componentes/button';
+
+beforeEach(() => {
+  localStorage.clear();
+  Object.defineProperty(window.navigator, 'language', { value: 'pt-BR', configurable: true });
+});
 
 describe('Button', () => {
   it('renders a button, primary by default, with accent colors', () => {
@@ -56,7 +62,11 @@ describe('Button', () => {
   });
 
   it('link mode opens external urls safely in a new tab', () => {
-    render(<Button href="https://github.com/x" target="_blank">Repo</Button>);
+    render(
+      <LanguageProvider>
+        <Button href="https://github.com/x" target="_blank">Repo</Button>
+      </LanguageProvider>
+    );
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', 'noopener noreferrer');
@@ -65,5 +75,41 @@ describe('Button', () => {
   it('merges a custom className', () => {
     render(<Button className="extra">Ok</Button>);
     expect(screen.getByRole('button')).toHaveClass('extra');
+  });
+
+  it('external link mode adds the localized new-tab hint', () => {
+    render(
+      <LanguageProvider>
+        <Button href="https://github.com/x">Repo</Button>
+      </LanguageProvider>
+    );
+    expect(screen.getByRole('link', { name: 'Repo (abre em nova aba)' })).toHaveAttribute('target', '_blank');
+  });
+
+  it('new-tab hint is English for the en locale', () => {
+    localStorage.setItem('portfolio-gazolla:locale', 'en');
+    render(
+      <LanguageProvider>
+        <Button href="https://github.com/x">Repo</Button>
+      </LanguageProvider>
+    );
+    expect(screen.getByRole('link', { name: 'Repo (opens in a new tab)' })).toBeInTheDocument();
+  });
+
+  it('mailto links get neither new tab nor hint', () => {
+    render(<Button href="mailto:a@b.co">Mail</Button>);
+    const link = screen.getByRole('link', { name: 'Mail' });
+    expect(link).not.toHaveAttribute('target');
+  });
+
+  it('callers cannot override disabled or aria-busy while loading', () => {
+    render(
+      <Button loading disabled={false} {...({ 'aria-busy': false } as object)}>
+        Enviando…
+      </Button>
+    );
+    const btn = screen.getByRole('button');
+    expect(btn).toBeDisabled();
+    expect(btn).toHaveAttribute('aria-busy', 'true');
   });
 });
