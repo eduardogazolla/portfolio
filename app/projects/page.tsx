@@ -7,38 +7,41 @@ export const metadata = {
   title: 'Projetos'
 }
 
-const getPageData = async (): Promise<LocalizedProjectsPageData> => {
-  const query = `
-      query ProjectsQuery {
-        ptProjects: projects(locales: [pt_BR, en]) {
-          shortDescription
-          slug
-          title
-          thumbnail {
-            url
-          }
-          technologies {
-            name
-          }
-        }
-        enProjects: projects(locales: [en, pt_BR]) {
-          shortDescription
-          slug
-          title
-          thumbnail {
-            url
-          }
-          technologies {
-            name
-          }
-        }
-      }
-      `;
+// Keep in sync with the `ProjectsPage` operation in
+// specs/002-redesign/contracts/hygraph-queries.graphql.
+const query = `
+  fragment ProjectCard on Project {
+    slug
+    title
+    context
+    shortDescription
+    thumbnail {
+      url
+    }
+    technologies {
+      name
+    }
+  }
 
-  return fetchHygraphQuery(
-    query,
-    60 * 60 * 24 // 24 hours
-  );
+  query ProjectsPage {
+    ptProjects: projects(locales: [pt_BR, en]) {
+      ...ProjectCard
+    }
+    enProjects: projects(locales: [en, pt_BR]) {
+      ...ProjectCard
+    }
+  }
+`;
+
+const getPageData = async (): Promise<LocalizedProjectsPageData> => {
+  const data = await fetchHygraphQuery<Partial<LocalizedProjectsPageData>>(query, {
+    revalidate: 60 * 60 * 24, // 24 hours
+  });
+
+  return {
+    ptProjects: data?.ptProjects ?? [],
+    enProjects: data?.enProjects ?? [],
+  };
 };
 
 export default async function Projects() {

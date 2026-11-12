@@ -55,6 +55,15 @@ export type LocalizedProjectsPageData = {
 
 export type LocalizedProjectPageData = {
   ptProject: Project;
-  enProject: Project;
+  enProject: Project | null;
+  /** Total published projects (`projectsConnection.aggregate.count`). */
+  totalProjects: number;
+};
+
+/** Raw `ProjectDetail` response; either project is null when the slug does not exist. */
+export type ProjectDetailResponse = {
+  ptProject: Project | null;
+  enProject: Project | null;
+  projectsConnection: { aggregate: { count: number } };
 };
 
