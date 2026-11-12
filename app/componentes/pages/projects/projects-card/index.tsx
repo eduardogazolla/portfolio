@@ -22,7 +22,7 @@ export const ProjectCard = ({ project, viewProjectLabel, priority = false }: Pro
       {project.thumbnail?.url && (
         <Image
           src={project.thumbnail.url}
-          alt={project.title}
+          alt=""
           fill
           loading={priority ? "eager" : undefined}
           fetchPriority={priority ? "high" : undefined}

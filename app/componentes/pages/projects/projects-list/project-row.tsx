@@ -24,7 +24,7 @@ export const ProjectRow = ({ project, onHover, reserveContext = false }: Project
   >
     {project.thumbnail?.url && (
       <div className="relative aspect-[7/4] w-full overflow-hidden rounded-md bg-surface md:hidden">
-        <Image src={project.thumbnail.url} alt={project.title} fill sizes="calc(100vw - 40px)" className="object-cover" />
+        <Image src={project.thumbnail.url} alt="" fill sizes="calc(100vw - 40px)" className="object-cover" />
       </div>
     )}
     {project.context ? (

@@ -118,8 +118,21 @@ describe('ProjectsListClient a11y and layout fixes', () => {
     renderPage([makeProject()]);
     const link = screen.getByRole('link', { name: 'Ver projeto: Hour Sync' });
     expect(link).toHaveAttribute('href', '/projects/hour-sync');
-    expect(screen.getByAltText('Hour Sync')).toHaveAttribute('fetchpriority', 'high');
-    expect(screen.getByAltText('Hour Sync')).toHaveAttribute('loading', 'eager');
+    const image = screen.getByTestId('project-thumbnail').querySelector('img') as HTMLImageElement;
+    expect(image).toHaveAttribute('fetchpriority', 'high');
+    expect(image).toHaveAttribute('loading', 'eager');
+  });
+
+  it('marks thumbnails next to the linked title as decorative (no repeated title for screen readers)', () => {
+    renderPage([makeProject()]);
+    expect(screen.queryByAltText('Hour Sync')).not.toBeInTheDocument();
+    expect(screen.getByTestId('project-thumbnail').querySelector('img')).toHaveAttribute('alt', '');
+  });
+
+  it('marks row thumbnails as decorative', () => {
+    const { container } = renderPage(four);
+    expect(container.querySelectorAll('img[alt=""]').length).toBeGreaterThan(0);
+    expect(container.querySelectorAll('img:not([alt=""])')).toHaveLength(0);
   });
 
   it('reserves the context column on rows without context when another row has one', () => {
