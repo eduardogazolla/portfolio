@@ -10,7 +10,7 @@ export const PageIntroduction = () => {
   const { translations } = useLanguage();
 
   return (
-    <section className="w-full h-[450px] lg:h-[630px] bg-hero-image bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center px-2">
+    <section className="w-full h-[450px] lg:h-[630px] flex flex-col items-center justify-center px-2">
       <SectionTitle
         subtitle={translations.projectsPage.subtitle}
         title={translations.projectsPage.title}
