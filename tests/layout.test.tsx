@@ -9,7 +9,6 @@ jest.mock('next/font/google', () => {
   return { Bricolage_Grotesque: font, Geist: font, IBM_Plex_Mono: font };
 });
 jest.mock('../app/componentes/header', () => ({ Header: () => <header data-testid="header"><a href="/x">nav</a></header> }));
-jest.mock('../app/componentes/contact-form', () => ({ ContactForm: () => <section data-testid="contact" /> }));
 jest.mock('../app/componentes/footer', () => ({
   Footer: ({ socials }: { socials: unknown[] }) => <footer data-testid="footer" data-socials={socials.length} />,
 }));

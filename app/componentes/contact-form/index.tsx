@@ -45,17 +45,18 @@ export const ContactForm = () => {
   return (
     <section
       id="contact"
-      className="py-16 px-6 md:py-32 flex items-center justify-center bg-gray-950"
+      className="container flex flex-col gap-7 pt-28 md:flex-row md:justify-between md:gap-12 md:pt-10 md:pb-40"
     >
-      <div className="w-full max-w-[420px] mx-auto">
-        <SectionTitle
-          subtitle={translations.contact.subtitle}
-          title={translations.contact.title}
-          className="items-center text-center"
-        />
+      <SectionTitle
+        title={translations.contactVoice.title}
+        subtitle={translations.contactVoice.description}
+        className="gap-7 md:gap-6"
+        subtitleClassName="md:max-w-[440px] md:text-body-l"
+      />
+      <div className="w-full md:max-w-[480px] md:shrink-0">
 
         <motion.form
-          className="mt-12 w-full flex flex-col gap-4"
+          className="w-full flex flex-col gap-4"
           onSubmit={handleSubmit(onSubmit)}
           {...fadeUpAnimation}
         >

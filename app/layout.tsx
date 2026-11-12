@@ -2,7 +2,6 @@ import { Bricolage_Grotesque, Geist, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { ReactNode } from "react";
 import { Header } from "./componentes/header";
-import { ContactForm } from "./componentes/contact-form";
 import { Footer } from "./componentes/footer";
 import { BackToTop } from "./componentes/back-to-top";
 import { Toaster } from "./componentes/toaster";
@@ -97,7 +96,6 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <main id="main" tabIndex={-1} className="focus:outline-none">
             {children}
           </main>
-          <ContactForm />
           <Footer socials={socials} />
           <BackToTop />
         </LanguageProvider>

@@ -8,6 +8,7 @@ import { HeroSection } from "./hero-section";
 import { KnownTechs } from "./known-techs";
 import { HighlightedProjects } from "./highlighted-projects";
 import { WorkExperience } from "./work-experiences";
+import { ContactForm } from "@/app/componentes/contact-form";
 
 type HomeClientProps = {
   data: LocalizedHomePageData;
@@ -33,8 +34,9 @@ export const HomeClient = ({ data }: HomeClientProps) => {
         currentExperience={getCurrentExperience(workExperiences)}
       />
       <KnownTechs techs={pageData.knownTechs} />
-      <HighlightedProjects projects={pageData.highlightProjects} />
+      <HighlightedProjects projects={pageData.highlightProjects} socials={pageData.socials} />
       <WorkExperience experiences={workExperiences} />
+      <ContactForm />
     </>
   );
 };

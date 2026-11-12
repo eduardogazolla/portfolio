@@ -18,7 +18,7 @@ export const KnownTechs = ({ techs }: KnownTechsProps) => {
   );
 
   return (
-    <section className="container pt-28 md:py-[120px]">
+    <section id="stack" className="container pt-28 md:py-[120px]">
       <SectionTitle
         title={translations.stack.title}
         subtitle={translations.stack.subtitle}
