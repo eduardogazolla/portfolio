@@ -1,6 +1,5 @@
-import { PageIntroduction } from "../componentes/pages/projects/page-introduction";
 import { ProjectsListClient } from "../componentes/pages/projects/projects-list-client";
-import { LocalizedProjectsPageData } from "../types/page-info";
+import { LocalizedProjectsPageData, Social } from "../types/page-info";
 import { fetchHygraphQuery } from "../utils/fetch-hygraph-query";
 
 export const metadata = {
@@ -30,17 +29,26 @@ const query = `
     enProjects: projects(locales: [en, pt_BR]) {
       ...ProjectCard
     }
+    pages(where: { slug: "home" }, locales: [pt_BR]) {
+      socials {
+        name
+        url
+      }
+    }
   }
 `;
 
 const getPageData = async (): Promise<LocalizedProjectsPageData> => {
-  const data = await fetchHygraphQuery<Partial<LocalizedProjectsPageData>>(query, {
+  const data = await fetchHygraphQuery<Partial<Omit<LocalizedProjectsPageData, "socials">> & {
+      pages?: { socials: Social[] }[];
+    }>(query, {
     revalidate: 60 * 60 * 24, // 24 hours
   });
 
   return {
     ptProjects: data?.ptProjects ?? [],
     enProjects: data?.enProjects ?? [],
+    socials: data?.pages?.[0]?.socials ?? [],
   };
 };
 
@@ -48,7 +56,6 @@ export default async function Projects() {
   const data = await getPageData();
   return (
     <>
-      <PageIntroduction />
       <ProjectsListClient data={data} />
     </>
   );

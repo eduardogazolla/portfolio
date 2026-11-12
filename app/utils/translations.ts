@@ -74,6 +74,9 @@ export type TranslationDictionary = {
     moreComing: string;
     filterAll: string;
     projectsCount: (count: number) => string;
+    filterLabel: string;
+    noProjectsWith: (tech: string) => string;
+    clearFilter: string;
     viewProject: string;
     viewCode: string;
     viewLive: string;
@@ -197,6 +200,9 @@ const pt: TranslationDictionary = {
       'Mais projetos chegando. Enquanto isso, o que estou construindo fica no GitHub.',
     filterAll: 'Todos',
     projectsCount: (count) => `${count} ${count === 1 ? 'projeto' : 'projetos'}`,
+    filterLabel: 'Filtrar por tecnologia',
+    noProjectsWith: (tech) => `Nenhum projeto com ${tech}`,
+    clearFilter: 'Limpar filtro',
     viewProject: 'Ver projeto',
     viewCode: 'Repositório',
     viewLive: 'Ver online',
@@ -322,6 +328,9 @@ const en: TranslationDictionary = {
       'More projects coming. Meanwhile, what I am building lives on GitHub.',
     filterAll: 'All',
     projectsCount: (count) => `${count} ${count === 1 ? 'project' : 'projects'}`,
+    filterLabel: 'Filter by technology',
+    noProjectsWith: (tech) => `No project with ${tech}`,
+    clearFilter: 'Clear filter',
     viewProject: 'View project',
     viewCode: 'Repository',
     viewLive: 'View live',

@@ -51,6 +51,8 @@ export type LocalizedHomePageData = {
 export type LocalizedProjectsPageData = {
   ptProjects: Project[];
   enProjects: Project[];
+  /** Site socials (for the GitHub link in "more projects coming"). */
+  socials: Social[];
 };
 
 export type LocalizedProjectPageData = {
