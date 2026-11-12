@@ -305,8 +305,9 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 - [x] T084 [P] [US8] E2E de teclado em `e2e/keyboard.spec.ts`: o primeiro Tab mostra "Pular para o conteúdo"; percorrer cada página só com Tab, com elemento focado sempre visível (outline calculado ≠ none); voltar ao topo move o foco
 - [x] T085 [P] E2E de acessibilidade e layout em `e2e/a11y.spec.ts`: axe com tags `wcag2a`, `wcag2aa`, `wcag21aa` e `wcag22aa` sem violações em `/`, `/projects`, `/projects/hour-sync` e 404 (SC-004); `scrollWidth === clientWidth` em 360, 390, 768, 1440 e 1920 (SC-006)
 - [x] T086 Remover o que ficou órfão: `app/componentes/divider/`, `app/componentes/cms-icon/`, `react-icons` (se não houver mais uso), `public/images/hero-bg.jpeg`, `logo2.png`; conferir com `grep` antes de apagar
-- [ ] T087 Rodar o quickstart completo (V1–V16), incluindo o Lighthouse mobile em `npm run build && npm run start` (Performance ≥ 90, Acessibilidade 100, LCP < 2,5 s, CLS < 0,1); registrar os números no PR
-- [ ] T088 Revisão final: `code-simplifier` nas mudanças, `/code-review`, `frontend-reviewer` e `security-reviewer` (rota de contato e queries); corrigir os achados, rodar os gates de novo (`lint`, `test`, `build`, `test:e2e`) e abrir o PR da Parte 6
+- [x] T087 Rodar o quickstart completo (V1–V16), incluindo o Lighthouse mobile em `npm run build && npm run start` (Performance ≥ 90, Acessibilidade 100, LCP < 2,5 s, CLS < 0,1); registrar os números no PR
+  - Resultado (Lighthouse mobile simulado, mediana de 3): `/` Perf 89 · `/projects` 92 · detalhe 91; A11y 100, SEO 100, BP 100, CLS 0 em todas; **LCP 3,35–3,62 s (meta < 2,5 s não atingida)**. LCP observado ~0,3 s; o simulado é dominado por fontes (Bricolage com eixo opsz, 77 KB) e JS (~220 KB). Follow-up acordado com o usuário: tarefa de performance separada (motion sob demanda, revisão de fontes).
+- [x] T088 Revisão final: `code-simplifier` nas mudanças, `/code-review`, `frontend-reviewer` e `security-reviewer` (rota de contato e queries); corrigir os achados, rodar os gates de novo (`lint`, `test`, `build`, `test:e2e`) e abrir o PR da Parte 6
 
 ---
 
