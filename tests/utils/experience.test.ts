@@ -40,55 +40,55 @@ describe('formatDuration', () => {
   afterEach(() => jest.useRealTimers());
 
   it('formats years and months in PT', () => {
-    expect(formatDuration('2025-02-01', '2026-11-15', 'pt-BR', pt)).toBe(
+    expect(formatDuration('2025-02-01', '2026-11-15', pt)).toBe(
       '1 ano e 9 meses',
     );
   });
 
   it('formats years and months in EN', () => {
-    expect(formatDuration('2025-02-01', '2026-11-15', 'en', en)).toBe(
+    expect(formatDuration('2025-02-01', '2026-11-15', en)).toBe(
       '1 year and 9 months',
     );
   });
 
   it('pluralizes years and singularizes month in PT', () => {
-    expect(formatDuration('2024-10-01', '2026-11-15', 'pt-BR', pt)).toBe(
+    expect(formatDuration('2024-10-01', '2026-11-15', pt)).toBe(
       '2 anos e 1 mês',
     );
   });
 
   it('omits months when the remainder is zero', () => {
-    expect(formatDuration('2025-11-01', '2026-11-15', 'pt-BR', pt)).toBe(
+    expect(formatDuration('2025-11-01', '2026-11-15', pt)).toBe(
       '1 ano',
     );
   });
 
   it('shows only months under a year', () => {
-    expect(formatDuration('2026-05-01', '2026-11-15', 'pt-BR', pt)).toBe(
+    expect(formatDuration('2026-05-01', '2026-11-15', pt)).toBe(
       '6 meses',
     );
   });
 
   it('rounds months down', () => {
-    expect(formatDuration('2026-09-16', '2026-11-14', 'pt-BR', pt)).toBe(
+    expect(formatDuration('2026-09-16', '2026-11-14', pt)).toBe(
       '1 mês',
     );
   });
 
   it('has a minimum of 1 month', () => {
-    expect(formatDuration('2026-11-10', '2026-11-15', 'pt-BR', pt)).toBe(
+    expect(formatDuration('2026-11-10', '2026-11-15', pt)).toBe(
       '1 mês',
     );
-    expect(formatDuration('2026-11-10', '2026-11-15', 'en', en)).toBe(
+    expect(formatDuration('2026-11-10', '2026-11-15', en)).toBe(
       '1 month',
     );
   });
 
   it('uses today when end is missing', () => {
-    expect(formatDuration('2025-02-01', null, 'pt-BR', pt)).toBe(
+    expect(formatDuration('2025-02-01', null, pt)).toBe(
       '1 ano e 9 meses',
     );
-    expect(formatDuration('2025-02-01', undefined, 'en', en)).toBe(
+    expect(formatDuration('2025-02-01', undefined, en)).toBe(
       '1 year and 9 months',
     );
   });
