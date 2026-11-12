@@ -4,11 +4,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../button";
+import { Link } from "../link";
 import { Input } from "../form/input";
 import { Textarea } from "../form/textarea";
 import { PageSection } from "../page-section";
 import { SectionTitle } from "../section-title";
 import { useLanguage } from "@/app/componentes/context/language-context";
+import { isLinkedInSocial } from "@/app/utils/socials";
+import type { Social } from "@/app/types/page-info";
 import { CONTACT_LIMITS, createContactSchema, type ContactFormData, type ContactFormInput } from "@/app/lib/contact-schema";
 
 // `invalid` is derived from the form errors while the status is `idle`.
@@ -17,12 +20,16 @@ type Status = "idle" | "submitting" | "sent" | "failed";
 const EMPTY: ContactFormInput = { name: "", email: "", message: "", company_url: "" };
 
 // The API answers 200 { ok: true } on success; anything else counts as a failure.
+const REQUEST_TIMEOUT_MS = 15000;
+
 const sendMessage = async ({ name, email, message }: ContactFormData): Promise<boolean> => {
   try {
     const response = await fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, message }),
+      // A stalled request ends in the failed state instead of hanging on "Enviando…".
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     });
     if (!response.ok) return false;
     const body = await response.json();
@@ -32,9 +39,10 @@ const sendMessage = async ({ name, email, message }: ContactFormData): Promise<b
   }
 };
 
-export const ContactForm = () => {
+export const ContactForm = ({ socials = [] }: { socials?: Social[] }) => {
   const { locale, translations } = useLanguage();
   const t = translations.contactVoice;
+  const linkedIn = socials.find(isLinkedInSocial);
   const [status, setStatus] = useState<Status>("idle");
   const sending = useRef(false);
   const confirmationRef = useRef<HTMLHeadingElement>(null);
@@ -46,6 +54,8 @@ export const ContactForm = () => {
     register,
     reset,
     control,
+    setFocus,
+    trigger,
     formState: { errors },
   } = useForm<ContactFormInput, unknown, ContactFormData>({
     mode: "onTouched",
@@ -53,11 +63,23 @@ export const ContactForm = () => {
     defaultValues: EMPTY,
   });
 
+  // Re-run validation for the fields showing an error so the messages follow the language.
+  const errorsRef = useRef(errors);
+  errorsRef.current = errors;
+  useEffect(() => {
+    const invalid = (Object.keys(errorsRef.current) as (keyof ContactFormInput)[]).filter((field) => errorsRef.current[field]);
+    if (invalid.length > 0) void trigger(invalid);
+  }, [locale, trigger]);
+
   // Move focus to the confirmation or the failure notice once it is on screen.
+  // Coming back from the confirmation, the form remounts: put focus on its first field.
+  const previousStatus = useRef<Status>(status);
   useEffect(() => {
     if (status === "sent") confirmationRef.current?.focus();
     if (status === "failed") failureRef.current?.focus();
-  }, [status]);
+    if (status === "idle" && previousStatus.current === "sent") setFocus("name");
+    previousStatus.current = status;
+  }, [status, setFocus]);
 
   const onSubmit = async (data: ContactFormData) => {
     if (sending.current) return;
@@ -92,7 +114,8 @@ export const ContactForm = () => {
       />
       <div className="w-full md:max-w-[480px] md:shrink-0">
         <div aria-live="polite" className="sr-only">
-          {submitting ? t.submittingAnnouncement : status === "sent" ? t.sent : ""}
+          {/* The confirmation is announced by its focused heading. */}
+          {submitting ? t.submittingAnnouncement : ""}
         </div>
 
         {status === "sent" ? (
@@ -161,7 +184,17 @@ export const ContactForm = () => {
                 className="flex flex-col gap-1.5 rounded-md border border-danger px-[18px] py-4 focus:outline-none"
               >
                 <p className="text-label-m text-danger">{t.failed}</p>
-                <p className="text-body-m text-text-muted">{t.failedDescription}</p>
+                <p className="text-body-m text-text-muted">
+                  {t.failedDescription}{" "}
+                  {linkedIn ? (
+                    <Link href={linkedIn.url} target="_blank" className="text-body-m text-text underline">
+                      {t.failedLinkLabel}
+                    </Link>
+                  ) : (
+                    t.failedLinkLabel
+                  )}
+                  .
+                </p>
               </div>
             )}
             <Button type="submit" loading={submitting} className="w-full md:w-fit md:px-7 md:py-4">

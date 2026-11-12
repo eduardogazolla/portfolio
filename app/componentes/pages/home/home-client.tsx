@@ -39,7 +39,7 @@ export const HomeClient = ({ data }: HomeClientProps) => {
         socials={pageData?.socials ?? []}
       />
       <WorkExperience experiences={workExperiences} />
-      <ContactForm />
+      <ContactForm socials={pageData?.socials ?? []} />
     </>
   );
 };

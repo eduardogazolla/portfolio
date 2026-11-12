@@ -1,8 +1,8 @@
 /// <reference types="@testing-library/jest-dom" />
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ContactForm } from '../../app/componentes/contact-form';
-import { LanguageProvider } from '../../app/componentes/context/language-context';
+import { LanguageProvider, useLanguage } from '../../app/componentes/context/language-context';
 
 const copy = {
   'pt-BR': {
@@ -39,13 +39,28 @@ const respond = (ok: boolean, body: unknown, status = ok ? 200 : 502) => ({
   json: async () => body,
 });
 
-const setup = (locale: keyof typeof copy) => {
+// Settles a pending fetch inside act so React state updates are flushed.
+const settle = (call: Deferred, value: unknown, fail = false) =>
+  act(async () => {
+    if (fail) call.reject(value);
+    else call.resolve(value);
+  });
+
+const LocaleSwitch = () => {
+  const { setLocale } = useLanguage();
+  return <button onClick={() => setLocale('en')}>to-en</button>;
+};
+
+const linkedIn = { name: 'LinkedIn', url: 'https://www.linkedin.com/in/eduardo' };
+
+const setup = (locale: keyof typeof copy, socials: { name?: string | null; url: string }[] = []) => {
   localStorage.clear();
   localStorage.setItem('portfolio-gazolla:locale', locale);
   const user = userEvent.setup();
   render(
     <LanguageProvider>
-      <ContactForm />
+      <ContactForm socials={socials} />
+      <LocaleSwitch />
     </LanguageProvider>
   );
   return { user, t: copy[locale] };
@@ -105,7 +120,7 @@ describe.each(['pt-BR', 'en'] as const)('ContactForm (%s)', (locale) => {
     await waitFor(() => expect(fn).toHaveBeenCalledTimes(1));
     const sent = JSON.parse((fn.mock.calls[0] as unknown as [string, { body: string }])[1].body);
     expect(sent.company_url ?? '').toBe('');
-    calls[0].resolve(respond(true, { ok: true }));
+    await settle(calls[0], respond(true, { ok: true }));
   });
 
   it('honeypot: when filled, nothing is sent and the form looks successful', async () => {
@@ -129,14 +144,14 @@ describe.each(['pt-BR', 'en'] as const)('ContactForm (%s)', (locale) => {
     expect(screen.getByText('3/500')).toBeInTheDocument();
   });
 
-  it('submitting: disables fields and button and shows the loading label', async () => {
+  it('submitting: disables fields, marks the button busy and shows the loading label', async () => {
     const { calls } = mockFetch();
     const { user, t } = setup(locale);
     await fillValid(user, t);
     await user.click(screen.getByRole('button', { name: t.submit }));
 
     const button = await screen.findByRole('button', { name: t.submitting });
-    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute('aria-disabled', 'true');
     expect(button).toHaveAttribute('aria-busy', 'true');
     expect(screen.getByLabelText(t.name)).toBeDisabled();
     expect(screen.getByLabelText(t.email)).toBeDisabled();
@@ -167,7 +182,7 @@ describe.each(['pt-BR', 'en'] as const)('ContactForm (%s)', (locale) => {
     const { user, t } = setup(locale);
     await fillValid(user, t);
     await user.click(screen.getByRole('button', { name: t.submit }));
-    calls[0].resolve(respond(true, { ok: true }));
+    await settle(calls[0], respond(true, { ok: true }));
 
     const heading = await screen.findByRole('heading', { name: t.sent });
     await waitFor(() => expect(heading).toHaveFocus());
@@ -177,6 +192,83 @@ describe.each(['pt-BR', 'en'] as const)('ContactForm (%s)', (locale) => {
     expect(screen.getByLabelText(t.name)).toHaveValue('');
     expect(screen.getByLabelText(t.email)).toHaveValue('');
     expect(screen.getByLabelText(t.message)).toHaveValue('');
+    expect(screen.getByLabelText(t.name)).toHaveFocus();
+  });
+
+  it('submitting: the submit button keeps focus', async () => {
+    const { calls } = mockFetch();
+    const { user, t } = setup(locale);
+    await fillValid(user, t);
+    await user.click(screen.getByRole('button', { name: t.submit }));
+    const button = await screen.findByRole('button', { name: t.submitting });
+    expect(button).toHaveFocus();
+    await user.click(button);
+    expect(calls).toHaveLength(1);
+    await settle(calls[0], respond(true, { ok: true }));
+  });
+
+  it('the live region announces the submission but not the confirmation', async () => {
+    const { calls } = mockFetch();
+    const { user, t } = setup(locale);
+    await fillValid(user, t);
+    await user.click(screen.getByRole('button', { name: t.submit }));
+    const region = document.querySelector('[aria-live]') as HTMLElement;
+    await waitFor(() => expect(region.textContent).not.toBe(''));
+    await settle(calls[0], respond(true, { ok: true }));
+    await screen.findByRole('heading', { name: t.sent });
+    expect(region.textContent).toBe('');
+  });
+
+  it('re-translates visible errors when the language changes', async () => {
+    mockFetch();
+    const { user, t } = setup(locale);
+    await user.click(screen.getByRole('button', { name: t.submit }));
+    await screen.findByText(t.nameRequired);
+    await user.click(screen.getByRole('button', { name: 'to-en' }));
+    expect(await screen.findByText(copy.en.nameRequired)).toBeInTheDocument();
+    if (locale === 'pt-BR') expect(screen.queryByText(copy['pt-BR'].nameRequired)).not.toBeInTheDocument();
+  });
+
+  it('failed: LinkedIn in the notice is a new-tab link when the CMS has one', async () => {
+    const { calls } = mockFetch();
+    const { user, t } = setup(locale, [{ name: 'GitHub', url: 'https://github.com/x' }, linkedIn]);
+    await fillValid(user, t);
+    await user.click(screen.getByRole('button', { name: t.submit }));
+    await settle(calls[0], respond(false, { ok: false }, 502));
+    const alert = await screen.findByRole('alert');
+    const link = within(alert).getByRole('link', { name: /LinkedIn/ });
+    expect(link).toHaveAttribute('href', linkedIn.url);
+    expect(link).toHaveAttribute('target', '_blank');
+  });
+
+  it('failed: LinkedIn stays plain text without a LinkedIn social', async () => {
+    const { calls } = mockFetch();
+    const { user, t } = setup(locale, [{ name: 'GitHub', url: 'https://github.com/x' }]);
+    await fillValid(user, t);
+    await user.click(screen.getByRole('button', { name: t.submit }));
+    await settle(calls[0], respond(false, { ok: false }, 502));
+    const alert = await screen.findByRole('alert');
+    expect(within(alert).queryByRole('link')).not.toBeInTheDocument();
+    expect(alert).toHaveTextContent('LinkedIn');
+  });
+
+  it('a request that times out ends in the failed state', async () => {
+    const controller = new AbortController();
+    const timeout = jest.spyOn(AbortSignal, 'timeout').mockReturnValue(controller.signal);
+    global.fetch = jest.fn(
+      (_url: unknown, init?: RequestInit) =>
+        new Promise((_resolve, reject) => {
+          init?.signal?.addEventListener('abort', () => reject(new DOMException('timeout', 'TimeoutError')));
+        })
+    ) as unknown as typeof fetch;
+    const { user, t } = setup(locale);
+    await fillValid(user, t);
+    await user.click(screen.getByRole('button', { name: t.submit }));
+    await screen.findByRole('button', { name: t.submitting });
+    expect(timeout).toHaveBeenCalledWith(15000);
+    act(() => controller.abort());
+    expect(await screen.findByRole('alert')).toHaveTextContent(t.failed);
+    timeout.mockRestore();
   });
 
   it.each([
@@ -188,7 +280,7 @@ describe.each(['pt-BR', 'en'] as const)('ContactForm (%s)', (locale) => {
     const { user, t } = setup(locale);
     await fillValid(user, t);
     await user.click(screen.getByRole('button', { name: t.submit }));
-    calls[0].resolve(response);
+    await settle(calls[0], response);
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(t.failed);
@@ -204,12 +296,12 @@ describe.each(['pt-BR', 'en'] as const)('ContactForm (%s)', (locale) => {
     const { user, t } = setup(locale);
     await fillValid(user, t);
     await user.click(screen.getByRole('button', { name: t.submit }));
-    calls[0].reject(new TypeError('network'));
+    await settle(calls[0], new TypeError('network'), true);
 
     await user.click(await screen.findByRole('button', { name: t.retry }));
-    expect(await screen.findByRole('button', { name: t.submitting })).toBeDisabled();
+    expect(await screen.findByRole('button', { name: t.submitting })).toHaveAttribute('aria-disabled', 'true');
     expect(fn).toHaveBeenCalledTimes(2);
-    calls[1].resolve(respond(true, { ok: true }));
+    await settle(calls[1], respond(true, { ok: true }));
     expect(await screen.findByRole('heading', { name: t.sent })).toBeInTheDocument();
   });
 });
