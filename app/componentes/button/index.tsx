@@ -26,16 +26,14 @@ type ButtonAsLink = CommonProps &
 
 type ButtonProps = ButtonAsButton | ButtonAsLink;
 
-const hoverFinePointer = "[@media(hover:hover)_and_(pointer:fine)]:hover";
-
 const base =
   "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-label-m " +
   "transition-transform duration-fast ease-out " +
   "active:scale-[0.97] motion-reduce:active:scale-100 disabled:cursor-not-allowed disabled:opacity-60";
 
 const variants: Record<Variant, string> = {
-  primary: `bg-accent text-on-accent ${hoverFinePointer}:bg-text`,
-  secondary: `border border-line text-text ${hoverFinePointer}:border-text`,
+  primary: "bg-accent text-on-accent [@media(hover:hover)_and_(pointer:fine)]:hover:bg-text",
+  secondary: "border border-line text-text [@media(hover:hover)_and_(pointer:fine)]:hover:border-text",
 };
 
 export const Button = (props: ButtonProps) => {

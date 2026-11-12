@@ -12,15 +12,13 @@ type LinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
   arrow?: boolean;
 };
 
-const hoverFinePointer = "[@media(hover:hover)_and_(pointer:fine)]";
-
 export const Link = ({ className, children, href, target, rel, arrow, ...props }: LinkProps) => {
   const external = isExternalUrl(href) || target === "_blank";
   const showArrow = arrow ?? external;
 
   const classes = cn(
     "group inline-flex items-center gap-2 text-body-m text-text duration-fast ease-out",
-    `${hoverFinePointer}:hover:text-accent`,
+    "[@media(hover:hover)_and_(pointer:fine)]:hover:text-accent",
     className
   );
 
@@ -34,7 +32,7 @@ export const Link = ({ className, children, href, target, rel, arrow, ...props }
           aria-hidden="true"
           className={cn(
             "inline-block transition-transform duration-fast ease-out",
-            `${hoverFinePointer}:group-hover:translate-x-[2px] ${hoverFinePointer}:group-hover:-translate-y-[2px]`,
+            "[@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-[2px] [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-y-[2px]",
             "motion-reduce:transform-none"
           )}
         >

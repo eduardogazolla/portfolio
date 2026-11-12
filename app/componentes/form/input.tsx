@@ -11,11 +11,11 @@ type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "id"> & {
 };
 
 export const Input = ({ label, helper, error, id, className, ref, ...props }: InputProps) => {
-  const field = useField({ id, helper, error });
+  const field = useField({ id, helper, error, describedBy: props["aria-describedby"] });
 
   return (
-    <div className="w-full">
-      <FieldLabel htmlFor={field.fieldId}>{label}</FieldLabel>
+    <div className="group flex w-full flex-col gap-2.5">
+      <FieldLabel htmlFor={field.fieldId} error={!!error}>{label}</FieldLabel>
       <div className="relative">
         <input
           {...props}

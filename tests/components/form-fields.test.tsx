@@ -55,10 +55,33 @@ describe.each([
     expect(lines[1].className).toMatch(/peer-focus:scale-x-100/);
   });
 
-  it('turns the line danger on error', () => {
+  it('turns the line danger on error and hides the accent overlay', () => {
     const { container } = render(<Field label="Nome" error="Erro" />);
     const lines = container.querySelectorAll('[aria-hidden="true"]');
     expect(lines[0].className).toMatch(/bg-danger/);
+    expect(lines[1].className).toMatch(/(^|\s)hidden(\s|$)/);
+  });
+
+  it('keeps the label muted, text on focus-within and on error', () => {
+    const { rerender } = render(<Field label="Nome" />);
+    const label = screen.getByText('Nome');
+    expect(label.className).toMatch(/text-text-muted/);
+    expect(label.className).toMatch(/group-focus-within:text-text/);
+    expect(label.parentElement?.className).toMatch(/(^|\s)group(\s|$)/);
+    rerender(<Field label="Nome" error="Erro" />);
+    expect(screen.getByText('Nome').className).toMatch(/(^|\s)text-text(\s|$)/);
+  });
+
+  it('merges a caller aria-describedby with the helper id', () => {
+    render(<Field label="Nome" helper="Ajuda" aria-describedby="extra" />);
+    const field = screen.getByLabelText('Nome');
+    const helper = screen.getByText('Ajuda');
+    expect(field.getAttribute('aria-describedby')).toBe(`extra ${helper.id}`);
+  });
+
+  it('keeps only the caller aria-describedby when there is no message', () => {
+    render(<Field label="Nome" aria-describedby="extra" />);
+    expect(screen.getByLabelText('Nome')).toHaveAttribute('aria-describedby', 'extra');
   });
 });
 

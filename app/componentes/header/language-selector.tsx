@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { useLanguage } from "@/app/componentes/context/language-context";
 import { spring } from "@/app/lib/motion";
@@ -14,12 +15,14 @@ const OPTIONS: { locale: Locale; label: string }[] = [
 export const LanguageSelector = () => {
   const { locale, setLocale, translations } = useLanguage();
   const reduceMotion = useReducedMotion();
+  // Per-instance id so several switches on a page never share one pill.
+  const pillId = useId();
 
   return (
     <div
       role="group"
       aria-label={translations.a11y.languageGroup}
-      className="inline-flex items-center rounded-sm border border-line p-0.5"
+      className="inline-flex items-center gap-0.5 rounded-full border border-line p-1"
     >
       {OPTIONS.map((option) => {
         const active = option.locale === locale;
@@ -32,15 +35,15 @@ export const LanguageSelector = () => {
               if (!active) setLocale(option.locale);
             }}
             className={cn(
-              "relative rounded-sm px-3 py-1 font-mono text-mono-s transition-colors duration-fast ease-out motion-reduce:transition-none",
+              "relative rounded-full px-3 py-1.5 text-label-m transition-colors duration-fast ease-out motion-reduce:transition-none",
               active ? "text-on-accent" : "text-text-muted hover:text-text"
             )}
           >
             {active && (
               <motion.span
-                layoutId="language-pill"
+                layoutId={pillId}
                 aria-hidden="true"
-                className="absolute inset-0 rounded-sm bg-accent"
+                className="absolute inset-0 rounded-full bg-text"
                 transition={reduceMotion ? { duration: 0 } : spring.ui}
               />
             )}

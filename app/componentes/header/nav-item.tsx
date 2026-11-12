@@ -9,8 +9,6 @@ type NavItemProps = {
   href: string;
 };
 
-const hoverFinePointer = "[@media(hover:hover)_and_(pointer:fine)]";
-
 export const NavItem = ({ label, href }: NavItemProps) => {
   const isActive = usePathname() === href;
 
@@ -20,7 +18,7 @@ export const NavItem = ({ label, href }: NavItemProps) => {
       aria-current={isActive ? "page" : undefined}
       className={cn(
         "inline-flex items-center gap-2 text-label-m text-text-muted transition-colors duration-fast ease-out motion-reduce:transition-none",
-        `${hoverFinePointer}:hover:text-text`,
+        "[@media(hover:hover)_and_(pointer:fine)]:hover:text-text",
         isActive && "text-text"
       )}
     >

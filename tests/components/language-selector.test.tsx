@@ -2,6 +2,24 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import { LanguageProvider, useLanguage } from '../../app/componentes/context/language-context';
 import { LanguageSelector } from '../../app/componentes/header/language-selector';
 
+const mockReducedMotion = jest.fn(() => false);
+let lastPillProps: { transition?: { duration?: number } } | undefined;
+jest.mock('motion/react', () => {
+  const actual = jest.requireActual('motion/react');
+  const React = jest.requireActual('react');
+  return {
+    ...actual,
+    useReducedMotion: () => mockReducedMotion(),
+    motion: {
+      ...actual.motion,
+      span: (props: { transition?: { duration?: number }; layoutId?: string; className?: string }) => {
+        lastPillProps = props;
+        return React.createElement('span', { 'aria-hidden': 'true', className: props.className });
+      },
+    },
+  };
+});
+
 const LocaleDisplay = () => {
   const { locale, translations } = useLanguage();
   return (
@@ -17,6 +35,8 @@ const renderWithLanguage = (ui: React.ReactElement) =>
 
 beforeEach(() => {
   localStorage.clear();
+  lastPillProps = undefined;
+  mockReducedMotion.mockReturnValue(false);
   Object.defineProperty(window.navigator, 'language', { value: 'pt-BR', configurable: true });
 });
 
@@ -84,5 +104,22 @@ describe('LanguageSelector', () => {
     const en = screen.getByRole('button', { name: 'EN' });
     expect(pt.querySelector('[aria-hidden="true"]')).not.toBeNull();
     expect(en.querySelector('[aria-hidden="true"]')).toBeNull();
+  });
+
+  it('uses a spring transition normally and an instant one with reduced motion', () => {
+    const { unmount } = renderWithLanguage(<LanguageSelector />);
+    expect(lastPillProps?.transition).toMatchObject({ type: 'spring' });
+    unmount();
+    mockReducedMotion.mockReturnValue(true);
+    renderWithLanguage(<LanguageSelector />);
+    expect(lastPillProps?.transition).toEqual({ duration: 0 });
+  });
+
+  it('styles the pill and container fully rounded with the Figma colors', () => {
+    renderWithLanguage(<LanguageSelector />);
+    expect(screen.getByRole('group').className).toMatch(/rounded-full/);
+    const pt = screen.getByRole('button', { name: 'PT' });
+    expect(pt.className).toMatch(/text-on-accent/);
+    expect(pt.querySelector('span')?.className).toMatch(/bg-text/);
   });
 });
