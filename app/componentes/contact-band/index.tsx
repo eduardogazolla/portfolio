@@ -16,7 +16,7 @@ export const ContactBand = () => {
       innerClassName="flex flex-col gap-5 md:flex-row md:items-center md:justify-between md:gap-12"
     >
       <div className="flex flex-col gap-5 md:gap-4">
-        <h2 className="font-display text-[56px] font-extrabold leading-[0.92] tracking-[-0.03em] text-text md:text-[88px]">
+        <h2 className="font-display text-display-cta-s text-text md:text-display-cta">
           {title}
         </h2>
         <p className="text-body-m text-text-muted md:text-body-l">{bandDescription}</p>

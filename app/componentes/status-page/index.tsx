@@ -21,7 +21,7 @@ export const StatusPage = ({ code, label, title, description, children }: Status
     innerClassName="flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-20"
   >
     <div aria-hidden="true" className="relative w-fit select-none px-3 py-2 lg:px-6 lg:py-3">
-      <span className="block font-display text-[160px] font-extrabold leading-[0.88] tracking-[-0.04em] text-text lg:text-[360px]">
+      <span className="block font-display text-display-status-s text-text lg:text-display-status">
         {code}
       </span>
       <InspectOutline variant="dashed" label={label} />

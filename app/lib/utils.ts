@@ -9,6 +9,11 @@ const twMerge = extendTailwindMerge({
             {
                 text: [
                     'display-xl',
+                    'display-title-s',
+                    'display-status-s',
+                    'display-status',
+                    'display-cta-s',
+                    'display-cta',
                     'display-l',
                     'h1',
                     'h2',
