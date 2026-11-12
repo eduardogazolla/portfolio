@@ -16,6 +16,12 @@ const projects = [
   project('d', []),
 ];
 
+const withoutTechs = [
+  { slug: 'n', technologies: null },
+  { slug: 'u' },
+  ...projects,
+];
+
 describe('getProjectsLayout', () => {
   it.each([
     [0, 'featured'],
@@ -44,6 +50,17 @@ describe('filterProjectsByTech', () => {
 
   it('returns empty for a tech nobody has', () => {
     expect(filterProjectsByTech(projects, 'Go')).toEqual({ projects: [], count: 0 });
+  });
+});
+
+describe('projects with null or missing technologies', () => {
+  it('filterProjectsByTech skips them without crashing', () => {
+    expect(filterProjectsByTech(withoutTechs, 'React').projects.map((p) => p.slug)).toEqual(['a', 'b']);
+    expect(filterProjectsByTech(withoutTechs, 'all').count).toBe(6);
+  });
+
+  it('getUniqueTechs ignores them', () => {
+    expect(getUniqueTechs(withoutTechs)).toEqual(['Java', 'Next', 'Node', 'React']);
   });
 });
 
