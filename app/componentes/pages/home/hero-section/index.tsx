@@ -4,16 +4,16 @@ import { useRef } from "react";
 import Image from "next/image";
 import { useReducedMotion } from "motion/react";
 import { Button } from "@/app/componentes/button";
-import { Link } from "@/app/componentes/link";
+import { SocialLinks } from "@/app/componentes/social-links";
 import { RichText } from "@/app/componentes/rich-text";
 import { useLanguage } from "@/app/componentes/context/language-context";
 import { HomePageInfo } from "@/app/types/page-info";
 import { WorkExperience } from "@/app/types/work-experience";
-import { getSocialLabel } from "@/app/utils/socials";
 import { HeroIntro } from "./hero-intro";
 
 type HeroSectionProps = {
-  homeInfo: HomePageInfo;
+  /** CMS page data; null when it failed to load (the shell still renders). */
+  homeInfo: HomePageInfo | null;
   /** The open experience, or null when there is none (hides the "Agora:" line). */
   currentExperience: WorkExperience | null;
 };
@@ -27,6 +27,8 @@ export const HeroSection = ({ homeInfo, currentExperience }: HeroSectionProps) =
   const { translations } = useLanguage();
   const reduceMotion = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
+
+  const profilePictureUrl = homeInfo?.profilePicture?.url;
 
   const handleContact = () => {
     const contact = document.getElementById("contact");
@@ -45,7 +47,7 @@ export const HeroSection = ({ homeInfo, currentExperience }: HeroSectionProps) =
       <HeroIntro rootRef={sectionRef} />
       <div className="mx-auto grid w-full max-w-content lg:grid-cols-[minmax(0,1fr)_400px]">
         <div className="flex min-w-0 flex-col">
-          {homeInfo.role && (
+          {homeInfo?.role && (
             <p data-hero="role" className="text-label-m text-text-muted">
               {homeInfo.role}
             </p>
@@ -70,9 +72,11 @@ export const HeroSection = ({ homeInfo, currentExperience }: HeroSectionProps) =
             </span>
           </h1>
 
-          <div data-hero="bio" className="mt-6 max-w-[560px] text-body-m text-text-muted lg:mt-11 lg:text-body-l">
-            <RichText content={homeInfo.introduction.raw} />
-          </div>
+          {homeInfo?.introduction?.raw && (
+            <div data-hero="bio" className="mt-6 max-w-[560px] text-body-m text-text-muted lg:mt-11 lg:text-body-l">
+              <RichText content={homeInfo.introduction.raw} />
+            </div>
+          )}
 
           <div data-hero="actions" className="mt-6 flex flex-wrap gap-3 lg:mt-10">
             <Button onClick={handleContact} className="px-7 py-4">
@@ -85,19 +89,21 @@ export const HeroSection = ({ homeInfo, currentExperience }: HeroSectionProps) =
         </div>
 
         <div className="mt-6 flex min-w-0 flex-col lg:mt-0 lg:pt-12">
-          <div
-            data-hero="photo"
-            className="relative aspect-[350/400] w-full overflow-hidden rounded-md lg:aspect-auto lg:h-[480px]"
-          >
-            <Image
-              src={homeInfo.profilePicture.url}
-              alt={translations.hero.photoAlt}
-              fill
-              priority
-              sizes="(min-width: 1024px) 400px, calc(100vw - 40px)"
-              className="object-cover"
-            />
-          </div>
+          {profilePictureUrl && (
+            <div
+              data-hero="photo"
+              className="relative aspect-[350/400] w-full overflow-hidden rounded-md lg:aspect-auto lg:h-[480px]"
+            >
+              <Image
+                src={profilePictureUrl}
+                alt={translations.hero.photoAlt}
+                fill
+                priority
+                sizes="(min-width: 1024px) 400px, calc(100vw - 40px)"
+                className="object-cover"
+              />
+            </div>
+          )}
 
           {currentExperience && (
             <p data-hero="status" className="mt-5 flex items-center gap-2.5 text-label-m text-text-muted">
@@ -106,15 +112,11 @@ export const HeroSection = ({ homeInfo, currentExperience }: HeroSectionProps) =
             </p>
           )}
 
-          <ul data-hero="socials" className="mt-6 flex flex-wrap gap-x-6 gap-y-2 lg:mt-auto lg:gap-x-7 lg:pb-5 lg:pt-8">
-            {homeInfo.socials.map((social) => (
-              <li key={social.url}>
-                <Link href={social.url} className="text-label-m">
-                  {getSocialLabel(social)}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <SocialLinks
+            socials={homeInfo?.socials ?? []}
+            data-hero="socials"
+            className="mt-6 gap-x-6 gap-y-2 lg:mt-auto lg:gap-x-7 lg:pb-5 lg:pt-8"
+          />
         </div>
       </div>
     </section>

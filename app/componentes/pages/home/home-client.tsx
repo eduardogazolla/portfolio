@@ -18,8 +18,8 @@ export const HomeClient = ({ data }: HomeClientProps) => {
   const { locale } = useLanguage();
 
   const base = data.ptPage ?? data.enPage;
-  if (!base) return null;
-  const pageData = pickLocale(base, data.enPage, locale);
+  // Without page data the hero shell and the contact form still render.
+  const pageData = base ? pickLocale(base, data.enPage, locale) : null;
 
   const workExperiences = pickLocale(
     data.ptWorkExperiences,
@@ -33,8 +33,11 @@ export const HomeClient = ({ data }: HomeClientProps) => {
         homeInfo={pageData}
         currentExperience={getCurrentExperience(workExperiences)}
       />
-      <KnownTechs techs={pageData.knownTechs} />
-      <HighlightedProjects projects={pageData.highlightProjects} socials={pageData.socials} />
+      <KnownTechs techs={pageData?.knownTechs ?? []} />
+      <HighlightedProjects
+        projects={pageData?.highlightProjects ?? []}
+        socials={pageData?.socials ?? []}
+      />
       <WorkExperience experiences={workExperiences} />
       <ContactForm />
     </>

@@ -30,10 +30,10 @@ const current: WorkExperience = {
   technologies: [],
 };
 
-const renderHero = (experience: WorkExperience | null = current) =>
+const renderHero = (experience: WorkExperience | null = current, info: HomePageInfo | null = homeInfo) =>
   render(
     <LanguageProvider>
-      <HeroSection homeInfo={homeInfo} currentExperience={experience} />
+      <HeroSection homeInfo={info} currentExperience={experience} />
     </LanguageProvider>
   );
 
@@ -102,5 +102,24 @@ describe('HeroSection', () => {
     renderHero();
     expect(document.documentElement).not.toHaveAttribute('data-intro');
     expect(screen.getByRole('heading', { level: 1 })).toBeVisible();
+  });
+
+  it('renders without photo, introduction or role', () => {
+    const { container } = renderHero(null, { ...homeInfo, role: null, introduction: undefined, profilePicture: undefined });
+    expect(screen.getByRole('heading', { level: 1, name: 'Eduardo Gazolla' })).toBeInTheDocument();
+    expect(container.querySelector('img')).toBeNull();
+    expect(container.querySelector('[data-hero="bio"]')).toBeNull();
+  });
+
+  it('renders the shell with no page info at all', () => {
+    const { container } = renderHero(null, null);
+    expect(screen.getByRole('heading', { level: 1, name: 'Eduardo Gazolla' })).toBeInTheDocument();
+    expect(container.querySelector('[data-hero="socials"]')).toBeNull();
+    expect(screen.getByRole('link', { name: /projetos/i })).toBeInTheDocument();
+  });
+
+  it('omits the socials list when there are none', () => {
+    const { container } = renderHero(null, { ...homeInfo, socials: [] });
+    expect(container.querySelector('ul')).toBeNull();
   });
 });

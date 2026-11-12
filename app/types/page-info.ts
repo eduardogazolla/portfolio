@@ -9,10 +9,10 @@ export type Social = {
 
 export type HomePageInfo = {
   role?: string | null;
-  introduction: {
+  introduction?: {
     raw: RichTextContent;
   };
-  profilePicture: {
+  profilePicture?: {
     url: string;
   };
   socials: Social[];

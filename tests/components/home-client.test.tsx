@@ -4,10 +4,6 @@ import { HomeClient } from '../../app/componentes/pages/home/home-client';
 import { LanguageProvider } from '../../app/componentes/context/language-context';
 import type { HomePageInfo, LocalizedHomePageData } from '../../app/types/page-info';
 
-jest.mock('../../app/componentes/pages/home/hero-section', () => ({
-  HeroSection: () => <section data-testid="hero" />,
-}));
-
 const page: HomePageInfo = {
   role: 'Dev',
   introduction: { raw: { children: [] } },
@@ -56,7 +52,7 @@ describe('HomeClient', () => {
     );
     expect(container.querySelectorAll('#contact')).toHaveLength(1);
     const ids = Array.from(container.querySelectorAll('section')).map(
-      (s) => s.id || s.getAttribute('data-testid')
+      (s) => s.id || (s.querySelector('h1') ? 'hero' : '')
     );
     const order = ['hero', 'stack', 'projects', 'experience', 'contact'];
     const positions = order.map((id) => ids.indexOf(id));
@@ -71,5 +67,17 @@ describe('HomeClient', () => {
       </LanguageProvider>
     );
     expect(getByRole('heading', { name: 'Vamos conversar?' })).toBeInTheDocument();
+  });
+
+  it('still renders the hero shell and the contact section without page data', () => {
+    const { container, getByRole } = render(
+      <LanguageProvider>
+        <HomeClient
+          data={{ ptPage: null, enPage: null, ptWorkExperiences: [], enWorkExperiences: [] }}
+        />
+      </LanguageProvider>
+    );
+    expect(getByRole('heading', { level: 1, name: 'Eduardo Gazolla' })).toBeInTheDocument();
+    expect(container.querySelectorAll('#contact')).toHaveLength(1);
   });
 });
