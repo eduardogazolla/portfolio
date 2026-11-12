@@ -32,6 +32,12 @@ export const isGitHubSocial = ({ url }: SocialLike): boolean => {
   return host === 'github.com' || host === 'www.github.com';
 };
 
+/** True when the URL's host is linkedin.com or one of its subdomains (www., br., ...). */
+export const isLinkedInSocial = ({ url }: SocialLike): boolean => {
+  const host = parseHostname(url);
+  return host === 'linkedin.com' || host.endsWith('.linkedin.com');
+};
+
 /** Link label: the CMS name, else a known-host label, else the bare domain. */
 export const getSocialLabel = ({ name, url }: SocialLike): string => {
   const trimmed = name?.trim();
