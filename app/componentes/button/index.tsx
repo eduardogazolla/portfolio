@@ -14,7 +14,10 @@ type ButtonAsButton = CommonProps &
   Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> & {
     href?: undefined;
     type?: "button" | "submit" | "reset";
-    /** Disables the button, sets aria-busy and shows a spinner. Pass the loading text as children. */
+    /**
+     * Sets aria-busy and aria-disabled, shows a spinner and ignores clicks. The button is not natively
+     * disabled, so a focused button keeps focus. Pass the loading text as children.
+     */
     loading?: boolean;
   };
 
@@ -32,7 +35,7 @@ const base =
   "active:scale-[0.97] motion-reduce:active:scale-100 disabled:cursor-not-allowed disabled:opacity-60 aria-busy:cursor-progress aria-busy:opacity-100";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-accent text-on-accent [@media(hover:hover)_and_(pointer:fine)]:hover:bg-text",
+  primary: "bg-accent text-on-accent [@media(hover:hover)_and_(pointer:fine)]:[&:not(:disabled):not([aria-busy=true])]:hover:bg-text",
   secondary: "border border-line text-text [@media(hover:hover)_and_(pointer:fine)]:hover:border-text",
 };
 
@@ -74,6 +77,7 @@ export const Button = (props: ButtonProps) => {
     className,
     loading = false,
     disabled,
+    onClick,
     type = "button",
     children,
     ...rest
@@ -84,8 +88,10 @@ export const Button = (props: ButtonProps) => {
       {...rest}
       type={type}
       className={cn(base, variants[variant], className)}
-      disabled={disabled || loading}
+      disabled={disabled}
       aria-busy={loading || undefined}
+      aria-disabled={loading || undefined}
+      onClick={loading ? (event) => event.preventDefault() : onClick}
     >
       {loading && (
         <span
