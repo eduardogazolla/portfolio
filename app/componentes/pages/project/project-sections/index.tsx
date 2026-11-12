@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { PageSection } from "@/app/componentes/page-section";
 import { duration, ease } from "@/app/lib/motion";
 import { ProjectSection } from "@/app/types/projects";
@@ -10,10 +10,8 @@ type ProjectSectionsProps = {
   sections: ProjectSection[];
 };
 
-// Figma 9:291 (desktop) / 11:456 (mobile). Under reduced motion the images stay at full size.
+// Figma 9:291 (desktop) / 11:456 (mobile). The app-wide MotionConfig (reducedMotion="user") drops the transform under reduced motion.
 export const ProjectSections = ({ sections }: ProjectSectionsProps) => {
-  const reduceMotion = useReducedMotion();
-
   if (sections.length === 0) return null;
 
   return (
@@ -24,8 +22,8 @@ export const ProjectSections = ({ sections }: ProjectSectionsProps) => {
           {section.image?.url && (
             <motion.div
               className="relative aspect-[350/220] overflow-hidden rounded-[12px] bg-surface md:aspect-[1200/640] md:rounded-md"
-              initial={reduceMotion ? false : { scale: 0.96 }}
-              whileInView={reduceMotion ? undefined : { scale: 1 }}
+              initial={{ scale: 0.96 }}
+              whileInView={{ scale: 1 }}
               viewport={{ once: true, margin: "0px 0px -10% 0px" }}
               transition={{ duration: duration.slow, ease: ease.out }}
             >

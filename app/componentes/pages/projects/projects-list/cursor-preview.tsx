@@ -5,13 +5,13 @@ import Image from "next/image";
 import {
   AnimatePresence,
   motion,
-  useReducedMotion,
   useSpring,
   useTransform,
   useVelocity,
   type SpringOptions,
 } from "motion/react";
 import { spring } from "@/app/lib/motion";
+import { usePrefersReducedMotion } from "@/app/lib/use-prefers-reduced-motion";
 
 const MAX_TILT = 6;
 const VELOCITY_FOR_MAX_TILT = 1500;
@@ -34,7 +34,7 @@ const useCanHover = () => useSyncExternalStore(subscribeHover, getCanHover, () =
 /** Image that trails the mouse with a spring and tilts (up to ±6°) with its velocity. */
 export const CursorPreview = ({ src }: CursorPreviewProps) => {
   const canHover = useCanHover();
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   if (!canHover || reduced) return null;
   return <Follower src={src} />;
 };
