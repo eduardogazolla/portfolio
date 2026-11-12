@@ -95,10 +95,10 @@ async function handle(request: Request) {
   if (!parsed.success) {
     return fail(400, "invalid_input");
   }
-  const { name, email, message, website } = parsed.data;
+  const { name, email, message, company_url } = parsed.data;
 
   // Honeypot: only bots fill the hidden field. Pretend success, deliver nothing.
-  if (website.trim() !== "") {
+  if (company_url.trim() !== "") {
     return NextResponse.json({ ok: true });
   }
 

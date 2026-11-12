@@ -8,7 +8,7 @@ export const CONTACT_LIMITS = {
   emailMax: 254,
   messageMin: 1,
   messageMax: 500,
-  websiteMax: 200,
+  honeypotMax: 200,
 } as const;
 
 const CONTROL_CHARS = /[\u0000-\u001f\u007f]/g;
@@ -130,7 +130,7 @@ export const createContactSchema = (locale: ContactLocale) => {
           .max(CONTACT_LIMITS.messageMax, m.messageTooLong)
       ),
     // Honeypot: hidden in the UI, so only bots fill it. The API drops those.
-    website: z.string().max(CONTACT_LIMITS.websiteMax).default(""),
+    company_url: z.string().max(CONTACT_LIMITS.honeypotMax).default(""),
   });
 };
 

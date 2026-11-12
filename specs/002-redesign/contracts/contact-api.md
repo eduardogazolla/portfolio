@@ -15,7 +15,7 @@ Rota existente (`app/api/contact/route.ts`), ajustada para os estados do formul�
 | `name` | string, aparada, 3–100 caracteres |
 | `email` | string, e-mail válido, até 254 caracteres |
 | `message` | string, aparada, 1–500 caracteres |
-| `website` | opcional (honeypot), string até 200 caracteres, padrão `""` |
+| `company_url` | opcional (honeypot), string até 200 caracteres, padrão `""` |
 
 Caracteres de controle ASCII são removidos (em `message` ficam `
 ` e `	`) antes da validação.
@@ -31,7 +31,7 @@ O schema zod é **o mesmo** no cliente e no servidor (`app/lib/contact-schema.ts
 | `502` | `{ "ok": false, "error": "delivery_failed" }` | webhook respondeu erro ou deu timeout (10 s) | `failed` |
 | `500` | `{ "ok": false, "error": "unexpected" }` | qualquer outra falha | `failed` |
 
-- **Honeypot**: se `website` vier não vazio (após trim), responde `200 { "ok": true }` **sem** chamar o webhook. O campo é oculto no formulário (fora da tela, `tabIndex=-1`, `aria-hidden`); o cliente nunca o envia, e finge sucesso se ele estiver preenchido.
+- **Honeypot**: se `company_url` vier não vazio (após trim), responde `200 { "ok": true }` **sem** chamar o webhook. O campo é oculto no formulário (fora da tela, `tabIndex=-1`, `aria-hidden`); o cliente nunca o envia, e finge sucesso se ele estiver preenchido.
 - **Mesma origem**: se houver header `Origin` e o host dele diferir do header `host` (ou o `Origin` for inválido) → `400 invalid_input`. Sem `Origin` é aceito.
 - **Limite de corpo**: 10 KB. O corpo é lido em stream e a leitura é cancelada ao passar do limite (`400 invalid_input`), mesmo sem `Content-Length`. `Content-Length` presente mas inválido (não numérico, negativo) ou acima do limite → `400`.
 - Qualquer exceção inesperada → `500 unexpected` (log sem dados do usuário). Runtime `nodejs`; o POST ao webhook usa `maxRedirects: 0`.

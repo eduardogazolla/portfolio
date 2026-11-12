@@ -87,23 +87,24 @@ describe.each(['pt-BR', 'en'] as const)('ContactForm (%s)', (locale) => {
   it('honeypot: hidden from keyboard and assistive tech, empty by default', async () => {
     mockFetch();
     const { t } = setup(locale);
-    const hp = document.querySelector('input[name="website"]') as HTMLInputElement;
+    const hp = document.querySelector('input[name="company_url"]') as HTMLInputElement;
     expect(hp).toBeInTheDocument();
     expect(hp).toHaveAttribute('tabindex', '-1');
     expect(hp).toHaveAttribute('autocomplete', 'off');
     expect(hp.value).toBe('');
     expect(hp.closest('[aria-hidden="true"]')).not.toBeNull();
+    expect(hp.closest('[inert]')).not.toBeNull();
     expect(screen.queryByLabelText(t.name)).not.toBe(hp);
   });
 
-  it('honeypot: a real submission never sends a website value', async () => {
+  it('honeypot: a real submission never sends a company_url value', async () => {
     const { fn, calls } = mockFetch();
     const { user, t } = setup(locale);
     await fillValid(user, t);
     await user.click(screen.getByRole('button', { name: t.submit }));
     await waitFor(() => expect(fn).toHaveBeenCalledTimes(1));
     const sent = JSON.parse((fn.mock.calls[0] as unknown as [string, { body: string }])[1].body);
-    expect(sent.website ?? '').toBe('');
+    expect(sent.company_url ?? '').toBe('');
     calls[0].resolve(respond(true, { ok: true }));
   });
 
@@ -111,7 +112,7 @@ describe.each(['pt-BR', 'en'] as const)('ContactForm (%s)', (locale) => {
     const { fn } = mockFetch();
     const { user, t } = setup(locale);
     await fillValid(user, t);
-    const hp = document.querySelector('input[name="website"]') as HTMLInputElement;
+    const hp = document.querySelector('input[name="company_url"]') as HTMLInputElement;
     await user.type(hp, 'http://spam.example');
     await user.click(screen.getByRole('button', { name: t.submit }));
     expect(await screen.findByRole('heading', { name: t.sent })).toBeInTheDocument();

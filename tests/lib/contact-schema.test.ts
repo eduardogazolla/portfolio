@@ -34,7 +34,7 @@ describe("createContactSchema", () => {
         name: "Maria Silva",
         email: "maria@empresa.com",
         message: "Oi!",
-        website: "",
+        company_url: "",
       });
     }
   });
@@ -122,15 +122,15 @@ describe("createContactSchema", () => {
 });
 
 describe("createContactSchema abuse hardening", () => {
-  it("defaults the honeypot field `website` to an empty string", () => {
+  it("defaults the honeypot field `company_url` to an empty string", () => {
     const result = createContactSchema("pt").safeParse(valid);
-    expect(result.success && result.data.website).toBe("");
+    expect(result.success && result.data.company_url).toBe("");
   });
 
   it("accepts a filled honeypot (the route decides what to do) but caps it", () => {
     const schema = createContactSchema("pt");
-    expect(schema.safeParse({ ...valid, website: "http://spam" }).success).toBe(true);
-    expect(schema.safeParse({ ...valid, website: "x".repeat(201) }).success).toBe(false);
+    expect(schema.safeParse({ ...valid, company_url: "http://spam" }).success).toBe(true);
+    expect(schema.safeParse({ ...valid, company_url: "x".repeat(201) }).success).toBe(false);
   });
 
   it("strips ASCII control characters from name and email", () => {

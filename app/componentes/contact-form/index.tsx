@@ -14,7 +14,7 @@ import { CONTACT_LIMITS, createContactSchema, type ContactFormData, type Contact
 // `invalid` is derived from the form errors while the status is `idle`.
 type Status = "idle" | "submitting" | "sent" | "failed";
 
-const EMPTY: ContactFormInput = { name: "", email: "", message: "", website: "" };
+const EMPTY: ContactFormInput = { name: "", email: "", message: "", company_url: "" };
 
 // The API answers 200 { ok: true } on success; anything else counts as a failure.
 const sendMessage = async ({ name, email, message }: ContactFormData): Promise<boolean> => {
@@ -62,7 +62,7 @@ export const ContactForm = () => {
   const onSubmit = async (data: ContactFormData) => {
     if (sending.current) return;
     // Honeypot filled: a bot. Look successful, send nothing.
-    if (data.website.trim() !== "") {
+    if (data.company_url.trim() !== "") {
       reset(EMPTY);
       setStatus("sent");
       return;
@@ -147,10 +147,10 @@ export const ContactForm = () => {
               {...register("message")}
             />
             {/* Honeypot: off-screen (not display:none, so bots still fill it), out of the tab order and the accessibility tree. */}
-            <div aria-hidden="true" className="pointer-events-none absolute -left-[9999px] top-auto h-px w-px overflow-hidden">
+            <div aria-hidden="true" inert className="pointer-events-none absolute -left-[9999px] top-auto h-px w-px overflow-hidden">
               <label>
                 {t.honeypotLabel}
-                <input type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
+                <input type="text" tabIndex={-1} autoComplete="off" {...register("company_url")} />
               </label>
             </div>
             {status === "failed" && (

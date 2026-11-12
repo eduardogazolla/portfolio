@@ -234,14 +234,14 @@ describe("POST /api/contact", () => {
   });
 
   it("filled honeypot -> 200 { ok: true } without calling the webhook", async () => {
-    const res = await POST(makeRequest({ ...valid, website: " http://spam.example " }));
+    const res = await POST(makeRequest({ ...valid, company_url: " http://spam.example " }));
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ ok: true });
     expect(post).not.toHaveBeenCalled();
   });
 
   it("empty or whitespace honeypot still delivers", async () => {
-    const res = await POST(makeRequest({ ...valid, website: "   " }));
+    const res = await POST(makeRequest({ ...valid, company_url: "   " }));
     expect(res.status).toBe(200);
     expect(post).toHaveBeenCalledTimes(1);
   });
