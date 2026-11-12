@@ -18,6 +18,8 @@ export const KnownTechs = ({ techs }: KnownTechsProps) => {
     a.startDate < b.startDate ? -1 : a.startDate > b.startDate ? 1 : 0
   );
 
+  if (sorted.length === 0) return null;
+
   return (
     <PageSection id="stack" className="pt-28 md:py-[120px]">
       <SectionTitle

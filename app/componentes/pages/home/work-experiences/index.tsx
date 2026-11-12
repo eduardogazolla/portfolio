@@ -16,6 +16,8 @@ export const WorkExperience = ({ experiences }: WorkExperienceProps) => {
   const { translations } = useLanguage();
   const current = getCurrentExperience(experiences);
 
+  if (!experiences?.length) return null;
+
   return (
     <PageSection id="experience" className="pt-28 md:pt-10 md:pb-40">
       <SectionTitle

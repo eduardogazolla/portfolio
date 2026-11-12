@@ -58,4 +58,13 @@ describe('KnownTechs', () => {
     renderTechs();
     expect(screen.getAllByText(/^since 20/)).toHaveLength(4);
   });
+
+  it('renders nothing when there are no techs', () => {
+    const { container } = render(
+      <LanguageProvider>
+        <KnownTechs techs={[]} />
+      </LanguageProvider>
+    );
+    expect(container).toBeEmptyDOMElement();
+  });
 });

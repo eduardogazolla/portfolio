@@ -174,4 +174,13 @@ describe('WorkExperience', () => {
       expect(screen.queryByRole('button')).toBeNull();
     });
   });
+
+  it('renders nothing when there are no experiences', () => {
+    const { container } = render(
+      <LanguageProvider>
+        <WorkExperience experiences={[]} />
+      </LanguageProvider>
+    );
+    expect(container).toBeEmptyDOMElement();
+  });
 });
