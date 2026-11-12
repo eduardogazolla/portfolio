@@ -194,7 +194,7 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
   - rótulo `context` só se preenchido; título `h3` (sob o `h2` da seção); descrição curta; badges; "Ver projeto";
   - linha "Mais projetos chegando…" com o link GitHub vindo das sociais;
   - a seção some se não houver projeto em destaque.
-- [ ] T054 [US3] Montar a Home em `app/componentes/pages/home/home-client.tsx` na ordem do Figma (Hero, Stack, Projetos, Experiência, Contato `#contact`) e verificar a Parte 3: gates verdes, Playwright MCP com Home e menu em 1440/390 contra `6:21`, `8:29` e `8:228`, teclado e PT/EN. Abrir o PR
+- [x] T054 [US3] Montar a Home em `app/componentes/pages/home/home-client.tsx` na ordem do Figma (Hero, Stack, Projetos, Experiência, Contato `#contact`) e verificar a Parte 3: gates verdes, Playwright MCP com Home e menu em 1440/390 contra `6:21`, `8:29` e `8:228`, teclado e PT/EN. Abrir o PR
 
 **Checkpoint**: Home completa (exceto os estados do form, que ficam na Parte 5).
 
