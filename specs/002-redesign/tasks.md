@@ -296,7 +296,7 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
   - nenhuma animação de `top`/`left`/`width`/`height`;
   - entradas na viewport com `once: true`;
   - toda animação usa `useReducedMotion` ou `@media (prefers-reduced-motion)`.
-- [x] T078 [P] [US1] E2E da primeira dobra em `e2e/home.spec.ts`: V1 (elementos visíveis sem rolar em desktop e mobile), V2 (não anima de novo na sessão) e V3 (`reducedMotion: 'reduce'`, sem transform nos elementos)
+- [x] T078 [P] [US1] E2E da primeira dobra em `e2e/home.spec.ts`: V1 (elementos visíveis sem rolar em desktop; em mobile "Agora:" e sociais ficam abaixo da dobra por design, Figma `8:29`, então só são checados em desktop), V2 (não anima de novo na sessão) e V3 (`reducedMotion: 'reduce'`, sem transform nos elementos)
 - [x] T079 [P] [US2] E2E do contato em `e2e/contact.spec.ts`, com `page.route('**/api/contact')` respondendo 200 e 502: inválido → erros e foco; sucesso → "Mensagem enviada."; falha → dados mantidos e "Tentar de novo"
 - [x] T080 [P] [US4] E2E dos projetos em `e2e/projects.spec.ts`: Home → "Ver todos os projetos" → "Ver projeto" → detalhe com "Contexto" → "Todos os projetos"
 - [x] T081 [P] [US5] E2E do idioma em `e2e/language.spec.ts`: alternar PT/EN em `/`, `/projects` e no detalhe; `html[lang]` acompanha; a preferência persiste após reload
