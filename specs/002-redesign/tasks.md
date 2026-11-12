@@ -288,7 +288,7 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 
 **Purpose**: completar a tabela de motion, fechar acessibilidade de teclado e automatizar as jornadas.
 
-- [ ] T074 Instalar `@playwright/test` ^1.65 e `@axe-core/playwright` ^4.14 como devDependencies; criar `playwright.config.ts` com projetos `desktop` (1440×900) e `mobile` (390×844, `hasTouch`) e `webServer` com `npm run build && npm run start`; adicionar o script `"test:e2e": "playwright test"`; excluir `e2e/` do Jest em `jest.config.js`
+- [x] T074 Instalar `@playwright/test` ^1.65 e `@axe-core/playwright` ^4.14 como devDependencies; criar `playwright.config.ts` com projetos `desktop` (1440×900) e `mobile` (390×844, `hasTouch`) e `webServer` com `npm run build && npm run start`; adicionar o script `"test:e2e": "playwright test"`; excluir `e2e/` do Jest em `jest.config.js`
 - [x] T075 Implementar a troca de página (só a entrada: o template remonta e o App Router não segura a página antiga, então a saída de 120 ms ficou de fora; entrada com opacity e `y` 8→0 em `duration-base`; só fade com reduzir movimento) em `app/template.tsx`
 - [x] T076 Implementar o destaque da Home ligado à rolagem em `app/componentes/pages/home/highlighted-projects/index.tsx`: seção fixa por 1,5 tela; imagem de 0,86→1 com raio 14→0; depois título e texto. Com reduzir movimento, a imagem já cheia e sem fixar. Só transform e opacity (o raio via `clip-path inset(... round)`)
 - [x] T077 Revisar a tabela do board `12:21` item a item contra o código e corrigir divergências em `app/componentes/**`:
@@ -296,14 +296,14 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
   - nenhuma animação de `top`/`left`/`width`/`height`;
   - entradas na viewport com `once: true`;
   - toda animação usa `useReducedMotion` ou `@media (prefers-reduced-motion)`.
-- [ ] T078 [P] [US1] E2E da primeira dobra em `e2e/home.spec.ts`: V1 (elementos visíveis sem rolar em desktop e mobile), V2 (não anima de novo na sessão) e V3 (`reducedMotion: 'reduce'`, sem transform nos elementos)
-- [ ] T079 [P] [US2] E2E do contato em `e2e/contact.spec.ts`, com `page.route('**/api/contact')` respondendo 200 e 502: inválido → erros e foco; sucesso → "Mensagem enviada."; falha → dados mantidos e "Tentar de novo"
-- [ ] T080 [P] [US4] E2E dos projetos em `e2e/projects.spec.ts`: Home → "Ver todos os projetos" → "Ver projeto" → detalhe com "Contexto" → "Todos os projetos"
-- [ ] T081 [P] [US5] E2E do idioma em `e2e/language.spec.ts`: alternar PT/EN em `/`, `/projects` e no detalhe; `html[lang]` acompanha; a preferência persiste após reload
-- [ ] T082 [P] [US6] E2E do menu mobile em `e2e/mobile-menu.spec.ts` (projeto mobile): abre, foco preso, Esc fecha e devolve o foco
-- [ ] T083 [P] [US7] E2E do 404 em `e2e/not-found.spec.ts`: `/nao-existe` e `/projects/nao-existe` mostram o 404 com os dois botões
-- [ ] T084 [P] [US8] E2E de teclado em `e2e/keyboard.spec.ts`: o primeiro Tab mostra "Pular para o conteúdo"; percorrer cada página só com Tab, com elemento focado sempre visível (outline calculado ≠ none); voltar ao topo move o foco
-- [ ] T085 [P] E2E de acessibilidade e layout em `e2e/a11y.spec.ts`: axe com tags `wcag2a`, `wcag2aa`, `wcag21aa` e `wcag22aa` sem violações em `/`, `/projects`, `/projects/hour-sync` e 404 (SC-004); `scrollWidth === clientWidth` em 360, 390, 768, 1440 e 1920 (SC-006)
+- [x] T078 [P] [US1] E2E da primeira dobra em `e2e/home.spec.ts`: V1 (elementos visíveis sem rolar em desktop e mobile), V2 (não anima de novo na sessão) e V3 (`reducedMotion: 'reduce'`, sem transform nos elementos)
+- [x] T079 [P] [US2] E2E do contato em `e2e/contact.spec.ts`, com `page.route('**/api/contact')` respondendo 200 e 502: inválido → erros e foco; sucesso → "Mensagem enviada."; falha → dados mantidos e "Tentar de novo"
+- [x] T080 [P] [US4] E2E dos projetos em `e2e/projects.spec.ts`: Home → "Ver todos os projetos" → "Ver projeto" → detalhe com "Contexto" → "Todos os projetos"
+- [x] T081 [P] [US5] E2E do idioma em `e2e/language.spec.ts`: alternar PT/EN em `/`, `/projects` e no detalhe; `html[lang]` acompanha; a preferência persiste após reload
+- [x] T082 [P] [US6] E2E do menu mobile em `e2e/mobile-menu.spec.ts` (projeto mobile): abre, foco preso, Esc fecha e devolve o foco
+- [x] T083 [P] [US7] E2E do 404 em `e2e/not-found.spec.ts`: `/nao-existe` e `/projects/nao-existe` mostram o 404 com os dois botões
+- [x] T084 [P] [US8] E2E de teclado em `e2e/keyboard.spec.ts`: o primeiro Tab mostra "Pular para o conteúdo"; percorrer cada página só com Tab, com elemento focado sempre visível (outline calculado ≠ none); voltar ao topo move o foco
+- [x] T085 [P] E2E de acessibilidade e layout em `e2e/a11y.spec.ts`: axe com tags `wcag2a`, `wcag2aa`, `wcag21aa` e `wcag22aa` sem violações em `/`, `/projects`, `/projects/hour-sync` e 404 (SC-004); `scrollWidth === clientWidth` em 360, 390, 768, 1440 e 1920 (SC-006)
 - [x] T086 Remover o que ficou órfão: `app/componentes/divider/`, `app/componentes/cms-icon/`, `react-icons` (se não houver mais uso), `public/images/hero-bg.jpeg`, `logo2.png`; conferir com `grep` antes de apagar
 - [ ] T087 Rodar o quickstart completo (V1–V16), incluindo o Lighthouse mobile em `npm run build && npm run start` (Performance ≥ 90, Acessibilidade 100, LCP < 2,5 s, CLS < 0,1); registrar os números no PR
 - [ ] T088 Revisão final: `code-simplifier` nas mudanças, `/code-review`, `frontend-reviewer` e `security-reviewer` (rota de contato e queries); corrigir os achados, rodar os gates de novo (`lint`, `test`, `build`, `test:e2e`) e abrir o PR da Parte 6
