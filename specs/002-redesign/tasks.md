@@ -113,7 +113,7 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 - [x] T032 [P] [US1] Teste de `getCurrentExperience` em `tests/utils/experience.test.ts`: retorna a experiência sem `endDate` de `startDate` mais recente; com duas atuais, a mais recente; sem nenhuma, `null`
 - [x] T033 [P] [US1] Teste de `getSocialLabel` em `tests/utils/socials.test.ts`: usa `name` aparado; sem `name`, mapeia `github.com` → "GitHub", `linkedin.com` → "LinkedIn", `api.whatsapp.com` e `wa.me` → "WhatsApp"; host desconhecido → domínio sem `www.`/`api.`
 - [x] T034 [P] [US1] Teste de `pickLocale` em `tests/utils/locale.test.ts`: com EN ativo, campos EN vazios ou `null` caem para o valor PT, campo a campo
-- [ ] T035 [P] [US1] Teste do Hero em `tests/components/hero.test.tsx`: renderiza papel, nome em `h1`, apresentação, "Agora: <cargo> na <empresa>" só quando há experiência atual, sociais com rótulos, "Vamos conversar" e "Ver projetos"; com `sessionStorage` marcado, não anima
+- [x] T035 [P] [US1] Teste do Hero em `tests/components/hero.test.tsx`: renderiza papel, nome em `h1`, apresentação, "Agora: <cargo> na <empresa>" só quando há experiência atual, sociais com rótulos, "Vamos conversar" e "Ver projetos"; com `sessionStorage` marcado, não anima
 
 ### Implementation
 
@@ -121,7 +121,7 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 - [x] T037 [P] [US1] Implementar `getSocialLabel` em `app/utils/socials.ts` (faz a T033 passar)
 - [x] T038 [P] [US1] Implementar `pickLocale` em `app/utils/locale.ts` (faz a T034 passar) e usá-lo em `app/componentes/pages/home/home-client.tsx` no lugar do fallback atual
 - [x] T039 [US1] Ajustar a query da Home em `app/page.tsx` ao contrato `HomePage` de `specs/002-redesign/contracts/hygraph-queries.graphql`: incluir `Social.name`, `Project.context` e `workExperiences(orderBy: startDate_DESC)`; remover `technologies`, `iconSvg` e `companyLogo`; atualizar `app/types/page-info.ts`, `app/types/projects.ts` (`context?: string`) e `app/types/work-experience.ts`
-- [ ] T040 [US1] Refazer o Hero em `app/componentes/pages/home/hero-section/index.tsx` conforme o Figma `6:21` / mobile `8:29`:
+- [x] T040 [US1] Refazer o Hero em `app/componentes/pages/home/hero-section/index.tsx` conforme o Figma `6:21` / mobile `8:29`:
   - papel (`label-m`, `text-muted`);
   - nome em duas linhas `display-xl` (`clamp` até 64 px no mobile);
   - apresentação em rich text `body-l`;
@@ -138,7 +138,7 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
   - nunca bloqueia clique;
   - com `useReducedMotion`, só um fade de 140 ms e sem contorno;
   - conteúdo visível sem JS (estado inicial via classe adicionada no cliente).
-- [ ] T042 [US1] Atualizar `app/componentes/footer/index.tsx`: "© <ano atual> Eduardo Gazolla", sociais do CMS via `getSocialLabel` e BackToTop; buscar as sociais com a query `SiteSocials` em `app/layout.tsx` (server component) e passar por props
+- [x] T042 [US1] Atualizar `app/componentes/footer/index.tsx`: "© <ano atual> Eduardo Gazolla", sociais do CMS via `getSocialLabel` e BackToTop; buscar as sociais com a query `SiteSocials` em `app/layout.tsx` (server component) e passar por props
 
 **Checkpoint**: US1 funcional na Home (quickstart V1–V3).
 

@@ -1,82 +1,121 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
+import Image from "next/image";
+import { useReducedMotion } from "motion/react";
 import { Button } from "@/app/componentes/button";
 import { Link } from "@/app/componentes/link";
 import { RichText } from "@/app/componentes/rich-text";
-import { HomePageInfo } from "@/app/types/page-info";
-import { getSocialLabel } from "@/app/utils/socials";
-import Image from "next/image";
-import { HiArrowNarrowRight } from "react-icons/hi";
-import { motion } from "motion/react";
 import { useLanguage } from "@/app/componentes/context/language-context";
+import { HomePageInfo } from "@/app/types/page-info";
+import { WorkExperience } from "@/app/types/work-experience";
+import { getSocialLabel } from "@/app/utils/socials";
+import {
+  readIntroPlayed,
+  readIntroPlayedOnServer,
+  subscribeIntroFlag,
+} from "./intro-flag";
 
-type HomeSectionProps = {
+type HeroSectionProps = {
   homeInfo: HomePageInfo;
+  /** The open experience, or null when there is none (hides the "Agora:" line). */
+  currentExperience: WorkExperience | null;
 };
 
-export const HeroSection = ({ homeInfo }: HomeSectionProps) => {
+const FIRST_NAME = "Eduardo";
+const LAST_NAME = "Gazolla";
+
+// Hooks for the intro animation (hero-intro.tsx): every animatable piece carries
+// a data-hero attribute and the section exposes data-intro="play" | "skip".
+export const HeroSection = ({ homeInfo, currentExperience }: HeroSectionProps) => {
   const { translations } = useLanguage();
+  const reduceMotion = useReducedMotion();
+  const introPlayed = useSyncExternalStore(
+    subscribeIntroFlag,
+    readIntroPlayed,
+    readIntroPlayedOnServer
+  );
 
   const handleContact = () => {
-    const constactSection = document.querySelector("#contact");
-    if (constactSection) {
-      constactSection.scrollIntoView({
-        behavior: "smooth",
-      });
-    }
+    const contact = document.getElementById("contact");
+    if (!contact) return;
+    contact.scrollIntoView({ behavior: reduceMotion ? "instant" : "smooth" });
+    contact
+      .querySelector<HTMLElement>("input, textarea, select")
+      ?.focus({ preventScroll: true });
   };
-  return (
-    <section className="w-full lg:h-[755px] flex flex-col justify-end pb-10 sm:pb-32 py-32 lg:pb-[110px]">
-      <div className="container flex items-start justify-between flex-col-reverse lg:flex-row">
-        <motion.div
-          className="w-full lg:max-w-[530px]"
-          initial={{ opacity: 0, x: -100 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -100 }}
-          transition={{ duration: 0.5 }}
-        >
-          <p className="font-mono text-blue-400">{translations.hero.greeting}</p>
-          <h1 className="text-4xl font-medium mt-2">Eduardo Gazolla</h1>
 
-          <div className="text-gray-400 my-6 text-sm sm:text-base">
+  return (
+    <section
+      data-intro={introPlayed ? "skip" : "play"}
+      className="w-full px-5 pb-16 pt-[118px] lg:px-10 lg:pb-[118px] lg:pt-[154px]"
+    >
+      <div className="mx-auto grid w-full max-w-content lg:grid-cols-[minmax(0,1fr)_400px]">
+        <div className="flex min-w-0 flex-col">
+          {homeInfo.role && (
+            <p data-hero="role" className="text-label-m text-text-muted">
+              {homeInfo.role}
+            </p>
+          )}
+
+          <h1
+            data-hero="name"
+            className="-ml-1 mt-4 font-display text-display-xl tracking-[-0.04em] text-text [font-size:clamp(64px,26vw,104px)] md:[font-size:clamp(64px,22vw,168px)] lg:-ml-3 lg:mt-7 lg:[font-size:clamp(64px,calc((100vw-480px)/3.5),232px)]"
+          >
+            <span data-hero="name-line" className="relative block">
+              {FIRST_NAME}
+            </span>{" "}
+            <span data-hero="name-line" className="relative block">
+              {LAST_NAME}
+            </span>
+          </h1>
+
+          <div data-hero="bio" className="mt-6 max-w-[560px] text-body-m text-text-muted lg:mt-11 lg:text-body-l">
             <RichText content={homeInfo.introduction.raw} />
           </div>
 
-          <div className="mt-6 lg:mt-10 flex sm:items-center sm:gap-5 flex-col sm:flex-row">
-            <Button className="w-max" onClick={handleContact}>
-              {translations.hero.contactButton}
-              <HiArrowNarrowRight size={18} />
+          <div data-hero="actions" className="mt-6 flex flex-wrap gap-3 lg:mt-10">
+            <Button onClick={handleContact} className="px-7 py-4">
+              {translations.contactVoice.primaryButton}
             </Button>
-            <div className="text-gray-600 text2xl flex items-center h-20 gap-3">
-              {homeInfo.socials.map((contact, index) => (
-                <Link
-                  href={contact.url}
-                  key={`contact-${index}`}
-                  arrow={false}
-                  className="hover:text-gray-100 transition-colors"
-                >
-                  {getSocialLabel(contact)}
-                </Link>
-              ))}
-            </div>
+            <Button href="/projects" variant="secondary" className="px-7 py-4">
+              {translations.hero.viewProjects}
+            </Button>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 200, scale: 0.5 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 200, scale: 0.5 }}
-          transition={{ duration: 0.5 }}
-          className="origin-center"
-        >
-          <Image
-            width={420}
-            height={404}
-            src={homeInfo.profilePicture.url}
-            alt="Foto de perfil do Eduardo Gazolla"
-            className="w-[300px] h-[300px] lg:w-[420px] lg:h-[404px] mb-6 lg:mb-0 shadow-2xl rounder-lg object-cover rounded-3xl"
-          />
-        </motion.div>
+        <div className="mt-6 flex min-w-0 flex-col lg:mt-0 lg:pt-12">
+          <div
+            data-hero="photo"
+            className="relative aspect-[350/400] w-full overflow-hidden rounded-md lg:aspect-auto lg:h-[480px]"
+          >
+            <Image
+              src={homeInfo.profilePicture.url}
+              alt={translations.hero.photoAlt}
+              fill
+              priority
+              sizes="(min-width: 1024px) 400px, calc(100vw - 40px)"
+              className="object-cover"
+            />
+          </div>
+
+          {currentExperience && (
+            <p data-hero="status" className="mt-5 flex items-center gap-2.5 text-label-m text-text-muted">
+              <span aria-hidden="true" className="size-2 shrink-0 rounded-full bg-accent" />
+              {`${translations.hero.nowPrefix} ${currentExperience.role} ${translations.hero.nowAt} ${currentExperience.companyName}`}
+            </p>
+          )}
+
+          <ul data-hero="socials" className="mt-6 flex flex-wrap gap-x-6 gap-y-2 lg:mt-auto lg:gap-x-7 lg:pb-5 lg:pt-8">
+            {homeInfo.socials.map((social) => (
+              <li key={social.url}>
+                <Link href={social.url} className="text-label-m">
+                  {getSocialLabel(social)}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   );

@@ -6,15 +6,13 @@ export type TranslationDictionary = {
     projects: string;
   };
   hero: {
-    greeting: string;
-    // legacy: removed in Part 3
-    contactButton: string;
+    photoAlt: string;
     nowPrefix: string;
     nowAt: string;
     viewProjects: string;
   };
-  // legacy: the groups knownTechs, highlightedProjects, workExperience,
-  // contact and footer are removed in Part 3
+  // legacy: the groups knownTechs, highlightedProjects, workExperience
+  // and contact are removed in Part 3
   knownTechs: {
     subtitle: string;
     title: string;
@@ -40,10 +38,6 @@ export type TranslationDictionary = {
     sendButton: string;
     successMessage: string;
     errorMessage: string;
-  };
-  footer: {
-    madeWith: string;
-    by: string;
   };
   projectsPage: {
     subtitle: string;
@@ -149,9 +143,7 @@ const pt: TranslationDictionary = {
     projects: 'Projetos',
   },
   hero: {
-    greeting: 'Olá, meu nome é',
-    // legacy: removed in Part 3
-    contactButton: 'Entre em contato',
+    photoAlt: 'Retrato de Eduardo Gazolla sorrindo, com as mãos entrelaçadas.',
     nowPrefix: 'Agora:',
     nowAt: 'na',
     viewProjects: 'Ver projetos',
@@ -182,10 +174,6 @@ const pt: TranslationDictionary = {
     sendButton: 'Enviar mensagem',
     successMessage: 'Mensagem enviada com sucesso!',
     errorMessage: 'Ocorreu um erro ao enviar a mensagem. Tente novamente.',
-  },
-  footer: {
-    madeWith: 'Feito com',
-    by: 'por',
   },
   projectsPage: {
     subtitle: 'projetos',
@@ -297,9 +285,7 @@ const en: TranslationDictionary = {
     projects: 'Projects',
   },
   hero: {
-    greeting: 'Hello, my name is',
-    // legacy: removed in Part 3
-    contactButton: 'Get in touch',
+    photoAlt: 'Portrait of Eduardo Gazolla smiling, hands clasped.',
     nowPrefix: 'Now:',
     nowAt: 'at',
     viewProjects: 'View projects',
@@ -330,10 +316,6 @@ const en: TranslationDictionary = {
     sendButton: 'Send message',
     successMessage: 'Message sent successfully!',
     errorMessage: 'An error occurred while sending the message. Please try again.',
-  },
-  footer: {
-    madeWith: 'Made with',
-    by: 'by',
   },
   projectsPage: {
     subtitle: 'projects',

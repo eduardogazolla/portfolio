@@ -8,6 +8,8 @@ import { BackToTop } from "./componentes/back-to-top";
 import { Toaster } from "./componentes/toaster";
 import { SkipLink } from "./componentes/skip-link";
 import { LanguageProvider } from "./componentes/context/language-context";
+import { fetchHygraphQuery } from "./utils/fetch-hygraph-query";
+import type { Social } from "./types/page-info";
 
 export const metadata = {
   title: {
@@ -45,7 +47,36 @@ const plexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+// Keep in sync with the `SiteSocials` operation in
+// specs/002-redesign/contracts/hygraph-queries.graphql.
+const siteSocialsQuery = `
+  query SiteSocials {
+    pages(where: { slug: "home" }, locales: [pt_BR]) {
+      socials {
+        name
+        url
+      }
+    }
+  }
+`;
+
+const getSiteSocials = async (): Promise<Social[]> => {
+  try {
+    const result = await fetchHygraphQuery<{ pages?: { socials: Social[] }[] }>(
+      siteSocialsQuery,
+      60 * 60 * 24 // 24 horas, same as the pages
+    );
+    return result?.pages?.[0]?.socials ?? [];
+  } catch (error) {
+    // The footer still renders (without socials) if the CMS is unreachable.
+    console.error("SiteSocials query failed", error);
+    return [];
+  }
+};
+
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const socials = await getSiteSocials();
+
   return (
     <html lang="pt-BR" className={`${bricolage.variable} ${geist.variable} ${plexMono.variable}`} suppressHydrationWarning>
       <body>
@@ -59,7 +90,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             {children}
           </main>
           <ContactForm />
-          <Footer />
+          <Footer socials={socials} />
           <BackToTop />
         </LanguageProvider>
       </body>

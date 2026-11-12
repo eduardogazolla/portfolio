@@ -3,6 +3,7 @@
 import { useLanguage } from "@/app/componentes/context/language-context";
 import { LocalizedHomePageData } from "@/app/types/page-info";
 import { pickLocale } from "@/app/utils/locale";
+import { getCurrentExperience } from "@/app/utils/experience";
 import { HeroSection } from "./hero-section";
 import { KnownTechs } from "./known-techs";
 import { HighlightedProjects } from "./highlighted-projects";
@@ -27,7 +28,10 @@ export const HomeClient = ({ data }: HomeClientProps) => {
 
   return (
     <>
-      <HeroSection homeInfo={pageData} />
+      <HeroSection
+        homeInfo={pageData}
+        currentExperience={getCurrentExperience(workExperiences)}
+      />
       <KnownTechs techs={pageData.knownTechs} />
       <HighlightedProjects projects={pageData.highlightProjects} />
       <WorkExperience experiences={workExperiences} />
