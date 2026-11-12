@@ -63,14 +63,24 @@ describe('WorkExperience', () => {
     const { container } = renderExperience();
     expect(container.querySelector('section#experience')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Experiência' })).toBeInTheDocument();
-    expect(screen.getByText(/^Do suporte de TI à qualidade de software/)).toBeInTheDocument();
+    expect(screen.getByText('Do suporte de TI à qualidade de software.')).toBeInTheDocument();
+    expect(
+      screen.getByText(/^Do suporte de TI à qualidade de software: cada etapa/)
+    ).toBeInTheDocument();
   });
 
   describe('current experience', () => {
+    beforeEach(() => {
+      jest.useFakeTimers({ now: new Date('2026-11-15T12:00:00Z') });
+    });
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
     it('shows period, duration, role, company link, description and badges', () => {
       renderExperience([current]);
       expect(screen.getByText(/fev\.? 2025 – atual/)).toBeInTheDocument();
-      expect(screen.getByText(/\d+ anos?/)).toBeInTheDocument();
+      expect(screen.getByText('1 ano e 9 meses')).toBeInTheDocument();
       expect(screen.getByText('Analista de Testes')).toBeInTheDocument();
       const link = screen.getByRole('link', { name: /DB1 Global Software/ });
       expect(link).toHaveAttribute('href', 'https://www.db1.com.br');
@@ -105,6 +115,27 @@ describe('WorkExperience', () => {
       expect(button).toHaveAttribute('aria-expanded', 'true');
       await user.click(button);
       expect(button).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('keeps a fixed accessible name while toggling', async () => {
+      const user = userEvent.setup();
+      renderExperience();
+      const button = screen.getByRole('button', { name: 'Ver detalhes: Auxiliar Administrativo' });
+      await user.click(button);
+      expect(button).toHaveAccessibleName('Ver detalhes: Auxiliar Administrativo');
+      expect(button).toHaveAttribute('aria-expanded', 'true');
+    });
+
+    it('marks the closed panel inert and the open one not', async () => {
+      const user = userEvent.setup();
+      renderExperience();
+      const button = screen.getByRole('button');
+      const panel = document.getElementById(button.getAttribute('aria-controls') ?? '');
+      expect(panel).toHaveAttribute('inert');
+      await user.click(button);
+      expect(panel).not.toHaveAttribute('inert');
+      await user.click(button);
+      expect(panel).toHaveAttribute('inert');
     });
 
     it('toggles with Enter and Space', async () => {
