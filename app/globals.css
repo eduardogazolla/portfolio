@@ -48,6 +48,11 @@
   }
 }
 
+html {
+  /* Sticky header is 86px (mobile) / 98px (desktop); keep hash anchors clear of it. */
+  scroll-padding-top: 6.5rem;
+}
+
 .container {
   @apply mx-auto w-full max-w-content px-6;
 }

@@ -25,10 +25,10 @@ export const Header = ({ socials }: HeaderProps) => {
     // 86 px mobile) and the menu stays reachable after scrolling.
     <header className="sticky top-0 z-40 w-full bg-bg px-5 py-4 md:py-7 lg:px-10">
       <div className="mx-auto flex max-w-content items-center justify-between">
-        <Link href="/" className="text-label-m text-text">
+        <Link href="/" className="min-w-0 truncate text-label-m text-text">
           Eduardo Gazolla
         </Link>
-        <div className="flex items-center gap-2 md:gap-8">
+        <div className="flex shrink-0 items-center gap-2 md:gap-8">
           <nav
             aria-label={translations.a11y.mainNavigation}
             className="hidden items-center gap-8 md:flex"

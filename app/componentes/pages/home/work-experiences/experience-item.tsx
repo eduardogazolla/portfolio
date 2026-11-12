@@ -100,7 +100,7 @@ const PreviousExperience = ({ experience }: { experience: WorkExperience }) => {
     locale,
     translations.experience.current,
   );
-  const hasDetails = Boolean(description) || technologies.length > 0;
+  const hasDetails = Boolean(description);
   const toggleLabel = `${translations.experience.showDetails}: ${role}`;
 
   return (

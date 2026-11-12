@@ -4,7 +4,8 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import type { MouseEvent as ReactMouseEvent } from "react";
 import { usePathname } from "next/navigation";
 import NextLink from "next/link";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { createPortal } from "react-dom";
+import { AnimatePresence, motion, useIsPresent, useReducedMotion } from "motion/react";
 import { Button } from "@/app/componentes/button";
 import { Link } from "@/app/componentes/link";
 import { useLanguage } from "@/app/componentes/context/language-context";
@@ -57,10 +58,17 @@ const MenuDialog = ({ id, label, origin, socials, onClose }: MenuDialogProps) =>
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
   const dialogRef = useRef<HTMLDivElement>(null);
+  // False while AnimatePresence plays the exit: the trap must let go so focus can return to the trigger.
+  const isPresent = useIsPresent();
 
-  // Move focus into the dialog on open, and trap Tab inside it while it is mounted.
+  // Move focus into the dialog on open.
   useEffect(() => {
     dialogRef.current?.querySelector<HTMLElement>("[data-menu-close]")?.focus();
+  }, []);
+
+  // Trap Tab inside the dialog while it is present.
+  useEffect(() => {
+    if (!isPresent) return;
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -92,7 +100,7 @@ const MenuDialog = ({ id, label, origin, socials, onClose }: MenuDialogProps) =>
 
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [onClose]);
+  }, [onClose, isPresent]);
 
   const links = [
     { label: translations.header.home, href: "/" },
@@ -126,19 +134,21 @@ const MenuDialog = ({ id, label, origin, socials, onClose }: MenuDialogProps) =>
       role="dialog"
       aria-modal="true"
       aria-label={label}
-      className="fixed inset-0 z-50 flex flex-col justify-between overflow-y-auto bg-bg px-5 pb-10 pt-4"
+      data-mobile-menu
+      inert={!isPresent}
+      className="fixed inset-0 z-50 flex flex-col justify-between overflow-y-auto overscroll-contain bg-bg px-5 pb-10 pt-4"
       {...dialogMotion}
     >
       <div className="flex items-center justify-between">
-        <NextLink href="/" onClick={onClose} className="text-label-m text-text">
+        <NextLink href="/" onClick={onClose} className="min-w-0 truncate text-label-m text-text">
           Eduardo Gazolla
         </NextLink>
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <LanguageSelector />
           <Button
             data-menu-close
             variant="secondary"
-            className="border-text px-7 py-4"
+            className="min-h-11 border-text px-5 py-3 min-[360px]:px-7 min-[360px]:py-4"
             onClick={onClose}
           >
             {translations.menu.close}
@@ -223,10 +233,13 @@ export const MobileMenu = ({ socials }: MobileMenuProps) => {
   const dialogId = useId();
   const triggerId = useId();
 
+  // Where focus goes once the menu is closed (and the page is no longer inert).
+  const returnFocusTo = useRef<"trigger" | "main">("trigger");
+
   const close = useCallback(() => {
+    returnFocusTo.current = "trigger";
     setOpen(false);
-    document.getElementById(triggerId)?.focus();
-  }, [triggerId]);
+  }, []);
 
   const handleOpen = (event: ReactMouseEvent<HTMLButtonElement>) => {
     setOrigin(originFrom(event.currentTarget));
@@ -243,12 +256,38 @@ export const MobileMenu = ({ socials }: MobileMenuProps) => {
     };
   }, [open]);
 
+  // Make everything outside the dialog inert while it is open (it is portalled to <body>).
+  useEffect(() => {
+    if (!open) return;
+    const changed = Array.from(document.body.children).filter(
+      (el) => !el.hasAttribute("data-mobile-menu") && !el.hasAttribute("inert")
+    );
+    changed.forEach((el) => el.setAttribute("inert", ""));
+    return () => changed.forEach((el) => el.removeAttribute("inert"));
+  }, [open]);
+
+  // Once closed (and no longer inert), hand focus back.
+  const wasOpen = useRef(false);
+  useEffect(() => {
+    if (wasOpen.current && !open) {
+      const target =
+        returnFocusTo.current === "main"
+          ? document.getElementById("main")
+          : document.getElementById(triggerId);
+      target?.focus();
+    }
+    wasOpen.current = open;
+  }, [open, triggerId]);
+
   // The menu is for narrow screens: close it if the viewport grows to the desktop layout.
   useEffect(() => {
     if (!open || typeof window.matchMedia !== "function") return;
     const query = window.matchMedia("(min-width: 768px)");
     const onChange = (event: MediaQueryListEvent) => {
-      if (event.matches) setOpen(false);
+      if (!event.matches) return;
+      // The Menu button is hidden at this width, so focus goes to the page content instead.
+      returnFocusTo.current = "main";
+      setOpen(false);
     };
     query.addEventListener("change", onChange);
     return () => query.removeEventListener("change", onChange);
@@ -259,24 +298,28 @@ export const MobileMenu = ({ socials }: MobileMenuProps) => {
       <Button
         id={triggerId}
         variant="secondary"
-        className="px-7 py-4 md:hidden"
+        className="min-h-11 px-5 py-3 min-[360px]:px-7 min-[360px]:py-4 md:hidden"
         aria-expanded={open}
         aria-controls={dialogId}
         onClick={handleOpen}
       >
         {translations.menu.open}
       </Button>
-      <AnimatePresence>
-        {open && (
-          <MenuDialog
-            id={dialogId}
-            label={translations.menu.open}
-            origin={origin}
-            socials={socials}
-            onClose={close}
-          />
+      {typeof document !== "undefined" &&
+        createPortal(
+          <AnimatePresence>
+            {open && (
+              <MenuDialog
+                id={dialogId}
+                label={translations.menu.open}
+                origin={origin}
+                socials={socials}
+                onClose={close}
+              />
+            )}
+          </AnimatePresence>,
+          document.body
         )}
-      </AnimatePresence>
     </>
   );
 };
