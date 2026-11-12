@@ -90,6 +90,12 @@ describe('ProjectDetailClient (pt-BR)', () => {
     expect(screen.getByRole('img', { name: 'Login' })).toBeInTheDocument();
   });
 
+  it('hides the about block when the project has no description, keeping technologies', () => {
+    renderDetail(makeProject({ description: null }));
+    expect(screen.queryByRole('heading', { level: 2, name: 'Sobre o projeto' })).not.toBeInTheDocument();
+    expect(screen.getByText('React')).toBeInTheDocument();
+  });
+
   it('shows the only-project notice when the total is 1', () => {
     renderDetail(makeProject(), { total: 1 });
     expect(screen.getByText('Por enquanto, este é o único projeto publicado.')).toBeInTheDocument();

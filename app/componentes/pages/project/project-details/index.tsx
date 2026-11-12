@@ -81,10 +81,14 @@ export const ProjectDetails = ({ project }: ProjectDetailsProps) => {
         className="py-14 md:py-[120px]"
         innerClassName="grid gap-5 md:grid-cols-[480px_1fr] md:grid-rows-[auto_1fr] md:gap-x-[120px] md:gap-y-6"
       >
-        <h2 className="font-display text-h2 text-text md:text-h1">{about}</h2>
-        <div className="text-body-m text-text-muted md:col-start-2 md:row-span-2 md:row-start-1 md:max-w-[600px] md:text-body-l">
-          <RichText content={project.description.raw} />
-        </div>
+        {project.description?.raw && (
+          <>
+            <h2 className="font-display text-h2 text-text md:text-h1">{about}</h2>
+            <div className="text-body-m text-text-muted md:col-start-2 md:row-span-2 md:row-start-1 md:max-w-[600px] md:text-body-l">
+              <RichText content={project.description.raw} />
+            </div>
+          </>
+        )}
         <div className="flex flex-col gap-3 md:col-start-1 md:gap-6">
           <p className="hidden text-label-m text-text-muted md:block">{technologies}</p>
           <div className="flex flex-wrap gap-2">
