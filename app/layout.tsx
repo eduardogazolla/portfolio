@@ -13,6 +13,8 @@ import { InlineScript } from "./componentes/inline-script";
 import { INTRO_BOOT_SCRIPT } from "./componentes/pages/home/hero-section/intro-flag";
 
 export const metadata = {
+  description:
+    "Portfólio de Eduardo Gazolla, desenvolvedor front-end e analista de testes: projetos, tecnologias e experiência.",
   title: {
     default: "Eduardo Gazolla - Portfólio",
     template: "%s | Eduardo Gazolla - Portfólio",

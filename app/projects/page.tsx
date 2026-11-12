@@ -4,7 +4,8 @@ import { LocalizedProjectsPageData, Social } from "../types/page-info";
 import { fetchHygraphQuery } from "../utils/fetch-hygraph-query";
 
 export const metadata = {
-  title: 'Projetos'
+  title: 'Projetos',
+  description: 'Projetos de Eduardo Gazolla: desenvolvimento front-end e testes, com contexto, tecnologias e links.',
 }
 
 // Keep in sync with the `ProjectsPage` operation in
