@@ -170,6 +170,7 @@ const PreviousExperience = ({ experience }: { experience: WorkExperience }) => {
           )}
         >
           <div className="min-h-0 overflow-hidden">
+            {/* md:pl-[288px] = the 240px period column + 48px (gap-12) gap, aligning with the title. */}
             <div className="flex flex-col items-start gap-4 pb-6 md:pl-[288px]">
               <Description description={description} />
             </div>

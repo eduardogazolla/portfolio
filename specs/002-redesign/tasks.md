@@ -136,9 +136,9 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
   - o InspectOutline com `measure` desenha (800–1400 ms), a etiqueta digita as medidas (1400–1750 ms), e etiqueta e contorno somem em 2400–2600 ms;
   - roda só se `sessionStorage['portfolio-gazolla:intro']` não existir, e grava a flag;
   - nunca bloqueia clique;
-  - com `useReducedMotion`, só um fade de 140 ms e sem contorno;
-  - conteúdo visível sem JS (estado inicial via classe adicionada no cliente).
-- [x] T042 [US1] Atualizar `app/componentes/footer/index.tsx`: "© <ano atual> Eduardo Gazolla", sociais do CMS via `getSocialLabel` e BackToTop; buscar as sociais com a query `SiteSocials` em `app/layout.tsx` (server component) e passar por props
+  - com movimento reduzido, a entrada é ignorada por completo (sem fade e sem contorno), e o conteúdo aparece direto;
+  - conteúdo visível sem JS: o estado inicial escondido vem de `html[data-intro]`, definido pelo script de boot inline no `<head>` (`INTRO_BOOT_SCRIPT`), antes da primeira pintura.
+- [x] T042 [US1] Atualizar `app/componentes/footer/index.tsx`: "© <ano atual> Eduardo Gazolla", sociais do CMS via `getSocialLabel` (BackToTop é irmão do Footer no layout, não filho dele); buscar as sociais com a query `SiteSocials` em `app/layout.tsx` (server component) e passar por props
 
 **Checkpoint**: US1 funcional na Home (quickstart V1–V3).
 
@@ -178,7 +178,7 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
   - meses arredondados para baixo, `end` ausente = hoje (com relógio fixo);
   - período "fev 2025 – atual" / "Feb 2025 – present".
 - [x] T048 [P] [US3] Teste do KnownTechs em `tests/components/known-techs.test.tsx`: só nome e "desde <ano>", ordenados por `startDate` crescente, sem ícone
-- [x] T049 [P] [US3] Teste do WorkExperience em `tests/components/work-experience.test.tsx`: a atual mostra período, duração, cargo, empresa com link, descrição e badges; as anteriores mostram uma linha e um botão "+" com `aria-expanded` que abre e fecha com clique, Enter e Espaço; sem descrição e sem tecnologias, não há "+"
+- [x] T049 [P] [US3] Teste do WorkExperience em `tests/components/work-experience.test.tsx`: a atual mostra período, duração, cargo, empresa com link, descrição e badges; as anteriores mostram uma linha e, só quando há descrição, um botão "+" com `aria-expanded` que abre e fecha com clique, Enter e Espaço; o painel compacto não mostra badges (decisão do usuário); sem descrição, não há "+"
 
 ### Implementation
 
@@ -191,7 +191,7 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 - [x] T053 [US3] Refazer o destaque de projetos da Home em `app/componentes/pages/home/highlighted-projects/index.tsx` e `project-card/index.tsx`:
   - SectionTitle "Projetos" com "Ver todos os projetos";
   - imagem `next/image` com `alt` do título;
-  - rótulo `context` só se preenchido; título `h2`; descrição curta; badges; "Ver projeto";
+  - rótulo `context` só se preenchido; título `h3` (sob o `h2` da seção); descrição curta; badges; "Ver projeto";
   - linha "Mais projetos chegando…" com o link GitHub vindo das sociais;
   - a seção some se não houver projeto em destaque.
 - [ ] T054 [US3] Montar a Home em `app/componentes/pages/home/home-client.tsx` na ordem do Figma (Hero, Stack, Projetos, Experiência, Contato `#contact`) e verificar a Parte 3: gates verdes, Playwright MCP com Home e menu em 1440/390 contra `6:21`, `8:29` e `8:228`, teclado e PT/EN. Abrir o PR
