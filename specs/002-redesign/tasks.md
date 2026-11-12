@@ -254,8 +254,8 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 
 ### Tests (primeiro)
 
-- [ ] T067 [P] [US2] Teste do schema em `tests/lib/contact-schema.test.ts`: `name` aparado com "3–100 caracteres", `email` válido com "até 254 caracteres", `message` aparada com "1–500 caracteres"; cada erro tem mensagem PT e EN que ensina a corrigir (ex.: "Falta o domínio. Use algo como nome@gmail.com.")
-- [ ] T068 [P] [US2] Teste da rota em `tests/api/contact-route.test.ts` (ambiente `node`, com `axios` mockado), cobrindo cada resposta do contrato `specs/002-redesign/contracts/contact-api.md`:
+- [x] T067 [P] [US2] Teste do schema em `tests/lib/contact-schema.test.ts`: `name` aparado com "3–100 caracteres", `email` válido com "até 254 caracteres", `message` aparada com "1–500 caracteres"; cada erro tem mensagem PT e EN que ensina a corrigir (ex.: "Falta o domínio. Use algo como nome@gmail.com.")
+- [x] T068 [P] [US2] Teste da rota em `tests/api/contact-route.test.ts` (ambiente `node`, com `axios` mockado), cobrindo cada resposta do contrato `specs/002-redesign/contracts/contact-api.md`:
   - válido → `200 { ok: true }`;
   - corpo inválido ou JSON quebrado → `400 { ok: false, error: "invalid_input" }`;
   - webhook falha ou passa de 10 s → `502 delivery_failed`;
@@ -270,8 +270,8 @@ Cada componente tem o teste escrito antes, em `tests/components/<nome>.test.tsx`
 
 ### Implementation
 
-- [ ] T070 [US2] Criar `app/lib/contact-schema.ts` com o zod compartilhado (faz a T067 passar), recebendo as mensagens por locale
-- [ ] T071 [US2] Reescrever `app/api/contact/route.ts` conforme o contrato (faz a T068 passar): `safeParse`; `axios.post` com `timeout: 10000`; respostas `{ ok, error }`; `console.error` só no servidor
+- [x] T070 [US2] Criar `app/lib/contact-schema.ts` com o zod compartilhado (faz a T067 passar), recebendo as mensagens por locale
+- [x] T071 [US2] Reescrever `app/api/contact/route.ts` conforme o contrato (faz a T068 passar): `safeParse`; `axios.post` com `timeout: 10000`; respostas `{ ok, error }`; `console.error` só no servidor
 - [ ] T072 [US2] Reescrever `app/componentes/contact-form/index.tsx` com os estados `idle | invalid | submitting | sent | failed` (faz a T069 passar):
   - react-hook-form com `mode: "onTouched"` e `zodResolver`;
   - Input e Textarea da T025, com `maxLength={500}` e o limite informado;
