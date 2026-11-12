@@ -213,7 +213,7 @@ const pt: TranslationDictionary = {
   experience: {
     sectionTitle: 'Experiência',
     subtitle:
-      'O suporte de TI à qualidade de software: cada etapa me deixou mais perto de quem usa o que eu construo.',
+      'Do suporte de TI à qualidade de software: cada etapa me deixou mais perto de quem usa o que eu construo.',
     current: 'atual',
     showDetails: 'Ver detalhes',
     hideDetails: 'Ocultar detalhes',

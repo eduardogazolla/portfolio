@@ -18,7 +18,10 @@ const renderTechs = () =>
   );
 
 describe('KnownTechs', () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    localStorage.clear();
+    localStorage.setItem('portfolio-gazolla:locale', 'pt-BR');
+  });
 
   it('renders the Stack title and subtitle', () => {
     renderTechs();

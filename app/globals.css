@@ -113,3 +113,19 @@ html[data-intro="play"] [data-hero="bio"],
 html[data-intro="play"] [data-hero="actions"] {
   animation: hero-fade-up 400ms var(--ease-out) 600ms both;
 }
+
+/* Pulsing "current" dot ring (see experience-item.tsx). Motion board 12:21: scale 1 -> 2.2, 2s loop. */
+@keyframes pulse-ring {
+  from { transform: scale(1); opacity: 0.6; }
+  to { transform: scale(2.2); opacity: 0; }
+}
+
+.pulse-ring {
+  animation: pulse-ring 2s var(--ease-out) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-ring {
+    display: none;
+  }
+}

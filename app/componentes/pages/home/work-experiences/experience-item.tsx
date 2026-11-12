@@ -1,115 +1,156 @@
 "use client";
 
+import { useId, useState } from "react";
 import { Link } from "@/app/componentes/link";
 import { RichText } from "@/app/componentes/rich-text";
 import { TechBadge } from "@/app/componentes/tech-badge";
-import { fadeUpAnimation } from "@/app/lib/animations";
-import { WorkExperience } from "@/app/types/work-experience";
-import { differenceInMonths, differenceInYears, format } from "date-fns";
-import ptBR from "date-fns/locale/pt-BR";
-import enUS from "date-fns/locale/en-US";
-import { motion } from "motion/react";
 import { useLanguage } from "@/app/componentes/context/language-context";
+import { cn } from "@/app/lib/utils";
+import { WorkExperience } from "@/app/types/work-experience";
+import { formatDuration, formatPeriod } from "@/app/utils/experience";
 
 type ExperienceItemProps = {
   experience: WorkExperience;
+  isCurrent: boolean;
 };
 
-export const ExperienceItem = ({ experience }: ExperienceItemProps) => {
-  const { locale } = useLanguage();
-  const dateLocale = locale === "en" ? enUS : ptBR;
+const Badges = ({ technologies }: Pick<WorkExperience, "technologies">) => (
+  <ul className="flex flex-wrap gap-2">
+    {technologies.map((tech) => (
+      <li key={tech.name}>
+        <TechBadge name={tech.name} />
+      </li>
+    ))}
+  </ul>
+);
 
-  const {
-    endDate,
-    companyName,
-    companyUrl,
-    description,
-    role,
-    technologies,
-  } = experience;
+const Description = ({ description }: Pick<WorkExperience, "description">) =>
+  description ? (
+    <div className="max-w-[600px] text-body-m text-text-muted">
+      <RichText content={description.raw} />
+    </div>
+  ) : null;
 
-  const startDate = new Date(experience.startDate);
-
-  const formattedStartDate = format(startDate, "MMM, yyyy", { locale: dateLocale });
-  const formattedEndDate = endDate
-    ? format(new Date(endDate), "MMM, yyyy", { locale: dateLocale })
-    : (locale === "en" ? "Present" : "O momento");
-
-  const end = endDate ? new Date(endDate) : new Date();
-
-  const months = differenceInMonths(end, startDate);
-  const years = differenceInYears(end, startDate);
-  const monthsRemaining = months % 12;
-
-  let formattedDuration = "";
-  if (locale === "en") {
-    formattedDuration =
-      years > 0
-        ? `${years} year${years > 1 ? "s" : ""}${
-            monthsRemaining > 0
-              ? ` and ${monthsRemaining} month${monthsRemaining > 1 ? "s" : ""}`
-              : ""
-          }`
-        : `${months} month${months > 1 ? "s" : ""}`;
-  } else {
-    formattedDuration =
-      years > 0
-        ? `${years} ano${years > 1 ? "s" : ""}${
-            monthsRemaining > 0
-              ? ` e ${monthsRemaining} mes${monthsRemaining > 1 ? "es" : ""}`
-              : ""
-          }`
-        : `${months} mes${months > 1 ? "es" : ""}`;
-  }
+const CurrentExperience = ({ experience }: { experience: WorkExperience }) => {
+  const { locale, translations } = useLanguage();
+  const { startDate, endDate, role, companyName, companyUrl, technologies, description } =
+    experience;
 
   return (
-    <motion.div
-      className="grid grid-cols-[40px,1fr] gap-4 md:gap-10"
-      {...fadeUpAnimation}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="flex items-center flex-col gap-4">
-        <div className="rounded-full border border-gray-500 w-[52px] h-[52px] flex items-center justify-center bg-gray-800 text-xs font-mono text-gray-400">
-          {companyName.substring(0, 2).toUpperCase()}
+    <article className="flex flex-col gap-3 border-t border-line pb-8 pt-7 md:flex-row md:gap-12 md:py-10">
+      <div className="flex flex-wrap items-center gap-x-2 md:w-[240px] md:shrink-0 md:flex-col md:items-start md:gap-y-1.5">
+        <div className="flex items-center gap-2">
+          <span aria-hidden="true" data-pulse-dot className="relative size-2">
+            <span className="pulse-ring absolute inset-0 rounded-full bg-accent" />
+            <span className="absolute inset-0 rounded-full bg-accent" />
+          </span>
+          <span className="text-label-m text-text">
+            {formatPeriod(startDate, endDate, locale, translations.experience.current)}
+          </span>
         </div>
-        <div className="h-full w-[1px] bg-gray-800"></div>
+        <span className="text-label-m text-text-muted md:text-body-m">
+          {formatDuration(startDate, endDate, translations.experience.duration)}
+        </span>
       </div>
 
-      <div>
-        <div className="flex flex-col gap-2 text-sm sm:text-base">
-          {companyUrl ? (
-            <Link
-              href={companyUrl}
-              arrow={false}
-              className="text-gray-500 hover:text-blue-500 transition-colors"
-            >
-              @ {companyName}
-            </Link>
-          ) : (
-            <span className="text-gray-500">@ {companyName}</span>
-          )}
-          <h3 className="text-gray-300">{role}</h3>
-          <span className="text-gray-500">
-            {formattedStartDate} • {formattedEndDate} • ({formattedDuration})
-          </span>
-          {description && (
-            <div className="text-gray-400">
-              <RichText content={description.raw} />
-            </div>
-          )}
-        </div>
-        <p className="text-gray-400 text-sm mb-3 mt-6 font-semibold">
-          {locale === "en" ? "Skills" : "Competências"}
-        </p>
-        <div className="flex gap-x-2 gap-y-3 flex-wrap lg:max-w-[350px] mb-8">
-          {technologies.map((tech) => (
-            <TechBadge
-              key={`experience-${companyName}-tech-${tech.name}`}
-              name={tech.name}
-            />
-          ))}
-        </div>
+      <div className="flex flex-col items-start gap-3">
+        <h3 className="font-display text-h3 text-text">{role}</h3>
+        {companyUrl ? (
+          <Link href={companyUrl} className="gap-1.5 text-label-m text-text-muted">
+            {companyName}
+          </Link>
+        ) : (
+          <span className="text-label-m text-text-muted">{companyName}</span>
+        )}
+        <Description description={description} />
+        {technologies.length > 0 && <Badges technologies={technologies} />}
       </div>
-    </motion.div>
+    </article>
   );
 };
+
+const PreviousExperience = ({ experience }: { experience: WorkExperience }) => {
+  const { locale, translations } = useLanguage();
+  const [open, setOpen] = useState(false);
+  const panelId = useId();
+  const { startDate, endDate, role, companyName, technologies, description } = experience;
+
+  const period = formatPeriod(startDate, endDate, locale, translations.experience.current);
+  const hasDetails = Boolean(description) || technologies.length > 0;
+  const toggleLabel = `${
+    open ? translations.experience.hideDetails : translations.experience.showDetails
+  }: ${role}`;
+
+  return (
+    <article className="border-t border-line">
+      <div className="flex items-center gap-3 py-5 md:gap-12 md:py-6">
+        <span className="hidden text-label-m text-text-muted md:block md:w-[240px] md:shrink-0">
+          {period}
+        </span>
+        <div className="flex min-w-0 flex-1 flex-col gap-1 md:flex-row md:items-baseline md:gap-3.5">
+          <h3 className="font-display text-label-m text-text md:text-h3">{role}</h3>
+          <p className="text-label-m text-text-muted">
+            <span>{companyName}</span>
+            <span className="md:hidden">
+              <span aria-hidden="true"> · </span>
+              {period}
+            </span>
+          </p>
+        </div>
+        <span className="hidden text-label-m text-text-muted md:block">
+          {formatDuration(startDate, endDate, translations.experience.duration)}
+        </span>
+        {hasDetails && (
+          <button
+            type="button"
+            aria-expanded={open}
+            aria-controls={panelId}
+            aria-label={toggleLabel}
+            onClick={() => setOpen((value) => !value)}
+            className="-mr-3 flex size-11 shrink-0 items-center justify-center text-text"
+          >
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 20 20"
+              className={cn(
+                "size-5 transition-transform duration-base ease-in-out motion-reduce:transition-none",
+                open && "rotate-45"
+              )}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            >
+              <path d="M10 3v14M3 10h14" />
+            </svg>
+          </button>
+        )}
+      </div>
+
+      {hasDetails && (
+        <div
+          id={panelId}
+          inert={!open}
+          className={cn(
+            "grid transition-[grid-template-rows] duration-base ease-in-out motion-reduce:transition-none",
+            open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+          )}
+        >
+          <div className="min-h-0 overflow-hidden">
+            <div className="flex flex-col items-start gap-4 pb-6 md:pl-[288px]">
+              <Description description={description} />
+              {technologies.length > 0 && <Badges technologies={technologies} />}
+            </div>
+          </div>
+        </div>
+      )}
+    </article>
+  );
+};
+
+export const ExperienceItem = ({ experience, isCurrent }: ExperienceItemProps) =>
+  isCurrent ? (
+    <CurrentExperience experience={experience} />
+  ) : (
+    <PreviousExperience experience={experience} />
+  );

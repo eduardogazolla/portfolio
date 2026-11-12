@@ -3,7 +3,6 @@
 import { SectionTitle } from "@/app/componentes/section-title";
 import { KnowTech } from "./known-tech";
 import { KnownTech as IKnownTech } from "@/app/types/projects";
-import { motion } from "motion/react";
 import { useLanguage } from "@/app/componentes/context/language-context";
 
 type KnownTechsProps = {
@@ -13,22 +12,24 @@ type KnownTechsProps = {
 export const KnownTechs = ({ techs }: KnownTechsProps) => {
   const { translations } = useLanguage();
 
+  // Oldest first. ISO dates compare correctly as plain strings.
+  const sorted = [...(techs ?? [])].sort((a, b) =>
+    a.startDate.localeCompare(b.startDate)
+  );
+
   return (
-    <section className="container py-16">
-      <SectionTitle subtitle={translations.knownTechs.subtitle} title={translations.knownTechs.title} />
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(264px,1fr))] gap-3 mt-[60px]">
-        {techs?.map((tech, i) => (
-          <motion.div
-            key={tech.name}
-            initial={{ opacity: 0, x: -100 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -100 }}
-            transition={{ duration: 0.15, delay: i * 0.1 }}
-          >
-            <KnowTech tech={tech} />
-          </motion.div>
+    <section className="container pt-28 md:py-[120px]">
+      <SectionTitle
+        title={translations.stack.title}
+        subtitle={translations.stack.subtitle}
+        className="md:flex-row md:items-end md:justify-between"
+        subtitleClassName="md:text-body-l"
+      />
+      <ul className="mt-8 grid grid-cols-1 md:grid-cols-2 md:gap-x-10">
+        {sorted.map((tech) => (
+          <KnowTech key={tech.name} tech={tech} />
         ))}
-      </div>
+      </ul>
     </section>
   );
 };

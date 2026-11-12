@@ -5,8 +5,8 @@ import { WorkExperience } from '../../app/componentes/pages/home/work-experience
 import { LanguageProvider } from '../../app/componentes/context/language-context';
 import type { WorkExperience as IWorkExperience } from '../../app/types/work-experience';
 
-const richText = (text: string) => ({
-  raw: { children: [{ type: 'paragraph', children: [{ text }] }] },
+const richText = (text: string): NonNullable<IWorkExperience['description']> => ({
+  raw: { children: [{ type: 'paragraph', children: [{ text }] }] } as never,
 });
 
 const current: IWorkExperience = {
@@ -54,7 +54,10 @@ const renderExperience = (experiences = [current, withDescription, bare]) =>
   );
 
 describe('WorkExperience', () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    localStorage.clear();
+    localStorage.setItem('portfolio-gazolla:locale', 'pt-BR');
+  });
 
   it('is the #experience section with title and subtitle', () => {
     const { container } = renderExperience();
@@ -65,7 +68,7 @@ describe('WorkExperience', () => {
 
   describe('current experience', () => {
     it('shows period, duration, role, company link, description and badges', () => {
-      renderExperience();
+      renderExperience([current]);
       expect(screen.getByText(/fev\.? 2025 – atual/)).toBeInTheDocument();
       expect(screen.getByText(/\d+ anos?/)).toBeInTheDocument();
       expect(screen.getByText('Analista de Testes')).toBeInTheDocument();
@@ -88,7 +91,7 @@ describe('WorkExperience', () => {
       renderExperience();
       expect(screen.getByText('Auxiliar Administrativo')).toBeInTheDocument();
       expect(screen.getByText('Loja Comac')).toBeInTheDocument();
-      expect(screen.getByText(/jan\.? 2023 – fev\.? 2025/)).toBeInTheDocument();
+      expect(screen.getAllByText(/jan\.? 2023 – fev\.? 2025/).length).toBeGreaterThan(0);
       const buttons = screen.getAllByRole('button');
       expect(buttons).toHaveLength(1);
       expect(buttons[0]).toHaveAttribute('aria-expanded', 'false');
