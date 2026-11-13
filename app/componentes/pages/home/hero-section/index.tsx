@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { useReducedMotion } from "motion/react";
 import { Button } from "@/app/componentes/button";
+import { CvDownload } from "@/app/componentes/cv-download";
 import { SocialLinks } from "@/app/componentes/social-links";
 import { RichText } from "@/app/componentes/rich-text";
 import { useLanguage } from "@/app/componentes/context/language-context";
@@ -85,6 +86,7 @@ export const HeroSection = ({ homeInfo, currentExperience }: HeroSectionProps) =
             <Button href="/projects" variant="secondary" className="px-7 py-4">
               {translations.hero.viewProjects}
             </Button>
+            <CvDownload />
           </div>
         </div>
 

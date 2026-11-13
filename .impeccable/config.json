@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "geist",
+        "createdAt": "2026-11-13T14:10:46.315Z",
+        "reason": "Geist is the portfolio's approved body font (redesign direction approved by the user); the CV reuses it for brand consistency"
+      }
+    ]
+  }
+}

@@ -74,3 +74,16 @@ AGENTS.md
 # Playwright
 /test-results/
 /playwright-report/
+
+# Original CVs (private: phone and client names)
+/cv/*.pdf
+/cv/*.JPEG
+/cv/*.jpeg
+/cv/*.jpg
+/cv/ats/
+
+# Private notes
+*.local.md
+
+# Playwright MCP screenshots/logs
+.playwright-mcp/
