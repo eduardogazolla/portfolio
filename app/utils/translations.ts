@@ -11,6 +11,14 @@ export type TranslationDictionary = {
     nowAt: string;
     viewProjects: string;
   };
+  cv: {
+    download: string;
+    /** Screen-reader name of each version: PT "Currículo QA", EN "QA CV". */
+    versionName: (version: string) => string;
+    qa: string;
+    java: string;
+    fileType: string;
+  };
   projectsPage: {
     subtitle: string;
     title: string;
@@ -125,6 +133,13 @@ const pt: TranslationDictionary = {
     nowPrefix: 'Agora:',
     nowAt: 'na',
     viewProjects: 'Ver projetos',
+  },
+  cv: {
+    download: 'Baixar currículo',
+    versionName: (version) => `Currículo ${version}`,
+    qa: 'QA',
+    java: 'Java',
+    fileType: 'PDF',
   },
   projectsPage: {
     subtitle: 'projetos',
@@ -247,6 +262,13 @@ const en: TranslationDictionary = {
     nowPrefix: 'Now:',
     nowAt: 'at',
     viewProjects: 'View projects',
+  },
+  cv: {
+    download: 'Download CV',
+    versionName: (version) => `${version} CV`,
+    qa: 'QA',
+    java: 'Java',
+    fileType: 'PDF',
   },
   projectsPage: {
     subtitle: 'projects',

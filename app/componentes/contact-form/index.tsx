@@ -9,6 +9,7 @@ import { Input } from "../form/input";
 import { Textarea } from "../form/textarea";
 import { PageSection } from "../page-section";
 import { SectionTitle } from "../section-title";
+import { CvDownload } from "../cv-download";
 import { useLanguage } from "@/app/componentes/context/language-context";
 import { isLinkedInSocial } from "@/app/utils/socials";
 import type { Social } from "@/app/types/page-info";
@@ -111,12 +112,15 @@ export const ContactForm = ({ socials = [] }: { socials?: Social[] }) => {
       className="pt-28 md:pt-10 md:pb-40"
       innerClassName="flex flex-col gap-7 xl:flex-row xl:justify-between xl:gap-12"
     >
-      <SectionTitle
-        title={t.title}
-        subtitle={t.description}
-        className="gap-7 md:gap-6"
-        subtitleClassName="md:max-w-[440px] md:text-body-l"
-      />
+      <div className="flex flex-col items-start gap-7 md:gap-6">
+        <SectionTitle
+          title={t.title}
+          subtitle={t.description}
+          className="gap-7 md:gap-6"
+          subtitleClassName="md:max-w-[440px] md:text-body-l"
+        />
+        <CvDownload variant="link" />
+      </div>
       <div className="w-full md:max-w-[640px] xl:max-w-[480px] xl:shrink-0">
         <div aria-live="polite" className="sr-only">
           {/* The confirmation is announced by its focused heading. */}

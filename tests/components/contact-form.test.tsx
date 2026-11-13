@@ -72,6 +72,13 @@ const fillValid = async (user: User, t: Copy) => {
   await user.type(screen.getByLabelText(t.message), 'Oi, Eduardo!');
 };
 
+describe('ContactForm CV download', () => {
+  it('offers the CV download below the section intro', () => {
+    setup('pt-BR');
+    expect(screen.getByRole('button', { name: 'Baixar currículo' })).toBeInTheDocument();
+  });
+});
+
 describe.each(['pt-BR', 'en'] as const)('ContactForm (%s)', (locale) => {
   it('invalid: shows errors under the fields and focuses the first invalid one', async () => {
     const { fn } = mockFetch();

@@ -1,3 +1,4 @@
+import { CvDownload } from "@/app/componentes/cv-download";
 import { SocialLinks } from "@/app/componentes/social-links";
 import { Social } from "@/app/types/page-info";
 
@@ -11,7 +12,11 @@ export const Footer = ({ socials }: FooterProps) => (
       <p className="text-label-m text-text-muted">
         © {new Date().getFullYear()} Eduardo Gazolla
       </p>
-      <SocialLinks socials={socials} className="gap-x-5 gap-y-2 lg:gap-x-7" />
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 lg:gap-x-7">
+        <SocialLinks socials={socials} className="gap-x-5 gap-y-2 lg:gap-x-7" />
+        {/* On desktop it sits at the right edge: open leftwards, clear of the back-to-top button. */}
+        <CvDownload variant="link" placement="top" listClassName="lg:left-auto lg:right-0" />
+      </div>
     </div>
   </footer>
 );

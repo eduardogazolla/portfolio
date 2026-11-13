@@ -43,6 +43,12 @@ describe('HeroSection', () => {
     localStorage.setItem('portfolio-gazolla:locale', 'pt-BR');
   });
 
+  it('offers the CV download next to the main actions', () => {
+    renderHero();
+    const actions = screen.getByRole('button', { name: 'Vamos conversar' }).parentElement!;
+    expect(actions).toContainElement(screen.getByRole('button', { name: 'Baixar currículo' }));
+  });
+
   it('renders the CMS role line', () => {
     renderHero();
     expect(screen.getByText(homeInfo.role as string)).toBeInTheDocument();
@@ -119,7 +125,8 @@ describe('HeroSection', () => {
   });
 
   it('omits the socials list when there are none', () => {
-    const { container } = renderHero(null, { ...homeInfo, socials: [] });
-    expect(container.querySelector('ul')).toBeNull();
+    renderHero(null, { ...homeInfo, socials: [] });
+    // The closed CV list is hidden, so the only list that could show up is the socials one.
+    expect(screen.queryByRole('list')).toBeNull();
   });
 });
