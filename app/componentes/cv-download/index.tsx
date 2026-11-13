@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type FocusEvent, type KeyboardEvent } from "react";
+import { useEffect, useId, useRef, useState, type FocusEvent } from "react";
 import { Button } from "@/app/componentes/button";
 import { useLanguage } from "@/app/componentes/context/language-context";
 import { cn } from "@/app/lib/utils";
@@ -34,30 +34,36 @@ export const CvDownload = ({ variant = "button", placement = "bottom", className
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
-  // Close on a pointer press outside (clicks on non-focusable areas don't move focus).
-  useEffect(() => {
-    if (!open) return;
-    const onPointerDown = (event: PointerEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
-    };
-    document.addEventListener("pointerdown", onPointerDown);
-    return () => document.removeEventListener("pointerdown", onPointerDown);
-  }, [open]);
-
   const closeAndRefocus = () => {
     setOpen(false);
     triggerRef.current?.focus();
   };
 
-  const onKeyDown = (event: KeyboardEvent) => {
-    if (open && event.key === "Escape") {
-      event.stopPropagation();
-      closeAndRefocus();
-    }
-  };
+  // Listen on the document while open: a press outside doesn't always move focus, and Safari
+  // doesn't focus a clicked button, so Escape may reach <body> instead of this component.
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const onKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setOpen(false);
+      triggerRef.current?.focus();
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
 
+  // Close when keyboard focus moves to something else. A null target (a press on the list's
+  // padding, or leaving the window) is not a move away: outside presses are handled above.
   const onBlur = (event: FocusEvent) => {
-    if (!rootRef.current?.contains(event.relatedTarget as Node | null)) setOpen(false);
+    const next = event.relatedTarget as Node | null;
+    if (next && !rootRef.current?.contains(next)) setOpen(false);
   };
 
   const chevron = (
@@ -86,7 +92,7 @@ export const CvDownload = ({ variant = "button", placement = "bottom", className
   };
 
   return (
-    <div ref={rootRef} className={cn("relative w-fit", className)} onKeyDown={onKeyDown} onBlur={onBlur}>
+    <div ref={rootRef} className={cn("relative w-fit", className)} onBlur={onBlur}>
       {variant === "button" ? (
         <Button {...triggerProps} variant="secondary" className="px-7 py-4">
           {t.download}

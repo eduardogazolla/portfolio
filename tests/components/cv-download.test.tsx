@@ -9,6 +9,7 @@ const renderCv = (props: Parameters<typeof CvDownload>[0] = {}) =>
     <LanguageProvider>
       <button type="button">outside</button>
       <CvDownload {...props} />
+      <button type="button">after</button>
     </LanguageProvider>
   );
 
@@ -71,6 +72,26 @@ describe('CvDownload', () => {
     expect(trigger).toHaveFocus();
   });
 
+  it('closes on Escape even when the trigger did not keep focus (Safari)', async () => {
+    renderCv();
+    const { user, trigger } = await open();
+    (document.activeElement as HTMLElement).blur();
+    expect(document.body).toHaveFocus();
+
+    await user.keyboard('{Escape}');
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(trigger).toHaveFocus();
+  });
+
+  it('stays open when focus drops to nothing (a press on the list padding)', async () => {
+    renderCv();
+    const { user, trigger } = await open();
+    const list = document.getElementById(trigger.getAttribute('aria-controls')!)!;
+    await user.pointer({ keys: '[MouseLeft]', target: list });
+    trigger.blur();
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  });
+
   it('closes on a click outside', async () => {
     renderCv();
     const { user, trigger } = await open();
@@ -84,6 +105,7 @@ describe('CvDownload', () => {
     await user.tab(); // QA
     await user.tab(); // Java
     await user.tab(); // out of the component
+    expect(screen.getByRole('button', { name: 'after' })).toHaveFocus();
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
   });
 

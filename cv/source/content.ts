@@ -1,7 +1,8 @@
 import type { CvContent, CvEntry, CvLang } from "./types";
 
-// Single source of truth for the public CVs (see docs/cv/content-review.md).
-// Public file: no client or brand names, no internal metrics, no phone.
+// Single source of truth for the CVs (see docs/architecture/cv-generation.md).
+// The PDFs are public: never name the DB1 client or its brands, no internal metrics or jargon,
+// no phone number. tests/cv/cv.test.ts enforces this.
 
 const PORTFOLIO = "https://eduardogazolla.dev";
 const API_REPO = "https://github.com/eduardogazolla/api-rest";

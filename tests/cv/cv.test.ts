@@ -101,9 +101,10 @@ describe("renderCvAts", () => {
       // No photo, icons, tables or letter-spaced headings (they scramble text extraction).
       expect(out).not.toMatch(/<img|<svg|<table|letter-spacing|grid-template-columns/);
       expect(out).toContain(`<h1>${cv.name.first} ${cv.name.last}</h1>`);
-      // Full URLs as visible text, so they survive copy-paste parsing.
-      expect(out).toContain("https://eduardogazolla.dev");
-      expect(out).toContain("eduardogazolla1@gmail.com");
+      // Contact details as visible text (parsers read the text, not the href).
+      expect(out).toContain(">eduardogazolla.dev</a>");
+      expect(out).toContain(">eduardogazolla1@gmail.com</a>");
+      expect(out).toContain(">linkedin.com/in/eduardogazolla</a>");
     },
   );
 
